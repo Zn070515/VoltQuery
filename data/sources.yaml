@@ -29,6 +29,11 @@ sources:
         3.0 United States License. It permits copying, distribution, and
         modification with attribution and carries no non-commercial
         restriction. Verified against the project's published license notice.
+        Note: some compiled worksheet PDFs print an internal "Creative Commons
+        Attribution License, version 1.0" footer that conflicts with this
+        declaration. The authoritative site license (CC-BY-3.0-US) is recorded
+        here; both are attribution-with-no-noncommercial so data_policy is
+        unaffected. Discrepancy logged in SEED_CORPUS_FINDINGS.md.
     source_url: http://www.ibiblio.org/kuphaldt/socratic/
     status: approved
     notes: >-
