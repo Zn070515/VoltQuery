@@ -77,3 +77,13 @@ documents:
     license_evidence:
       - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
       - "collection: CC-BY-3.0-US (authoritative site license)"
+
+  - id: openstax-upv2
+    source_id: openstax-university-physics-v2
+    filename: UniversityPhysicsVolume2-WEB.pdf
+    url: https://assets.openstax.org/oscms-prodcms/media/documents/UniversityPhysicsVolume2-WEB.pdf
+    sha256: "32b49efd2fd1fa225ea3d1743d59a53bd7a86cca3d77055ca99525bdca1d1f46"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-4.0 (printed on the compiled PDF title page, p4)"
+      - "collection: CC-BY-4.0 (OpenStax University Physics Volume 2, Rice University)"

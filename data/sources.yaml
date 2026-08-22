@@ -123,6 +123,45 @@ sources:
       Volume III (Semiconductors). Analog probe source for diode/BJT/MOSFET
       problems.
 
+  - id: openstax-university-physics-v2
+    title: University Physics Volume 2
+    authors:
+      - Samuel J. Ling
+      - Jeff Sanny
+      - William Moebs
+    institution: Rice University / OpenStax
+    edition: "Web (open access)"
+    published_year: 2016
+    domains:
+      - circuit_theory
+      - analog_electronics
+    license:
+      id: CC-BY-4.0
+      redistribution: true
+      derivatives: true
+      commercial: true
+      attribution_required: true
+      data_policy: public_redistributable
+      verified: true
+      verification_url: https://openstax.org/details/books/university-physics-volume-2
+      verified_at: 2026-08-22
+      verification_note: >-
+        Copyright (c) 2021 Rice University. Textbook content produced by OpenStax
+        is licensed under a Creative Commons Attribution 4.0 International
+        License (CC BY 4.0) — confirmed verbatim on the compiled PDF license
+        imprint (p4). Share/Adapt permitted for any purpose including commercial,
+        with attribution. The on-disk file is the OpenStax "WEB" PDF from
+        assets.openstax.org.
+    source_url: https://openstax.org/details/books/university-physics-volume-2
+    status: approved
+    notes: >-
+      University Physics Volume 2 (Ch 10 Direct-Current Circuits, Ch 15
+      Alternating-Current Circuits). Genuinely independent of the Kuphaldt
+      corpus; the primary choice for diversifying the source mix at 0016+. Uses
+      explicit (a)(b)(c)(d) lettered subparts, exercising the annotation
+      contract across sources. Note: its problem sections use a two-column
+      layout, so per-problem cropping must be inspected against column bounds.
+
   - id: ksu-circuits-i-2022
     title: Circuits I Lab Manual and Ancillary Materials
     authors:
