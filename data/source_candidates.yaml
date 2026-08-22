@@ -27,8 +27,14 @@ candidates:
     notes: >-
       Laboratory Manual for Engineering Electronics (Kennesaw State / OpenALG).
       Fills the Analog probe: diode, BJT, MOSFET, op-amp, pre-lab, LTspice,
-      handouts, datasheets. Must verify the exact license of the specific
-      artifact, independent of the Circuits I manual.
+      handouts, datasheets. Verified 2026-08-22: the authoritative GALILEO OLM
+      record (Das, Thain, Hill, 2019; Engineering Open Textbooks 2, recommended
+      citation oer.galileo.usg.edu/engineering-textbooks/2) lists
+      "License: Attribution-NonCommercial" (CC BY-NC) — NOT the claimed CC-BY-4.0.
+      Under the public policy (public_redistributable requires commercial+derivatives)
+      this is REJECTED. Do not promote to approved public. The OpenALG/manifold
+      project was not confirmable (only a different "Circuits I" project surfaced);
+      treat NC as governing.
 
   - id: fiore-semiconductor-lab
     domain: [analog_electronics]
@@ -43,11 +49,15 @@ candidates:
       target: public_redistributable
     priority: A
     notes: >-
-      Fiore, Semiconductor Devices: Theory and Application Lab Manual. IMPORTANT:
-      this is a per-work distinction. Most Fiore textbooks are CC BY-NC-SA and are
-      REJECTED under the public policy; only the Lab Manual is claimed CC BY 4.0.
-      Verify the lab manual's license directly; do not generalize a Fiore-wide
-      license.
+      Fiore, Semiconductor Devices: Theory and Application Lab Manual. Verified
+      2026-08-22: the author's own MVCC "Free Books" page
+      (www2.mvcc.edu/users/faculty/jfiore/freebooks.html) licenses this title as
+      copyright-by-author under CC BY-NC-SA 3.0; the pressbooks author note
+      ("A Note from the Author") likewise says non-commercial share-alike. Only a
+      pressbooks catalog metadata row says "CC BY", which conflicts. Per the
+      conflict rule (never assume the permissive side) this is CC BY-NC-SA → NOT
+      public_redistributable → REJECTED under the public policy. The per-work trap
+      is confirmed: this family is not a CC-BY public source.
 
   - id: umass-ee-fundamentals
     domain: [circuit_theory]
@@ -62,9 +72,12 @@ candidates:
       target: public_redistributable
     priority: A
     notes: >-
-      UMass, Applied Electrical Engineering Fundamentals (2025 update). Independent
-      author/institution; EE fundamentals and real circuit content. Verify license
-      and edition/date.
+      UMass, Applied Electrical Engineering Fundamentals. Verified 2026-08-22:
+      "About this book" (openbooks.library.umass.edu/funee/front-matter/about/)
+      states licensed under CC BY 4.0 International, except where otherwise noted.
+      Author David J. McLaughlin; UMass Amherst; accompaniers ECE 361. Independent
+      author/institution. VERIFIED CC BY 4.0 → eligible for public Gold, pending
+      per-problem annotation.
 
   - id: janzen-electricity-magnetism-circuits
     domain: [circuit_theory]
@@ -80,7 +93,10 @@ candidates:
     priority: A
     notes: >-
       Daryl Janzen, Introduction to Electricity, Magnetism, and Circuits.
-      Advanced circuit analysis incl. Thevenin. Independent author system.
+      Verified 2026-08-22: CircuitBread appendices page and eCampusOntario Open
+      Library record both state CC BY 4.0 International, except where otherwise
+      noted. Advanced circuit analysis incl. Thevenin. Independent author system.
+      VERIFIED CC BY 4.0 → eligible for public Gold, pending per-problem annotation.
 
   - id: libretexts-digital-circuit-projects
     domain: [digital_electronics]

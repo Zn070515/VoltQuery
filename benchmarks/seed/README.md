@@ -9,20 +9,23 @@ Target: **40 manually reviewed** seed problems.
 retrieval benchmark. It is populated by the content task with manually reviewed
 problems sourced from verified licenses.
 
-Current status: **16 / 40 problems collected** (13 Circuit Theory,
+Current status: **15 / 40 problems collected** (12 Circuit Theory,
 3 Analog Electronics). Each is fully annotated per
 [`ANNOTATION_GUIDE.md`](ANNOTATION_GUIDE.md).
 
-15 problems are from the `socratic-electronics` source; 1 (`vq_seed_0016`) is from
-`openstax-university-physics-v2` (University Physics Vol 2, Ch 10) — the first
-lettered-subpart problem and the first genuinely independent candidate. **Its
-source is under `LICENSE_REVIEW_REQUIRED`** (the pinned PDF prints CC-BY-4.0, but
-the current OpenStax collection license is CC-BY-NC-SA-4.0 with an additional
-no-LLM-training clause), so `vq_seed_0016` is **not counted toward the public Gold
-gate** and no further OpenStax items are collected until the governing license is
-confirmed. The next tranche pursues independently verified CC-BY sources (KSU
-Engineering Electronics, Fiore's CC-BY lab manual, UMass, Janzen) and falls back
-to Socratic for nodal/mesh, superposition, diode, and MOSFET — see
+All 15 problems are from the `socratic-electronics` source. `vq_seed_0016`
+(OpenStax University Physics Vol 2, Ch 10) — the first lettered-subpart problem
+and the first genuinely independent candidate — has been **moved out of the
+public Gold corpus** to `benchmarks/research/held.jsonl`. Its source is under
+`LICENSE_REVIEW_REQUIRED` (the pinned PDF prints CC-BY-4.0, but the current
+OpenStax collection license is CC-BY-NC-SA-4.0 with an additional no-LLM-training
+clause), so it is **not counted toward the public Gold gate** and no further
+OpenStax items are collected until the governing license is confirmed. The
+full question text + crops are held local-only under the gitignored
+`data/raw/hold/vq_seed_0016/`; only locator/metadata is public. The next tranche
+pursues independently verified CC-BY sources (KSU Engineering Electronics, Fiore's
+CC-BY lab manual, UMass, Janzen) and falls back to Socratic for nodal/mesh,
+superposition, diode, and MOSFET — see
 [`docs/development/SEED_CORPUS_FINDINGS.md`](../../docs/development/SEED_CORPUS_FINDINGS.md).
 
 ## Gold / Silver / Bronze

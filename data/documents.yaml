@@ -89,3 +89,13 @@ documents:
       - "collection (current OpenStax pages): CC-BY-NC-SA-4.0 + no LLM/generative-AI training without permission"
       - "collection (aggregators, original 2016 edition): CC-BY-4.0"
       - "status: LICENSE_REVIEW_REQUIRED — document imprint conflicts with current collection license; see data/sources.yaml"
+
+  - id: umass-funee-ch4-3
+    source_id: umass-ee-fundamentals
+    filename: chapter-4-3.html
+    url: https://openbooks.library.umass.edu/funee/chapter/4-3/
+    sha256: "226dc12b8a28e223de5826d315345aa9700115578117a299f77525ddced14ef2"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "collection: CC-BY-4.0 (About this book page: 'Creative Commons Attribution 4.0 International License, except where otherwise noted'; chapter footer confirms)"
+      - "note: web-only Pressbooks chapter (no paginated PDF); SourceRef.page_index is null, page_label is the section title."

@@ -203,3 +203,65 @@ sources:
     notes: >-
       Kennesaw State / University System of Georgia. Prevents mixing
       research-only material into the public Gold corpus.
+
+  - id: umass-ee-fundamentals
+    title: Applied Electrical Engineering Fundamentals
+    authors:
+      - David J. McLaughlin
+    institution: University of Massachusetts Amherst
+    published_year: 2025
+    domains:
+      - circuit_theory
+    license:
+      id: CC-BY-4.0
+      redistribution: true
+      derivatives: true
+      commercial: true
+      attribution_required: true
+      data_policy: public_redistributable
+      verified: true
+      verification_url: https://openbooks.library.umass.edu/funee/front-matter/about/
+      verified_at: 2026-08-22
+      verification_note: >-
+        The book's "About this book" page states it is licensed under a Creative
+        Commons Attribution 4.0 International License, except where otherwise
+        noted. Author David J. McLaughlin; published by UMass Amherst via UMass
+        OpenBooks; accompanying course ECE 361. Confirmed independently; version
+        re-checked against the specific artifact when the first problem is
+        recorded.
+    source_url: https://openbooks.library.umass.edu/funee/
+    status: approved
+    notes: >-
+      Genuinely independent of the Kuphaldt corpus; EE fundamentals and real
+      circuit content. Diversifies the source mix; attribute D. J. McLaughlin on
+      each recorded problem.
+
+  - id: janzen-electricity-magnetism-circuits
+    title: Introduction to Electricity, Magnetism, and Circuits
+    authors:
+      - Daryl Janzen
+    institution: CircuitBread (independent author)
+    domains:
+      - circuit_theory
+    license:
+      id: CC-BY-4.0
+      redistribution: true
+      derivatives: true
+      commercial: true
+      attribution_required: true
+      data_policy: public_redistributable
+      verified: true
+      verification_url: https://www.circuitbread.com/textbooks/introduction-to-electricity-magnetism-and-circuits/appendices
+      verified_at: 2026-08-22
+      verification_note: >-
+        The CircuitBread appendices page and the eCampusOntario Open Library
+        record both state the book is licensed under a Creative Commons
+        Attribution 4.0 International License, except where otherwise noted.
+        Independent author Daryl Janzen. Confirmed independently; version
+        re-checked against the specific artifact when the first problem is
+        recorded.
+    source_url: https://www.circuitbread.com/textbooks/introduction-to-electricity-magnetism-and-circuits/
+    status: approved
+    notes: >-
+      Advanced circuit analysis incl. Thevenin/Norton; independent author system.
+      Diversifies the source mix; attribute D. Janzen on each recorded problem.
