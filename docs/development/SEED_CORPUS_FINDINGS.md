@@ -1,13 +1,15 @@
 # Seed Corpus Findings
 
-Status: **pending**. Core analysis is anchored to the seed problems studied: the
-23 public Gold items in `benchmarks/seed/problems.jsonl` (`vq_seed_0001–0015`
-Socratic worksheets + `vq_seed_0017`, `vq_seed_0018` UMass + `vq_seed_0020`
-Janzen + `vq_seed_0021` Lessons DC + `vq_seed_0022–0025` Socratic) plus the two
-held items (`vq_seed_0016` OpenStax, `vq_seed_0019` Janzen Thévenin). M0 is RED
-(23 < 40), so this is a running requirements ledger for `EEProblemIR` v0.1, not
-a completion report. Observations below reflect the latest facts — not an earlier
-pilot-only view.
+Status: **complete at 40**. Core analysis is anchored to the seed problems studied: the
+40 public Gold items in `benchmarks/seed/problems.jsonl` (`vq_seed_0001–0015`,
+`vq_seed_0022–0025`, `vq_seed_0033`, `vq_seed_0034` Socratic worksheets +
+`vq_seed_0017`, `vq_seed_0018` UMass + `vq_seed_0020`, `vq_seed_0026`, `vq_seed_0027`,
+`vq_seed_0040`–`0042` Janzen + `vq_seed_0021` Lessons DC +
+`vq_seed_0028`–`0032`, `vq_seed_0035`–`0039` KSU Circuits I) plus the two held items
+(`vq_seed_0016` OpenStax, `vq_seed_0019` Janzen Thévenin). M0 is GREEN (40 problem /
+32 circuit / 8 analog), so this is a running requirements ledger for `EEProblemIR`
+v0.1 anchored to a complete seed corpus, not a completion report by itself.
+Observations below reflect the latest facts — not an earlier pilot-only view.
 **Note:** `vq_seed_0016` has been **physically isolated** out of the public Gold
 corpus: it is no longer in `problems.jsonl` and its crops are no longer under
 `benchmarks/seed/assets/`. It is now an on-hold item, with only locator/metadata
@@ -18,27 +20,47 @@ public Gold gate. **`vq_seed_0019`** (Janzen Thévenin) was also held out: its
 Figure 7.3.1(a) is egress-gated and unretrieved, and the earlier Gold record
 re-encoded the un-fetched schematic into `question_text` (R1∥R2 in series with
 R3), which violates the no-re-encode rule and leaks solution structure. Re-add it
-only once the figure is retrieved. The public Gold is therefore **23 (17 circuit,
-6 analog)**. Both held items remain valid data-shape observations for
+only once the figure is retrieved. The public Gold is therefore **40 (32 circuit,
+8 analog)**. Both held items remain valid data-shape observations for
 `EEProblemIR`.
 
 The seed corpus is the requirements document for `EEProblemIR` v0.1. Record
 observations here rather than freezing the IR ahead of real data. Historical
 change is tracked by Git; this document carries the current truth, not a changelog.
 
-## Composition at 23
+## Composition at 40
 
-- **Public Gold** (`benchmarks/seed/problems.jsonl`): **23 problems —
-  17 circuit_theory, 6 analog_electronics.** Source mix: **19 from
+- **Public Gold** (`benchmarks/seed/problems.jsonl`): **40 problems —
+  32 circuit_theory, 8 analog_electronics.** Source mix: **21 from
   `socratic-electronics`** (Kuphaldt Socratic worksheets, 11 documents) + **2 from
   `umass-ee-fundamentals`** (`vq_seed_0017`, a diode worked example;
-  `vq_seed_0018`, an inverting op-amp closed-loop-gain worked example) + **1 from
+  `vq_seed_0018`, an inverting op-amp closed-loop-gain worked example) + **6 from
   `janzen-electricity-magnetism-circuits`** (`vq_seed_0020`, an RLC-series AC
-  example) + **1 from `lessons-electric-circuits-dc`** (`vq_seed_0021`, a
-  node-voltage method worked example). This file is physically public-only; its
-  count equals the Gold count. The batch 0022–0025 (Socratic igfet MOSFET, dcmesh
-  mesh current, super superposition, kvl Kirchhoff) closes the remaining named
-  topic gaps (mesh/KVL, superposition, MOSFET).
+  example; `vq_seed_0026`, RLC resonance/power; `vq_seed_0027`, a parallel-circuit
+  equivalent-resistance example; `vq_seed_0040` battery emf / internal resistance;
+  `vq_seed_0041` series-parallel reduction; `vq_seed_0042` RLC impedance + rms +
+  average power) + **1 from `lessons-electric-circuits-dc`**
+  (`vq_seed_0021`, a node-voltage method worked example) + **10 from
+  `ksu-circuits-i-2022`** (`vq_seed_0028`, Lab 5 Prelab Task 1 nodal analysis of
+  the Fig 1 complex DC circuit; `vq_seed_0029`, Lab 3 Prelab Task 1b series
+  circuit of Fig 1; `vq_seed_0030`, Lab 8 Prelab Task 1 AC source-signal
+  parameters; `vq_seed_0031`, Lab 6 Prelab Task 1 maximum-power-transfer /
+  Thévenin design; `vq_seed_0032`, Lab 7 Prelab Task 1 superposition;
+  `vq_seed_0035`–`0039`, Lab 9 Prelab Tasks 1/2/4, Lab 10 Prelab Task 1, and
+  Lab 5 Prelab Task 2 mesh analysis). This file
+  is physically public-only; its count equals the Gold count. The batch
+  0022–0025 (Socratic igfet MOSFET, dcmesh mesh current, super superposition, kvl
+  Kirchhoff) closes the remaining named topic gaps (mesh/KVL, superposition,
+  MOSFET); 0026/0027 add Janzen (independent ecosystem) examples for resonance
+  and parallel resistance; 0028 establishes KSU Circuits I as the 4th truly
+  independent ecosystem, 0029 deepens it with a second problem, and
+  0030/0031/0032 deepen it to five (AC params, MPT/Thévenin, superposition).
+  0033/0034 close the analog probe at 8/8 with two answer-bearing Socratic analog
+  problems (`vq_seed_0033`, BJT quiescent base current; `vq_seed_0034`,
+  MOSFET + RC time delay), accepting the Kuphaldt concentration trade-off.
+  0035–0039 take KSU to ten (transient RC/RL, RLC phasor, mesh) and
+  0040–0042 take Janzen to six (DC/internal-resistance and AC power examples),
+  which lands the final +8 circuit_theory to reach 32.
 - **On hold** (`benchmarks/research/held.jsonl`): **2 items** — `vq_seed_0016`
   (`openstax-university-physics-v2`, University Physics Vol 2, Ch 10), held from
   the public Gold gate pending license review (imprint CC-BY-4.0 vs current
@@ -47,13 +69,15 @@ change is tracked by Git; this document carries the current truth, not a changel
   unretrieved egress-gated figure. For both, only locator/metadata is public; full
   text + crops are local-only. See *Source diversity* and *Source policy ≠
   Document policy*.
-- The analysis in *Findings* below is anchored to the 25 problems studied (23
+- The analysis in *Findings* below is anchored to the 42 problems studied (40
   public Gold + the two held items). `vq_seed_0017`/`vq_seed_0018` are the first
-  public problems from a web-only independent source, `vq_seed_0020` establishes
-  the Janzen independent ecosystem, and `vq_seed_0021` adds the Lessons DC
-  collection — though Socratic and Lessons are both Kuphaldt/Open Book Project, so
-  the **independent author/institution ecosystem count is 3** (Kuphaldt,
-  McLaughlin/UMass, Janzen) even though collection families number 4 — see
+  public problems from a web-only independent source, `vq_seed_0020`/`0026`/`0027`
+  establish the Janzen independent ecosystem, `vq_seed_0021` adds the Lessons
+  DC collection (still Kuphaldt/Open Book Project), and `vq_seed_0028`/`0029` give
+  KSU Circuits I as the **4th truly independent author/institution ecosystem** —
+  even though collection families number 5. Socratic and Lessons are both
+  Kuphaldt/Open Book Project, so they count once; the independent count is
+  Kuphaldt, McLaughlin/UMass, Janzen, KSU/University System of Georgia — see
   *Source diversity* and *Web-source provenance*.
 - Topics observed: ohm_law, series, parallel, voltage_divider, thevenin, norton,
   equivalent_circuit, led, capacitor, rc_time_constant, rl_time_constant,
@@ -64,8 +88,10 @@ change is tracked by Git; this document carries the current truth, not a changel
   **superposition**, **superposition_theorem**, **current_source**,
   **ac**, **phasor**, **impedance**, **mosfet**, **insulated_gate_fet**,
   **depletion**, **enhancement**, **n_channel**, **p_channel**,
-  **voltage_polarity**, **voltage_drop**, **series_voltage**. Open slugs;
-  vocabulary is not frozen.
+  **voltage_polarity**, **voltage_drop**, **series_voltage**, **resonance**,
+  **quality_factor**, **bandwidth**, **average_power**,
+  **equivalent_resistance**, **kirchhoff_junction**, **power_dissipation**.
+  Open slugs; vocabulary is not frozen.
 
 ## Questions to answer
 
@@ -125,14 +151,15 @@ requires but does not print. Observed:
 - **Displayed** (`has_formula: true`): `vq_seed_0008` (`R = R1 + R2 + R3`),
   `vq_seed_0013` (RC/LR universal step response
   `V(t) = (Vf − V0)(1 − 1/e^(t/τ)) + V0` and its current twin), `vq_seed_0014`
-  (`AV = Vout / Vin(+)`).
+  (`AV = Vout / Vin(+)`), `vq_seed_0042` (the ac-generator emf
+  `v(t) = (4.00 V)sin[(1.00×10⁴ rad/s)t]`).
 - **Required, not displayed** (`has_formula: false`): `vq_seed_0001` (Ohm's law),
   `vq_seed_0012` (RL time constant).
 - **To be derived from data** (`has_formula: false`): `vq_seed_0002` (find the V–I
   relationship from a data table).
 
 So the single boolean conflates "involved", "stated", and "to-derive", and cannot
-distinguish inline from display. The three displayed formulas are **display
+distinguish inline from display. The four displayed formulas are **display
 formulas**; no seed problem shows an inline formula mid-sentence. The OpenStax
 source introduces a *different* value-form: component values and computed answers
 are rendered as **images** (rasterized math), so the extracted narrative simply has
@@ -222,7 +249,7 @@ the lookup key, and only odd numbers appear.
 
 ### 10. What must be represented in `EEProblemIR` v0.1?
 
-From 23 problems, minimally:
+From 40 problems, minimally:
 - structured **answer** — scalar-with-unit / table / expression / explanation /
   ordered subparts / drawing,
 - structured **inputs** — data tables embedded in `vq_seed_0002/0004/0005/0015`
@@ -263,17 +290,21 @@ convention plus the `has_circuit_figure` boolean are sufficient to finish M0.
 
 ## Source diversity (most serious gap)
 
-**19 of the 23 public Gold problems are from the Kuphaldt/Open Book Project
-ecosystem (`socratic-electronics` 19 + `lessons-electric-circuits-dc` 1); four
-are from two other independent ecosystems (`vq_seed_0017`, `vq_seed_0018` UMass;
-`vq_seed_0020` Janzen). The other independent items — `vq_seed_0016` OpenStax and
-`vq_seed_0019` Janzen Thévenin — are on hold in `benchmarks/research/held.jsonl`
-(license review; unretrieved figure, respectively).** Collection families number 4
-(Socratic, UMass, Janzen, Lessons DC) but Socratic and Lessons are both Kuphaldt,
-so the **independent author/institution ecosystem count is 3**. Diversity therefore
-leans heavily on a single authorial axis (Kuphaldt, 20 of 23), which is the main
-open question for the next tranche — a genuinely 4th ecosystem (e.g. KSU Circuits I,
-CC-BY-4.0) — rather than topic coverage (see *Next tranche*).
+**22 of the 40 public Gold problems are from the Kuphaldt/Open Book Project
+ecosystem (`socratic-electronics` 21 + `lessons-electric-circuits-dc` 1); eighteen
+are from three other independent ecosystems (`vq_seed_0017`, `vq_seed_0018`
+UMass; `vq_seed_0020`, `vq_seed_0026`, `vq_seed_0027`, `vq_seed_0040`–`0042`
+Janzen; `vq_seed_0028`–`0032`, `vq_seed_0035`–`0039` KSU Circuits I). The other independent items — `vq_seed_0016`
+OpenStax and `vq_seed_0019` Janzen Thévenin — are on hold in
+`benchmarks/research/held.jsonl` (license review; unretrieved figure,
+respectively).** Collection families number 5 (Socratic, UMass, Janzen, Lessons
+DC, KSU Circuits I) but Socratic and Lessons are both Kuphaldt, so the
+**independent author/institution ecosystem count is 4** (Kuphaldt,
+McLaughlin/UMass, Janzen, KSU/University System of Georgia). Diversity still
+leans on a single authorial axis (Kuphaldt, 22 of 40), which remains the main
+open question for the next tranche — the 4th ecosystem (KSU Circuits I,
+CC-BY-4.0, via `vq_seed_0028`–`0032`, `vq_seed_0035`–`0039`) is in place and now carries ten
+problems — rather than topic coverage (see *Next tranche*).
 OpenStax University Physics Vol 2 is genuinely independent, but it is registered
 as `status: license_review` (NOT approved/public) because its document imprint
 (CC-BY-4.0) conflicts with its current collection license (CC-BY-NC-SA-4.0 +
@@ -284,9 +315,10 @@ body values, and odd-numbered-only answers each add per-problem work.
 
 The real content gaps (KCL/KVL now covered by `vq_seed_0025`; nodal covered by
 `vq_seed_0021`; mesh by `vq_seed_0023`; superposition by `vq_seed_0024`;
-AC/phasor/impedance by `vq_seed_0020`; MOSFET by `vq_seed_0022`) are closed; the
-remaining lettered-subparts and the heavy Kuphaldt concentration (20 of 23) are
-the driver of the next tranche.
+AC/phasor/impedance by `vq_seed_0020`; resonance & parallel resistance by
+`vq_seed_0026`/`0027` from the Janzen ecosystem; MOSFET by `vq_seed_0022`) are
+closed; the remaining lettered-subparts and the heavy Kuphaldt concentration
+(22 of 40) are the driver of the next tranche.
 
 ## License version discrepancy
 
@@ -390,7 +422,7 @@ usable but need worked-example mining (answer-bearing) rather than a straight
   record ships real assets. The figure gap remains an **access follow-up**. This is
   the correction that sharpened the Annotation Guide rule (§`assets`).
 
-## Next tranche (0026–0030)
+## Next tranche (0033+)
 
 - **OpenStax is on hold** — `vq_seed_0016` stays in the corpus but is excluded
   from the public Gold gate, and **no further OpenStax problems are collected**
@@ -398,34 +430,78 @@ usable but need worked-example mining (answer-bearing) rather than a straight
   slots are deferred, not filled.
 - **Diversify to genuinely independent, verified CC-BY sources** instead. A-grades
   were independently verified 2026-08-22 (see `data/source_candidates.yaml`):
-  - **VERIFIED CC BY 4.0** (promote to `approved` public):
-    - UMass **Applied Electrical Engineering Fundamentals** (About-this-book:
-      CC BY 4.0; David J. McLaughlin; ECE 361; independent author/institution),
-    - Daryl Janzen **Introduction to Electricity, Magnetism, and Circuits**
-      (CircuitBread + eCampusOntario: CC BY 4.0; advanced circuit analysis incl.
-      Thévenin),
+  - **VERIFIED CC BY 4.0** (promoted to `approved` public and now mined):
+    - UMass **Applied Electrical Engineering Fundamentals** (David J. McLaughlin,
+      ECE 361) — 2 problems (`vq_seed_0017`, `vq_seed_0018`),
+    - Daryl Janzen **Introduction to Electricity, Magnetism, and Circuits** — 6
+      problems (`vq_seed_0020`, `vq_seed_0026`, `vq_seed_0027`, `vq_seed_0040`,
+      `vq_seed_0041`, `vq_seed_0042`),
+    - **KSU Circuits I** (`ksu-circuits-i-2022`, CC-BY-4.0, University System of
+      Georgia) — 10 problems (`vq_seed_0028`, Lab 5 Prelab Task 1 nodal analysis;
+      `vq_seed_0029`, Lab 3 Prelab Task 1b series circuit; `vq_seed_0030`, Lab 8
+      Prelab Task 1 AC signal parameters; `vq_seed_0031`, Lab 6 Prelab Task 1
+      MPT/Thévenin design; `vq_seed_0032`, Lab 7 Prelab Task 1 superposition;
+      `vq_seed_0035`–`0039`, Lab 9 Prelab Tasks 1/2/4, Lab 10 Prelab Task 1, and
+      Lab 5 Prelab Task 2 mesh analysis);
+      this is the **4th truly independent ecosystem**, now carrying 10 problems,
   - **NOT public-redistributable** (rejected under the public policy; keep
     research-local only — both are *NonCommercial*):
-    - KSU **Laboratory Manual for Engineering Electronics** — GALILEO OLM record
-      lists **CC BY-NC** (the earlier CC-BY-4.0 claim did not hold),
+    - KSU **Laboratory Manual for Engineering Electronics** — was **rejected** as
+      non-commercial (GALILEO OLM record listed CC BY-NC), but **re-opened as
+      `license_review` 2026-08-22**: the *current* OpenALG project page AND the
+      *current* GALILEO `/2` record (EE 3401, Summer 2019) both declare **CC BY
+      4.0**. Genuine version/date conflict with the earlier BY-NC reading — do
+      **not** promote on the page claim alone (see `data/source_candidates.yaml`);
+      pin the exact artifact's printed license first. Fills diode/BJT/MOSFET/op-amp
+      analog gap **if** confirmed,
     - Fiore **Semiconductor Devices: Theory and Application Lab Manual** —
       author's own MVCC page licenses it **CC BY-NC-SA 3.0** (the per-work NC-SA
       trap is confirmed; only a pressbooks catalog row said CC BY).
   - LibreTexts **page/book-level** CC-BY-4.0 works (e.g. Charles Kann Digital
     Circuit Projects) — never treat `libretexts.org` as a single source license.
-- **Topic coverage is largely closed** — nodal (`vq_seed_0021`), mesh
-  (`vq_seed_0023`), superposition (`vq_seed_0024`), KCL/KVL (`vq_seed_0025`), and
-  MOSFET (`vq_seed_0022`) are filled; AC/phasor/impedance via `vq_seed_0020`. The
-  remaining open driver is **independent-ecosystem diversity**, not topic coverage:
-  20 of 23 public Gold problems are from the Kuphaldt ecosystem (Socratic 19 +
-  Lessons 1), so the next batch should preferentially add non-Kuphaldt,
-  **authentically 4th-ecosystem** items — e.g. **KSU Circuits I** (`ksu-circuits-i-2022`,
-  CC-BY-4.0, University System of Georgia), verified but not yet mined.
-- **Analog probe** is at **6/8** (BJT, op-amp ×3, diode, MOSFET). Two analog
-  shapes remain to hit 8; keep them independent-ecosystem where possible.
+- **Topic coverage is largely closed** — nodal (`vq_seed_0021`, `vq_seed_0028`),
+  mesh (`vq_seed_0023`), superposition (`vq_seed_0024`), KCL/KVL (`vq_seed_0025`),
+  MOSFET (`vq_seed_0022`) are filled; AC/phasor/impedance via `vq_seed_0020`;
+  resonance and parallel-resistance via `vq_seed_0026`/`0027`. The remaining open
+  driver is **independent-ecosystem diversity**, not topic coverage: 22 of 40
+  public Gold problems are still from the Kuphaldt ecosystem (Socratic 21 +
+  Lessons 1). 0026–0027 strengthened Janzen and **0028 delivered the 4th ecosystem
+  (KSU Circuits I)**, deepened by **0029 (Lab 3 series circuit)** and then by
+  **0030 (Lab 8 AC) / 0031 (Lab 6 MPT) / 0032 (Lab 7 superposition)** and
+  **0035–0039 (Lab 9 transient, Lab 10 RLC phasor, Lab 5 mesh)** — KSU now
+  carries ten problems. M0 is GREEN (40 / 32 circuit / 8 analog), so the seed
+  corpus is complete; further independent sources would push Kuphaldt below 22 of
+  40 but are post-M0 follow-up. Note `answer_available` is usually false for the
+  KSU student prelabs.
+- **Analog probe is at 8/8 (done)**: BJT, op-amp ×3, diode, MOSFET — now closed by
+  `vq_seed_0033` (BJT quiescent base current, Socratic bjtbias Q13) and
+  `vq_seed_0034` (MOSFET + RC time delay, Socratic igfet Q31). The 2026-08-22
+  re-run confirmed KSU Engineering Electronics' artifact prints NO license, so it
+  stays `license_review` and is NOT counted for public Gold; the two remaining
+  analog items were therefore pulled from the already-verified-permissive
+  Kuphaldt Socratic worksheets (accepting the concentration trade-off the
+  composition notes above). Both ship a question crop + a circuit crop, and,
+  unlike the KSU prelabs, print their answers (IB = 38.3 µA; tdelay = 2.05 s),
+  so `answer_available: true` for both.
 
-The `vq_seed_0020` Janzen and `vq_seed_0021` Lessons DC items establish the
-non-Socratic collections, but independence is 3 ecosystems (Kuphaldt,
-McLaughlin/UMass, Janzen) — Lessons DC adds a collection, not an ecosystem. Circuit
+The `vq_seed_0020`/`0026`/`0027` Janzen, `vq_seed_0021` Lessons DC, and
+`vq_seed_0028`–`0032` KSU items establish the non-Socratic collections; independence is
+now **4 ecosystems** (Kuphaldt, McLaughlin/UMass, Janzen, KSU/University System of
+Georgia) — Lessons DC adds a collection, not an ecosystem. Circuit
 set now covers Ohm, series/parallel divider, Thevenin/Norton, RC/RL time constants,
-nodal, mesh, superposition, KVL, and AC/phasor/impedance.
+nodal, mesh, superposition, KVL, AC/phasor/impedance, resonance, and parallel
+resistance.
+
+**KSU acquisition succeeded** (this replaces the earlier "remains blocked"
+reading). The deepened crawler — Stoke `CrawlerClient` with curl-cffi `chrome120`
+TLS impersonation + browserforge request headers + per-host rate limiter, plus
+content-type-aware byte persistence and a sha256 manifest (`data/raw/acq.py`) —
+fetched the full KSU Circuits I resource set: the lab manual
+(`circuits_i_lab_manual.docx`, 11.5 MB, also extracted to text/PDF and its
+figures) and all six binary attachments (Prelab-2..10 and Lab-1..10 datasheets,
+the App-install guide, etc.). The working entry point was the OpenALG/MathWorks
+CDN (`cdn.alg.manifoldapp.org`), which served the artifacts directly. The primary
+`oer.galileo.usg.edu` gateway remains Cloudflare JavaScript bot-gated and was not
+forced (per the anti-scraping rule). From this acquisition `vq_seed_0028`–`0032`
+and `vq_seed_0035`–`0039` were mined (ten problems). KSU's own App-guide PDF is CC BY 4.0; the manual's
+prelabs print no answers, so `answer_available: false` for the mined items.

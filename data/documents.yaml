@@ -173,3 +173,14 @@ documents:
       - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
       - "collection: CC-BY-3.0-US (authoritative site license)"
       - "note: Kirchhoff's Laws worksheet; Question 3 is a series voltage-polarity/drop problem (12/8/6 V sources, 2 V drop)."
+
+  - id: ksu-circuits-i-lab-manual
+    source_id: ksu-circuits-i-2022
+    filename: circuits_i_lab_manual.docx
+    url: https://cdn.alg.manifoldapp.org/store/actioncallout/5/d/3/5d3a4e90-6e3d-4dae-94a6-3b5abea32860/attachment/4f245a7112af2ce472709228e135580a.docx
+    sha256: "bad64d27033484c7507d58b717c3c627accf28a5e6534fa828bcd9fcdc887315"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "collection/project: CC-BY-4.0 (OpenALG project page alg.manifoldapp.org/projects/circuits-i-lab-manual-ancillary-app and GALILEO oer.galileo.usg.edu/engineering-textbooks/4 both declare CC BY 4.0)"
+      - "no separate license imprint in the DOCX body (only MathWorks license-center hyperlinks); artifact license taken from the governing project listing, consistent with source record ksu-circuits-i-2022"
+      - "note: DOCX (not a paginated PDF); SourceRef.page_index is null, page_label is the lab-exercise heading. Schematic asset extracted from word/media/image90.png (Lab 5 Figure 1)."

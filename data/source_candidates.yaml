@@ -16,6 +16,7 @@
 #   verified              license claim independently confirmed at the artifact level
 #   promoted              verified acceptable; registered in data/sources.yaml
 #   rejected              verified NOT acceptable under the target policy
+#   license_review        conflicting / version-dependent license evidence; adjudicate before promote/reject
 # `reason` (rejected-only) records why; `promoted_source_id` (promoted-only)
 # records the data/sources.yaml id it was registered under.
 # `license_claim.status` tracks the *claim* resolution specifically:
@@ -28,26 +29,33 @@ candidates:
     discovered_url: https://alg.manifoldapp.org/projects/laboratory-manual-for-engineering-electronics
     license_claim:
       id: CC-BY-4.0
-      status: rejected
+      status: pending_verification
     acquisition:
       type: web
       requires_auth: false
     policy:
       target: public_redistributable
-    status: rejected
-    reason: noncommercial
+    status: license_review
+    reason: version_license_metadata_conflict
     priority: A
     notes: >-
       Laboratory Manual for Engineering Electronics (Kennesaw State / OpenALG).
       Fills the Analog probe: diode, BJT, MOSFET, op-amp, pre-lab, LTspice,
-      handouts, datasheets. Verified 2026-08-22: the authoritative GALILEO OLM
-      record (Das, Thain, Hill, 2019; Engineering Open Textbooks 2, recommended
-      citation oer.galileo.usg.edu/engineering-textbooks/2) lists
-      "License: Attribution-NonCommercial" (CC BY-NC) — NOT the claimed CC-BY-4.0.
-      Under the public policy (public_redistributable requires commercial+derivatives)
-      this is REJECTED. Do not promote to approved public. The OpenALG/manifold
-      project was not confirmable (only a different "Circuits I" project surfaced);
-      treat NC as governing.
+      handouts, datasheets. VERIFIED 2026-08-22 originally: the GALILEO OLM
+      record (Das, Thain, Hill, 2019; Engineering Open Textbooks 2, citation
+      oer.galileo.usg.edu/engineering-textbooks/2) listed
+      "Attribution-NonCommercial" (CC BY-NC) -> rejected as noncommercial.
+      RE-CHECKED 2026-08-22 (version: current live pages): BOTH the OpenALG
+      project page (alg.manifoldapp.org/projects/laboratory-manual-for-engineering-electronics)
+      AND the current GALILEO /2 record (EE 3401, Summer 2019) now declare
+      "Creative Commons Attribution 4.0 International License" (CC BY 4.0).
+      This is a genuine version/date conflict with the earlier BY-NC reading —
+      either the work was re-licensed or the earlier NC note was a stale/different
+      record. Under the strict "never assume the permissive side" rule, do NOT
+      promote to approved on the page claim alone. STATUS: license_review. To
+      promote: download the exact lab-manual artifact, confirm its printed/licensed
+      version (auth + date + license), then record the artifact-level license. A
+      faithful analog probe source (diode/BJT/MOSFET/op-amp) if confirmed.
 
   - id: fiore-semiconductor-lab
     domain: [analog_electronics]
