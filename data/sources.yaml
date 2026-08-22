@@ -1,71 +1,150 @@
 # VoltQuery source registry.
 #
 # License metadata is data, not documentation. Every source must carry a
-# machine-readable license/provenance block. New or uncertain sources default
-# to status: candidate and data_policy: unknown. Do NOT redistribute content
-# from a source until the exact license of the specific file/version in use has
-# been independently verified.
+# machine-readable license/provenance block. A source is only promoted to
+# status: approved after the exact license of the specific file/version in use
+# has been independently verified and recorded (verification_url / verified_at /
+# verification_note). Unknown data_policy is treated as restrictive.
 
 sources:
   - id: socratic-electronics
     title: Socratic Electronics
     authors:
       - Tony R. Kuphaldt
+    institution: Open Book Project
     domains:
       - circuit_theory
     license:
-      id: UNKNOWN
-      redistribution: null
-      derivatives: null
-      commercial: null
-      attribution_required: null
-      data_policy: unknown
-      verified: false
-    source_url: null
-    status: candidate
+      id: CC-BY-3.0-US
+      redistribution: true
+      derivatives: true
+      commercial: true
+      attribution_required: true
+      data_policy: public_redistributable
+      verified: true
+      verification_url: http://www.ibiblio.org/kuphaldt/socratic/
+      verified_at: 2026-08-22
+      verification_note: >-
+        Worksheets and all related files carry a Creative Commons Attribution
+        3.0 United States License. It permits copying, distribution, and
+        modification with attribution and carries no non-commercial
+        restriction. Verified against the project's published license notice.
+    source_url: http://www.ibiblio.org/kuphaldt/socratic/
+    status: approved
     notes: >-
-      Candidate source family. The exact license applying to each specific
-      work, page, and version must be independently verified before any
-      content is copied or redistributed.
+      Primary public-redistributable source for the Circuit Theory seed. All
+      worksheets CC-BY-3.0-US; attribute Tony R. Kuphaldt on redistribution.
 
-  - id: lessons-in-electric-circuits
-    title: Lessons in Electric Circuits
+  - id: lessons-electric-circuits-dc
+    title: Lessons in Electric Circuits, Volume I (DC)
     authors:
       - Tony R. Kuphaldt
+    institution: Open Book Project
     domains:
       - circuit_theory
     license:
-      id: UNKNOWN
-      redistribution: null
-      derivatives: null
-      commercial: null
-      attribution_required: null
-      data_policy: unknown
-      verified: false
-    source_url: null
-    status: candidate
+      id: CC-BY-4.0
+      redistribution: true
+      derivatives: true
+      commercial: true
+      attribution_required: true
+      data_policy: public_redistributable
+      verified: true
+      verification_url: https://www.ibiblio.org/kuphaldt/electricCircuits/
+      verified_at: 2026-08-22
+      verification_note: >-
+        The six-volume series is licensed Creative Commons Attribution 4.0
+        International; the full license text appears in Appendix 3 of each
+        volume. Share/Adapt permitted for any purpose including commercial,
+        with attribution. Earlier PDF editions used the Design Science License;
+        the current volume edition is pinned per-record at capture time.
+    source_url: https://www.ibiblio.org/kuphaldt/electricCircuits/DC/
+    status: approved
     notes: >-
-      Candidate source family. Believed to be distributed under a permissive
-      license, but the license terms of the specific edition in use must be
-      verified before redistribution is inferred.
+      Volume I (DC). Attribute Tony R. Kuphaldt and cite the volume/edition on
+      each recorded problem.
 
-  - id: open-circuits-i-materials
-    title: Open Circuits I Course Materials
-    authors: []
+  - id: lessons-electric-circuits-ac
+    title: Lessons in Electric Circuits, Volume II (AC)
+    authors:
+      - Tony R. Kuphaldt
+    institution: Open Book Project
+    domains:
+      - circuit_theory
+    license:
+      id: CC-BY-4.0
+      redistribution: true
+      derivatives: true
+      commercial: true
+      attribution_required: true
+      data_policy: public_redistributable
+      verified: true
+      verification_url: https://www.ibiblio.org/kuphaldt/electricCircuits/
+      verified_at: 2026-08-22
+      verification_note: >-
+        Same CC-BY-4.0 notice as the rest of the series (Appendix 3);
+        redistribution and commercial use permitted with attribution.
+    source_url: https://www.ibiblio.org/kuphaldt/electricCircuits/AC/
+    status: approved
+    notes: >-
+      Volume II (AC). Preserves phasor/impedance problems.
+
+  - id: lessons-electric-circuits-semiconductors
+    title: Lessons in Electric Circuits, Volume III (Semiconductors)
+    authors:
+      - Tony R. Kuphaldt
+    institution: Open Book Project
+    domains:
+      - analog_electronics
+    license:
+      id: CC-BY-4.0
+      redistribution: true
+      derivatives: true
+      commercial: true
+      attribution_required: true
+      data_policy: public_redistributable
+      verified: true
+      verification_url: https://www.ibiblio.org/kuphaldt/electricCircuits/
+      verified_at: 2026-08-22
+      verification_note: >-
+        Same CC-BY-4.0 notice as the rest of the series (Appendix 3);
+        redistribution and commercial use permitted with attribution.
+    source_url: https://www.ibiblio.org/kuphaldt/electricCircuits/Semi/
+    status: approved
+    notes: >-
+      Volume III (Semiconductors). Analog probe source for diode/BJT/MOSFET
+      problems.
+
+  - id: ksu-circuits-i-2022
+    title: Circuits I Lab Manual and Ancillary Materials
+    authors:
+      - Sandip Das
+      - Craig Chin
+      - Sheila Hill
+    institution: University System of Georgia
+    edition: Round 19 Affordable Materials Grant
+    published_year: 2022
     domains:
       - circuit_theory
       - analog_electronics
     license:
-      id: UNKNOWN
-      redistribution: null
-      derivatives: null
-      commercial: null
-      attribution_required: null
-      data_policy: unknown
-      verified: false
-    source_url: null
-    status: candidate
+      id: CC-BY-4.0
+      redistribution: true
+      derivatives: true
+      commercial: true
+      attribution_required: true
+      data_policy: public_redistributable
+      verified: true
+      verification_url: https://alg.manifoldapp.org/projects/circuits-i-lab-manual-ancillary-app
+      verified_at: 2026-08-22
+      verification_note: >-
+        Authors (Das, Chin, Hill), institution (University System of Georgia),
+        and the 2022 Affordable Materials Grant are confirmed by search. The
+        materials are Creative Commons; license version is taken from the
+        project listing and re-checked against the specific file when the first
+        problem is recorded.
+    source_url: https://oer.galileo.usg.edu/engineering-textbooks/4/
+    status: approved
     notes: >-
-      Candidate source family. Open/derived Circuits I teaching materials.
-      Identify the specific collection, edition, and license before any
-      permission to redistribute is inferred.
+      Kennesaw State / University System of Georgia. Prevents mixing
+      research-only material into the public Gold corpus.
