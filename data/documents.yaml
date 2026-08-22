@@ -47,3 +47,33 @@ documents:
     license_evidence:
       - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
       - "collection: CC-BY-3.0-US (authoritative site license)"
+
+  - id: socratic-dc-s
+    source_id: socratic-electronics
+    filename: dc_s.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/dc_s.pdf
+    sha256: "52714a1f0a7ea5f9f496e5436699bfb625099c1020941131f75f9c6e67320958"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"
+
+  - id: socratic-thev
+    source_id: socratic-electronics
+    filename: thev.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/thev.pdf
+    sha256: "6e6c6f43bd2c0623c2c0176f7c025fd893c2ec260ed367e49ca9b12f60d8914c"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"
+
+  - id: socratic-opamp3
+    source_id: socratic-electronics
+    filename: opamp3.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/opamp3.pdf
+    sha256: "bb9059a430da913269e823f3e4f2532c2ba20a0378add5c0c9fd4e16ef347d7f"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"
