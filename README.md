@@ -41,12 +41,12 @@ Python >=3.12,<3.13
 ## Documentation
 
 - `CLAUDE.md` — coding-agent instructions and development constraints
-- `docs/development/PROJECT_VISION.md` — long-term product goal
-- `docs/development/ROADMAP.md` — milestone/version roadmap
-- `docs/development/VERSION_SPEC.md` — version features and acceptance criteria
-- `docs/development/ARCHITECTURE_PRINCIPLES.md` — architecture rules
-- `docs/development/M0_BOOTSTRAP.md` — immediate starting work
-- `docs/development/SEED_CORPUS_FINDINGS.md` — lessons learned from the seed corpus
+- `docs/vision.md` — long-term product goal
+- `docs/roadmap.md` — milestone/version roadmap
+- `docs/version-spec.md` — version features and acceptance criteria
+- `docs/architecture.md` — architecture rules
+- `docs/development/M0-BOOTSTRAP.md` — immediate M0 starting work
+- `docs/development/SEED-CORPUS-FINDINGS.md` — lessons learned from the seed corpus
 
 ## Long-term Direction
 
