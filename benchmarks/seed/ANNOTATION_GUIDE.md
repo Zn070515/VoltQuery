@@ -59,14 +59,25 @@ circuit figure (`kind: schematic`) plus a complete `question_text` with the exac
 values, and omit the `question_crop` (one asset, not two). `vq_seed_0018` is the
 example of this rule; `vq_seed_0017` is the rendered-crop case.
 
+`has_circuit_figure` is an **observable of the source**, not of our fetch: `true`
+when the source problem displays / references a circuit figure, independent of
+whether we managed to download it. A gated figure is a *capture* gap, never a reason
+to flip the observable the other way.
+
 When the **circuit figure itself** cannot be obtained (egress-gated host, 401/403,
-or prohibitive download), record the problem **text-faithfully**: the verbatim prompt
-plus the source's own narrative description of the circuit, with `assets: []` and
-`has_circuit_figure: false`, and record the figure gap as an **access follow-up**
-rather than reconstructing a schematic from prose (reconstruction is fabrication and
-is forbidden). `vq_seed_0019` (Janzen Thévenin, Figure 7.3.1(a) unreachable) is the
-example. This is a deliberate, recorded deviation — not a license to invent values or
-topology; only what the source's own text states may be transcribed.
+or prohibitive download), record the problem with `has_circuit_figure: true` (the
+source has one), `assets: []`, and `question_text` = the **verbatim prompt only** —
+never re-encode the un-fetched schematic (component layout, `R1∥R2 in series with
+R3`, node connections) into `question_text`, and never transcribe the solution
+structure. Re-encoding a figure as prose is reconstruction from prose, which is
+fabrication and is forbidden; it also pollutes text-only retrieval and answer-leakage
+analysis. Record the figure gap as an **access follow-up** for a future
+re-fetch. If a problem's only figure is unreachable *and* the question is otherwise
+not self-contained, hold it (e.g. `benchmarks/research/held.jsonl`) rather than
+degrading Gold fidelity. `vq_seed_0019` (Janzen Thévenin, Figure 7.3.1(a)
+unreachable) failed this rule and has been held out of Gold; `vq_seed_0020` (same
+source) is the conforming case because its question states all needed values
+verbatim in prose with no figure dependency.
 
 ## Provenance
 
