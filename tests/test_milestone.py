@@ -85,3 +85,38 @@ def test_m0_blocks_research_only_source(
     # The source is still approved and verified; only the data-policy gates trip.
     assert "milestone_source_unapproved" not in codes
     assert "milestone_source_unverified" not in codes
+
+
+def test_m0_excludes_license_review_source(
+    tmp_path: Path,
+    fixture_corpus_path: Path,
+    fixture_assets_root: Path,
+    fixture_documents_path: Path,
+) -> None:
+    # A source whose document imprint and collection license conflict is held in
+    # LICENSE_REVIEW and must be excluded from the public Gold corpus, with a
+    # distinct reason rather than being silently blocked as a bare unapproved
+    # candidate.
+    sources = tmp_path / "sources.yaml"
+    sources.write_text(
+        "sources:\n"
+        "  - id: fixture-source\n"
+        "    title: Fixture Source\n"
+        "    authors: [VoltQuery Fixtures]\n"
+        "    domains: [circuit_theory]\n"
+        "    license:\n"
+        "      id: CC-BY-NC-SA-4.0\n"
+        "      redistribution: false\n"
+        "      derivatives: false\n"
+        "      commercial: false\n"
+        "      attribution_required: true\n"
+        "      data_policy: research_only\n"
+        "      verified: false\n"
+        "    status: license_review\n",
+        encoding="utf-8",
+    )
+    issues = check_m0(fixture_corpus_path, sources, fixture_assets_root, fixture_documents_path)
+    codes = _error_codes(issues)
+    assert "milestone_source_license_review" in codes
+    assert "milestone_source_unapproved" not in codes
+    assert "milestone_source_not_redistributable" not in codes

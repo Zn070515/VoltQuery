@@ -5,7 +5,10 @@ seed problems: `vq_seed_0001–0005`, `vq_seed_0006–0015` (Socratic worksheets
 first source), and `vq_seed_0016` (OpenStax, the second source). M0 is RED
 (16 < 40), so this is a running requirements ledger for `EEProblemIR` v0.1, not a
 completion report. Observations below reflect the latest facts — not an earlier
-pilot-only view.
+pilot-only view. **Note:** `vq_seed_0016` sits in the corpus but its source is
+held in `LICENSE_REVIEW_REQUIRED` (see *Source policy ≠ Document policy*), so it
+is **not** counted toward the public-redistributable Gold gate — the public Gold
+is effectively 15 until its license is confirmed.
 
 The seed corpus is the requirements document for `EEProblemIR` v0.1. Record
 observations here rather than freezing the IR ahead of real data. Historical
@@ -15,9 +18,11 @@ change is tracked by Git; this document carries the current truth, not a changel
 
 - 16 problems: **13 circuit_theory, 3 analog_electronics**.
 - Source mix: **15 from `socratic-electronics`** (Kuphaldt Socratic worksheets),
-  **1 from `openstax-university-physics-v2`** (University Physics Vol 2, Ch 10).
-  Source diversity has moved off a single source but is still heavily skewed to
-  Kuphaldt — see *Source diversity*.
+  **1 from `openstax-university-physics-v2`** (University Physics Vol 2, Ch 10) —
+  but the OpenStax item is **held from the public Gold gate** pending license
+  review (imprint CC-BY-4.0 vs current collection CC-BY-NC-SA-4.0 + AI-training
+  restriction). Effectively 15 public items, 1 on hold. See *Source diversity*
+  and *Source policy ≠ Document policy*.
 - Topics observed: ohm_law, series, parallel, voltage_divider, thevenin, norton,
   equivalent_circuit, led, capacitor, rc_time_constant, rl_time_constant,
   inductor, algebraic_manipulation, bjt, emitter_follower, op_amp, voltage_gain,
@@ -112,9 +117,12 @@ remaining multi-work problems are expressed as:
 
 The boolean is still too weak regardless: it cannot enumerate parts, order them, or
 attach per-part answers. `EEProblemIR` needs structured subparts. Being able to
-verify `is_multipart` across two sources is themselves a useful contract test: OpenStax answers
+verify `is_multipart` across two sources is itself a useful contract test: OpenStax answers
 **only odd-numbered** problems, so a multipart problem is only `answer_available`
-if its number is odd (problem 37 is odd).
+if its number is odd (problem 37 is odd). Caveat: `vq_seed_0016` is the sole
+carrier of the lettered-subpart observation, and its source is **not** in the
+released/public set until the license is resolved — so the "cross-source
+subparts" claim is a *data-shape* observation, not a *public Gold* one yet.
 
 ### 6. How often is the answer a scalar vs expression vs explanation?
 
@@ -213,19 +221,19 @@ convention plus the `has_circuit_figure` boolean are sufficient to finish M0.
 ## Source diversity (most serious gap)
 
 **15 of 16 problems are from `socratic-electronics`; 1 is from
-`openstax-university-physics-v2`.** At 5 problems a single source was fine; at 15
-it was no longer acceptable; at 16 it is improved but still skewed. The corpus now
-supports two weak claims — "VoltQuery on Kuphaldt Socratic worksheets" and one
-OpenStax item — but is still not "VoltQuery on varied university EE problems."
-OpenStax University Physics Vol 2 is a genuinely independent CC-BY-4.0 source and
-is registered as `openstax-university-physics-v2` (verified 2026-08-22). The main
-reason few OpenStax items are in so far is its annotation difficulty, not its
-quality: two-column pages, rasterized body values, and odd-numbered-only answers
-each add per-problem work.
+`openstax-university-physics-v2`, and that item is held from the public Gold gate
+pending license review.** At 5 problems a single source was fine; at 15 it was no
+longer acceptable; at 16 it remains effectively single-source for the *released*
+set. OpenStax University Physics Vol 2 is genuinely independent, but it is
+registered as `status: license_review` (NOT approved/public) because its document
+imprint (CC-BY-4.0) conflicts with its current collection license (CC-BY-NC-SA-4.0
++ explicit no-LLM-training clause). So it cannot yet contribute to a public Gold
+corpus. Its other costs stand regardless: two-column pages, rasterized body
+values, and odd-numbered-only answers each add per-problem work.
 
-The real content gaps (KCL/KVL partially covered by `vq_seed_0016`; nodal, mesh,
-superposition, AC/phasor, impedance, diode, MOSFET) and the remaining lettered
-subparts are the driver of the next tranche.
+The real content gaps (KCL/KVL partially covered by `vq_seed_0016` — which is held;
+nodal, mesh, superposition, AC/phasor, impedance, diode, MOSFET) and the remaining
+lettered subparts are the driver of the next tranche.
 
 ## License version discrepancy
 
@@ -236,20 +244,62 @@ redistribution + derivatives, so the data policy is unchanged
 (PUBLIC_REDISTRIBUTABLE) — but the *version* differs between the PDF imprint and
 the site's declared license. This should be reconciled at the source level (pick
 the authoritative site license) and noted as provenance, not silently assumed.
-OpenStax prints **CC-BY-4.0** on its title page, matching the registered source
-license exactly; no discrepancy.
+OpenStax is the sharper case: its **pinned PDF** prints **CC-BY-4.0**, while the
+**current OpenStax pages** declare **CC-BY-NC-SA-4.0** plus an explicit
+no-LLM/generative-AI-training clause. The two do not agree — see *Source policy
+≠ Document policy*.
 
-## Next tranche (0016–0025) → (0017–0025)
+## Source policy ≠ Document policy
 
-- **From OpenStax** (the independent source) — `vq_seed_0016` is the first. Fill
-  the remaining KCL/KVL, RC-transient, and (Ch 15) AC/phasor/impedance slots with
-  **odd-numbered** problems so `answer_available: true` holds, and prefer
-  problems whose values and answers are vector text rather than rasterized.
-- **Fall back to Socratic** (Kuphaldt worksheets) for nodal/mesh, superposition,
-  diode, and MOSFET — OpenStax UPV2 does not cover these.
+The Socratic license discrepancy (PDF imprint CC-BY-1.0 vs site CC-BY-3.0-US) is a
+*version* mismatch that does not change the permissive policy. OpenStax is a
+different animal: the license **type** differs (BY vs BY-NC-SA) and a substantive
+use restriction is added (no LLM/GA training without permission). Both matter to
+our pipeline.
+
+- **Document-level license** (the artifact we pinned, sha256 `32b49efd…`): the
+  compiled PDF prints "CC BY 4.0" on its title page — verified verbatim.
+- **Collection-level license** (current OpenStax pages for University Physics
+  Vol 2): "Creative Commons Attribution-NonCommercial-ShareAlike License" plus
+  "may not be used to train large language models or in a generative-AI offering
+  without OpenStax's permission."
+- **Aggregator records** (BC Campus, Open Textbook Library, archive.org full
+  text) still list CC BY 4.0 — likely the original 2016 edition.
+
+These cannot be reconciled by assumption. The source is therefore in
+`LICENSE_REVIEW_REQUIRED` and excluded from the public Gold corpus until the
+license governing the specific artifact is confirmed. The system must support a
+`Source`-level policy that is **not** simply derived from a `Document`-level
+imprint: the same source can carry a document that prints a different (older)
+notice than the collection currently declares. This is the concrete requirement
+`vq_seed_0016` forced out, and it is a better M0 finding than the diversity gap.
+
+## Next tranche (0017–0025)
+
+- **OpenStax is on hold** — `vq_seed_0016` stays in the corpus but is excluded
+  from the public Gold gate, and **no further OpenStax problems are collected**
+  until its license is confirmed. Its KCL/KVL, RC, and (Ch 15) AC/phasor/impedance
+  slots are deferred, not filled.
+- **Diversify to genuinely independent, verified CC-BY sources** instead — the
+  following were surfaced as candidates and must be license-verified *before*
+  promotion to `approved`:
+  - KSU **Laboratory Manual for Engineering Electronics** (CC-BY-4.0; fills the
+    diode/BJT/MOSFET/op-amp analog probe directly),
+  - Fiore **Semiconductor Devices: Theory and Application Lab Manual**
+    (**CC-BY-4.0 for the lab manual** — note the main textbooks are NC-SA, so this
+    is a per-work distinction, not a blanket Fiore license),
+  - UMass **Applied Electrical Engineering Fundamentals** (CC-BY-4.0; independent
+    author/institution, EE fundamentals),
+  - Daryl Janzen **Introduction to Electricity, Magnetism, and Circuits**
+    (CC-BY-4.0; advanced circuit analysis incl. Thévenin),
+  - LibreTexts **page/book-level** CC-BY-4.0 works (e.g. Charles Kann Digital
+    Circuit Projects) — never treat `libretexts.org` as a single source license.
+  - **Fall back to Socratic** (Kuphaldt) for nodal/mesh, superposition, diode, and
+    MOSFET if no verified independent source covers them.
 - **Analog probe**: grow toward the 8 target — currently 3, needing diode, MOSFET,
   and one more analog shape.
 
 At 25 problems the corpus begins to be a genuine cross-source benchmark. Mix is
 roughly: Circuit 7–8 (KCL/KVL, node/mesh, superposition, AC/phasor/impedance) +
-Analog 3 (diode, MOSFET, one more).
+Analog 3 (diode, MOSFET, one more), spread over >= 3–4 independent source
+families.

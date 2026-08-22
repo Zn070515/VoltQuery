@@ -136,31 +136,39 @@ sources:
       - circuit_theory
       - analog_electronics
     license:
-      id: CC-BY-4.0
-      redistribution: true
-      derivatives: true
-      commercial: true
+      id: CC-BY-NC-SA-4.0
+      redistribution: false
+      derivatives: false
+      commercial: false
       attribution_required: true
-      data_policy: public_redistributable
-      verified: true
-      verification_url: https://openstax.org/details/books/university-physics-volume-2
-      verified_at: 2026-08-22
+      data_policy: research_only
+      verified: false
+      verification_url: https://openstax.org/books/university-physics-volume-2/pages/preface
       verification_note: >-
-        Copyright (c) 2021 Rice University. Textbook content produced by OpenStax
-        is licensed under a Creative Commons Attribution 4.0 International
-        License (CC BY 4.0) — confirmed verbatim on the compiled PDF license
-        imprint (p4). Share/Adapt permitted for any purpose including commercial,
-        with attribution. The on-disk file is the OpenStax "WEB" PDF from
-        assets.openstax.org.
-    source_url: https://openstax.org/details/books/university-physics-volume-2
-    status: approved
+        LICENSE_REVIEW_REQUIRED. The pinned PDF (openstax-upv2, sha256
+        32b49efd...) prints a "CC BY 4.0" imprint on its title page (verified
+        verbatim on the artifact), but the current OpenStax chapter/preface
+        pages for University Physics Volume 2 declare "Creative Commons
+        Attribution-NonCommercial-ShareAlike License" and add a clause that the
+        content may not be used to train large language models or in a
+        generative-AI offering without OpenStax's permission. Aggregators (BC
+        Campus, Open Textbook Library, archive.org full text) still list CC BY
+        4.0. The document-level license and the collection-level license
+        therefore CONFLICT, so the source is held in LICENSE_REVIEW and is NOT
+        treated as public_redistributable until the license governing the
+        specific artifact is resolved. This exercises the Source-policy !=
+        Document-policy gap.
+    source_url: https://openstax.org/books/university-physics-volume-2
+    status: license_review
     notes: >-
       University Physics Volume 2 (Ch 10 Direct-Current Circuits, Ch 15
       Alternating-Current Circuits). Genuinely independent of the Kuphaldt
-      corpus; the primary choice for diversifying the source mix at 0016+. Uses
-      explicit (a)(b)(c)(d) lettered subparts, exercising the annotation
-      contract across sources. Note: its problem sections use a two-column
-      layout, so per-problem cropping must be inspected against column bounds.
+      corpus; the primary choice for diversifying the source mix. Uses explicit
+      (a)(b)(c)(d) lettered subparts, exercising the annotation contract across
+      sources. HELD: license under review (imprint CC-BY-4.0 vs current
+      collection CC-BY-NC-SA-4.0 + AI-training restriction). vq_seed_0016 is
+      sourced here but is NOT counted toward the public Gold M0 gate until the
+      governing license is confirmed.
 
   - id: ksu-circuits-i-2022
     title: Circuits I Lab Manual and Ancillary Materials

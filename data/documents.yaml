@@ -86,4 +86,6 @@ documents:
     retrieved_at: 2026-08-22
     license_evidence:
       - "imprint: CC-BY-4.0 (printed on the compiled PDF title page, p4)"
-      - "collection: CC-BY-4.0 (OpenStax University Physics Volume 2, Rice University)"
+      - "collection (current OpenStax pages): CC-BY-NC-SA-4.0 + no LLM/generative-AI training without permission"
+      - "collection (aggregators, original 2016 edition): CC-BY-4.0"
+      - "status: LICENSE_REVIEW_REQUIRED — document imprint conflicts with current collection license; see data/sources.yaml"

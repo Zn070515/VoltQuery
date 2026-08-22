@@ -1,0 +1,100 @@
+# VoltQuery source-candidate registry (acquisition-side).
+#
+# This is the *discovery* output: sources the crawler surfaced or that were
+# proposed, BEFORE the license/policy gate has adjudicated them. A candidate is
+# promoted to data/sources.yaml (status: approved) only after the exact license of
+# the specific file/version in use has been independently verified and recorded
+# (verification_url / verified_at / verification_note). Until then every entry is
+# `pending_verification` — never assume a discovered URL implies a license.
+#
+# This file is deliberately NOT a frozen cross-module contract. It is an ingest
+# registry for source discovery. When the acquisition pipeline becomes its own
+# component, this shape should move behind a typed model.
+
+candidates:
+  - id: ksu-engineering-electronics
+    domain: [analog_electronics]
+    discovered_url: https://alg.manifoldapp.org/projects/laboratory-manual-for-engineering-electronics
+    license_claim:
+      id: CC-BY-4.0
+      status: pending_verification
+    acquisition:
+      type: web
+      requires_auth: false
+    policy:
+      target: public_redistributable
+    priority: A
+    notes: >-
+      Laboratory Manual for Engineering Electronics (Kennesaw State / OpenALG).
+      Fills the Analog probe: diode, BJT, MOSFET, op-amp, pre-lab, LTspice,
+      handouts, datasheets. Must verify the exact license of the specific
+      artifact, independent of the Circuits I manual.
+
+  - id: fiore-semiconductor-lab
+    domain: [analog_electronics]
+    discovered_url: https://pressbooks.atlanticoer-relatlantique.ca/semiconductorlab/
+    license_claim:
+      id: CC-BY-4.0
+      status: pending_verification
+    acquisition:
+      type: web
+      requires_auth: false
+    policy:
+      target: public_redistributable
+    priority: A
+    notes: >-
+      Fiore, Semiconductor Devices: Theory and Application Lab Manual. IMPORTANT:
+      this is a per-work distinction. Most Fiore textbooks are CC BY-NC-SA and are
+      REJECTED under the public policy; only the Lab Manual is claimed CC BY 4.0.
+      Verify the lab manual's license directly; do not generalize a Fiore-wide
+      license.
+
+  - id: umass-ee-fundamentals
+    domain: [circuit_theory]
+    discovered_url: https://openbooks.library.umass.edu/funee/
+    license_claim:
+      id: CC-BY-4.0
+      status: pending_verification
+    acquisition:
+      type: web
+      requires_auth: false
+    policy:
+      target: public_redistributable
+    priority: A
+    notes: >-
+      UMass, Applied Electrical Engineering Fundamentals (2025 update). Independent
+      author/institution; EE fundamentals and real circuit content. Verify license
+      and edition/date.
+
+  - id: janzen-electricity-magnetism-circuits
+    domain: [circuit_theory]
+    discovered_url: https://www.circuitbread.com/textbooks/introduction-to-electricity-magnetism-and-circuits/
+    license_claim:
+      id: CC-BY-4.0
+      status: pending_verification
+    acquisition:
+      type: web
+      requires_auth: false
+    policy:
+      target: public_redistributable
+    priority: A
+    notes: >-
+      Daryl Janzen, Introduction to Electricity, Magnetism, and Circuits.
+      Advanced circuit analysis incl. Thevenin. Independent author system.
+
+  - id: libretexts-digital-circuit-projects
+    domain: [digital_electronics]
+    discovered_url: https://eng.libretexts.org/Bookshelves/Electrical_Engineering/Electronics/
+    license_claim:
+      id: CC-BY-4.0
+      status: pending_verification
+    acquisition:
+      type: web
+      requires_auth: false
+    policy:
+      target: public_redistributable
+    priority: B
+    notes: >-
+      Charles Kann, Digital Circuit Projects (LibreTexts). RULE: LibreTexts must be
+      verified at page/book level — libretexts.org is NOT a single source license,
+      different books differ. Useful later for the Digital Electronics domain.

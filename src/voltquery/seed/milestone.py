@@ -125,6 +125,19 @@ def _check_sources(
                 )
             )
             continue
+        if source.status is SourceStatus.LICENSE_REVIEW:
+            issues.append(
+                ValidationIssue(
+                    code="milestone_source_license_review",
+                    path=source_id,
+                    message=(
+                        f"source '{source_id}' license is under review "
+                        "(LICENSE_REVIEW_REQUIRED); excluded from the public "
+                        "Gold corpus until the governing license is confirmed"
+                    ),
+                )
+            )
+            continue
         if source.status is not SourceStatus.APPROVED:
             issues.append(
                 ValidationIssue(

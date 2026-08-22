@@ -26,6 +26,7 @@ class SourceStatus(str, Enum):
 
     CANDIDATE = "candidate"
     APPROVED = "approved"
+    LICENSE_REVIEW = "license_review"
     REJECTED = "rejected"
 
 

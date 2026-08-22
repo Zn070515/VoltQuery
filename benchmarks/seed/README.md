@@ -15,10 +15,14 @@ Current status: **16 / 40 problems collected** (13 Circuit Theory,
 
 15 problems are from the `socratic-electronics` source; 1 (`vq_seed_0016`) is from
 `openstax-university-physics-v2` (University Physics Vol 2, Ch 10) — the first
-genuinely independent, non-Kuphaldt source and the first lettered-subpart problem
-in the corpus. The next tranche continues from the OpenStax source for the
-coverage OpenStax supports (KCL/KVL, RC, AC/phasor/impedance) and falls back to
-Socratic for nodal/mesh, superposition, diode, and MOSFET — see
+lettered-subpart problem and the first genuinely independent candidate. **Its
+source is under `LICENSE_REVIEW_REQUIRED`** (the pinned PDF prints CC-BY-4.0, but
+the current OpenStax collection license is CC-BY-NC-SA-4.0 with an additional
+no-LLM-training clause), so `vq_seed_0016` is **not counted toward the public Gold
+gate** and no further OpenStax items are collected until the governing license is
+confirmed. The next tranche pursues independently verified CC-BY sources (KSU
+Engineering Electronics, Fiore's CC-BY lab manual, UMass, Janzen) and falls back
+to Socratic for nodal/mesh, superposition, diode, and MOSFET — see
 [`docs/development/SEED_CORPUS_FINDINGS.md`](../../docs/development/SEED_CORPUS_FINDINGS.md).
 
 ## Gold / Silver / Bronze
