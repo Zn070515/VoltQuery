@@ -45,7 +45,7 @@ single stylistic/authorial axis.
   `ksu-circuits-i-lab-manual` DOCX) — 10 problems:
   - `vq_seed_0028` Lab Exercise #5 Prelab Task 1, nodal analysis of the Fig 1
     complex DC circuit (R1=1 kΩ, R2=2.2 kΩ, R3=820 Ω, R4=220 Ω, R5=470 Ω,
-    R6=330 Ω, Vs=8 V; real vector schematic asset, no question crop).
+    R6=330 Ω, Vs=8 V; full question crop + real vector schematic asset).
   - `vq_seed_0029` Lab Exercise #3 Prelab Task 1b, the Fig 1 series circuit
     (Vs=9 V; R1=Green–Blue–Brown, R2=Red–Red–Brown; find VR2 and I; authentic
     series-schematic asset).
@@ -59,9 +59,10 @@ single stylistic/authorial axis.
   - `vq_seed_0032` Lab Exercise #7 Prelab Task 1, superposition (12 V/5 V
     sources, RL to find; power 87.11 mW / 3.44 mW; circuit-schematic asset;
     is_multipart true for (i)(ii)(iii)).
-  - `vq_seed_0035` Lab Exercise #9 Prelab Task 1 (Circuit 1), series resistive
-    divider fed by a 2 V square wave (R1=1 kΩ, R2=2.2 kΩ; find peak-to-peak
-    VR1/VR2).
+  - `vq_seed_0035` Lab Exercise #9 Prelab Task 1 (Circuit 1), LTspice simulation
+    of Circuit 1: sketch the series resistive divider (R1=1 kΩ, R2=2.2 kΩ on
+    Fig 8), set Vs as a 2 V Pulse (Von=2 V, Ton=0.5 ms, Tperiod=1 ms,
+    Trise/Tfall=10 ns), then run a Transient analysis to 2 ms.
   - `vq_seed_0036` Lab Exercise #9 Prelab Task 2 (Circuit 2), series RC
     transient (R1=1 kΩ, C1=82 nF; find Vc/Vr across time + τ).
   - `vq_seed_0037` Lab Exercise #9 Prelab Task 4 (Circuit 3), RL transient
@@ -72,6 +73,8 @@ single stylistic/authorial axis.
     1–4 kHz + resonant frequency; is_multipart true for Task 1a/1b).
   - `vq_seed_0039` Lab Exercise #5 Prelab Task 2, mesh analysis of the same
     Fig 1 circuit as `vq_seed_0028` (compute mesh currents I1/I2/I3).
+  Each of the ten ships a **full question crop** (`kind: figure`, a DOCX-rendered
+  Prelab page) plus its **schematic crop** (`kind: schematic`).
   This is the 4th truly independent ecosystem; CC-BY-4.0 and verified.
   `answer_available` is false for all ten — they are student prelab exercises
   and the manual prints no answer.

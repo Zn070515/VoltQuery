@@ -110,10 +110,14 @@ change is tracked by Git; this document carries the current truth, not a changel
 
 ### 1. Can a problem have multiple figures?
 
-Yes. Ten public problems carry **two** assets — a full-question crop
+Yes. Twenty public problems carry **two** assets — a full-question crop
 (`kind: figure`) plus a circuit crop (`kind: schematic`): `vq_seed_0002`–`0005`,
-`0009`–`0011`, `0014`, `0015`, and `vq_seed_0017` (the held `vq_seed_0016` also
-does). `assets: list[AssetRef]` of length 2 is exercised. The asset list is still
+`0009`–`0011`, `0014`, `0015`, `vq_seed_0017`, and all ten KSU Circuits I items
+`vq_seed_0028`–`0032`, `vq_seed_0035`–`0039` (the held `vq_seed_0016` also
+does). The KSU question crops are **DOCX→PDF-rendered Prelab pages** (a
+`docx`/`doc` source, so the inline-formula-web exception in the Annotation
+Guide does not apply — the figure is obtained and both assets ship). `assets:
+list[AssetRef]` of length 2 is exercised. The asset list is still
 homogeneous in `kind` (figure = question crop, schematic = circuit crop);
 no problem yet combines, say, a schematic + a waveform plot in the same item. The
 `kind` enum is genuinely used: `vq_seed_0006` embeds a *pictorial* (power-supply
