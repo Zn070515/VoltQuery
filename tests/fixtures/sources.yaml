@@ -1,0 +1,19 @@
+sources:
+  - id: fixture-source
+    title: Fixture Source (schema example, VoltQuery-owned)
+    author: VoltQuery Fixtures
+    domains:
+      - circuit_theory
+    license:
+      id: fixture-license
+      redistribution: true
+      derivatives: true
+      commercial: false
+      attribution_required: true
+      data_policy: public_redistributable
+      verified: true
+    source_url: null
+    status: approved
+    notes: >-
+      Structural fixture for the validation tests. Not real EE curriculum
+      content; owned by VoltQuery for schema testing.

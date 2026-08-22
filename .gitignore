@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+dist/
+build/
+
+# Local raw data is excluded from git unless a source is explicitly
+# verified as redistributable and repo policy permits inclusion.
+data/raw/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Developing Routes
+docs/superpowers/*
+docs/development/*

@@ -1,0 +1,122 @@
+"""Tests for seed corpus validation."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import pytest
+from voltquery.contracts import SeedProblemRecord
+from voltquery.seed import load_problems, validate_corpus
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+TARGET_TOTAL = 40
+TARGET_CIRCUIT = 32
+TARGET_ANALOG = 8
+
+
+def corpus_codes(problems_path: Path, sources_path: Path, assets_root: Path) -> set[str]:
+    issues = validate_corpus(problems_path, sources_path, assets_root)
+    return {issue.code for issue in issues}
+
+
+def test_problem_record_valid(
+    fixture_corpus_path: Path,
+    fixture_sources_path: Path,
+    fixture_assets_root: Path,
+) -> None:
+    codes = corpus_codes(fixture_corpus_path, fixture_sources_path, fixture_assets_root)
+    assert "problem_record_invalid" not in codes
+    assert "problem_record_invalid_json" not in codes
+
+
+def test_problem_source_exists(
+    fixture_corpus_path: Path,
+    fixture_sources_path: Path,
+    fixture_assets_root: Path,
+) -> None:
+    codes = corpus_codes(fixture_corpus_path, fixture_sources_path, fixture_assets_root)
+    assert "problem_source_unknown" not in codes
+
+
+def test_problem_ids_unique(
+    fixture_corpus_path: Path,
+    fixture_sources_path: Path,
+    fixture_assets_root: Path,
+) -> None:
+    codes = corpus_codes(fixture_corpus_path, fixture_sources_path, fixture_assets_root)
+    assert "duplicate_problem_id" not in codes
+
+
+def test_problem_assets_exist(
+    fixture_corpus_path: Path,
+    fixture_sources_path: Path,
+    fixture_assets_root: Path,
+) -> None:
+    codes = corpus_codes(fixture_corpus_path, fixture_sources_path, fixture_assets_root)
+    assert "problem_asset_missing" not in codes
+
+
+def test_topic_names_valid(
+    fixture_corpus_path: Path,
+    fixture_sources_path: Path,
+    fixture_assets_root: Path,
+) -> None:
+    codes = corpus_codes(fixture_corpus_path, fixture_sources_path, fixture_assets_root)
+    assert "problem_record_invalid" not in codes
+
+
+def test_domain_names_valid(
+    fixture_corpus_path: Path,
+    fixture_sources_path: Path,
+    fixture_assets_root: Path,
+) -> None:
+    codes = corpus_codes(fixture_corpus_path, fixture_sources_path, fixture_assets_root)
+    assert "problem_record_invalid" not in codes
+
+
+def test_problem_asset_missing_detected(
+    tmp_path: Path,
+    fixture_sources_path: Path,
+    fixture_assets_root: Path,
+) -> None:
+    record = SeedProblemRecord(
+        id="vq_seed_9999",
+        source={"source_id": "fixture-source"},
+        domain="circuit_theory",
+        topics=["ohm_law"],
+        question_text="[fixture] missing asset test",
+        has_formula=False,
+        has_circuit_figure=False,
+        is_multipart=False,
+        answer_available=False,
+        assets=[{"path": "assets/nope.svg", "kind": "figure"}],
+    )
+    corpus = tmp_path / "problems.jsonl"
+    corpus.write_text(record.model_dump_json() + "\n", encoding="utf-8")
+    codes = corpus_codes(corpus, fixture_sources_path, fixture_assets_root)
+    assert "problem_asset_missing" in codes
+
+
+def _real_corpus() -> list[SeedProblemRecord]:
+    corpus_path = REPO_ROOT / "benchmarks" / "seed" / "problems.jsonl"
+    if not corpus_path.exists() or corpus_path.stat().st_size == 0:
+        return []
+    return load_problems(corpus_path)
+
+
+def test_problem_count() -> None:
+    records = _real_corpus()
+    if not records:
+        pytest.skip("seed corpus not yet populated; content task pending")
+    assert len(records) >= TARGET_TOTAL
+
+
+def test_required_probe_coverage() -> None:
+    records = _real_corpus()
+    if not records:
+        pytest.skip("seed corpus not yet populated; content task pending")
+    circuit = sum(1 for record in records if record.domain.value == "circuit_theory")
+    analog = sum(1 for record in records if record.domain.value == "analog_electronics")
+    assert circuit >= TARGET_CIRCUIT
+    assert analog >= TARGET_ANALOG

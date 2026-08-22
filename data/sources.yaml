@@ -1,0 +1,69 @@
+# VoltQuery source registry.
+#
+# License metadata is data, not documentation. Every source must carry a
+# machine-readable license/provenance block. New or uncertain sources default
+# to status: candidate and data_policy: unknown. Do NOT redistribute content
+# from a source until the exact license of the specific file/version in use has
+# been independently verified.
+
+sources:
+  - id: socratic-electronics
+    title: Socratic Electronics
+    author: Tony R. Kuphaldt
+    domains:
+      - circuit_theory
+    license:
+      id: UNKNOWN
+      redistribution: null
+      derivatives: null
+      commercial: null
+      attribution_required: null
+      data_policy: unknown
+      verified: false
+    source_url: null
+    status: candidate
+    notes: >-
+      Candidate source family. The exact license applying to each specific
+      work, page, and version must be independently verified before any
+      content is copied or redistributed.
+
+  - id: lessons-in-electric-circuits
+    title: Lessons in Electric Circuits
+    author: Tony R. Kuphaldt
+    domains:
+      - circuit_theory
+    license:
+      id: UNKNOWN
+      redistribution: null
+      derivatives: null
+      commercial: null
+      attribution_required: null
+      data_policy: unknown
+      verified: false
+    source_url: null
+    status: candidate
+    notes: >-
+      Candidate source family. Believed to be distributed under a permissive
+      license, but the license terms of the specific edition in use must be
+      verified before redistribution is inferred.
+
+  - id: open-circuits-i-materials
+    title: Open Circuits I Course Materials
+    author: Various
+    domains:
+      - circuit_theory
+      - analog_electronics
+    license:
+      id: UNKNOWN
+      redistribution: null
+      derivatives: null
+      commercial: null
+      attribution_required: null
+      data_policy: unknown
+      verified: false
+    source_url: null
+    status: candidate
+    notes: >-
+      Candidate source family. Open/derived Circuits I teaching materials.
+      Identify the specific collection, edition, and license before any
+      permission to redistribute is inferred.
