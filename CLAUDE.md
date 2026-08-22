@@ -358,6 +358,9 @@ Before accepting a change, check:
 - No heavy runtime initialization at module import time.
 - No premature microservices.
 - No premature distributed architecture.
+- On every push, report the actual remote CI status (the GitHub Actions run
+  result), not just local gate results. Treat a commit's own claim of "passing"
+  as unverified until the Actions run is observed.
 
 VoltQuery should begin as a well-structured local application/library and earn complexity only when real usage requires it.
 
