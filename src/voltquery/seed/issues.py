@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from enum import Enum
 
-from pydantic import BaseModel, ValidationError
+from pydantic import ValidationError
+
+from voltquery.contracts import ContractModel
 
 
 class Severity(str, Enum):
@@ -14,7 +16,7 @@ class Severity(str, Enum):
     WARNING = "warning"
 
 
-class ValidationIssue(BaseModel):
+class ValidationIssue(ContractModel):
     """A single validation issue.
 
     Failures are first-class results returned as lists, never swallowed.

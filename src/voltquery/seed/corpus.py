@@ -14,13 +14,18 @@ from .sources import load_sources
 
 
 def load_problems(path: str | Path) -> list[SeedProblemRecord]:
-    """Parse ``problems.jsonl`` into validated ``SeedProblemRecord`` models."""
+    """Parse ``problems.jsonl`` into validated ``SeedProblemRecord`` models.
+
+    Loader semantics are fail-fast: a missing file raises ``FileNotFoundError``
+    and malformed JSON / schema errors propagate. Use ``validate_corpus`` when
+    you want issues collected rather than raised.
+    """
 
     problems_path = Path(path)
-    records: list[SeedProblemRecord] = []
     if not problems_path.exists():
-        return records
+        raise FileNotFoundError(f"corpus file not found: {problems_path}")
 
+    records: list[SeedProblemRecord] = []
     with problems_path.open("r", encoding="utf-8") as fh:
         for line in fh:
             if not line.strip():
@@ -105,7 +110,19 @@ def validate_corpus(
                 )
 
             for asset in record.assets:
-                if not (assets / asset.path).exists():
+                asset_path = (assets / asset.path).resolve()
+                if not asset_path.is_relative_to(assets.resolve()):
+                    issues.append(
+                        ValidationIssue(
+                            code="problem_asset_escape",
+                            path=ref,
+                            message=(
+                                f"problem '{record.id}' references asset outside "
+                                f"the corpus root: '{asset.path}'"
+                            ),
+                        )
+                    )
+                elif not asset_path.exists():
                     issues.append(
                         ValidationIssue(
                             code="problem_asset_missing",

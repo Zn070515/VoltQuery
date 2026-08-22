@@ -1,6 +1,6 @@
 [project]
 name = "voltquery"
-version = "0.1.0"
+version = "0.0.1"
 description = "VoltQuery - Electrical Engineering Problem Search & Verifiable Reasoning Engine"
 readme = "README.md"
 authors = [

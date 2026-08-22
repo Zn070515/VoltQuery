@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel
-
+from ._base import ContractModel
 from .enums import DataPolicy
 
 
-class LicenseMetadata(BaseModel):
+class LicenseMetadata(ContractModel):
     """License/provenance metadata owned by a source.
 
     Restrictive defaults: an unverified source defaults to ``UNKNOWN`` policy

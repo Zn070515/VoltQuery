@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -96,6 +97,43 @@ def test_problem_asset_missing_detected(
     corpus.write_text(record.model_dump_json() + "\n", encoding="utf-8")
     codes = corpus_codes(corpus, fixture_sources_path, fixture_assets_root)
     assert "problem_asset_missing" in codes
+
+
+def test_load_problems_missing_file_raises(tmp_path: Path) -> None:
+    with pytest.raises(FileNotFoundError):
+        load_problems(tmp_path / "nope.jsonl")
+
+
+def test_load_problems_malformed_json_raises(tmp_path: Path) -> None:
+    corpus = tmp_path / "problems.jsonl"
+    corpus.write_text("{not valid json}\n", encoding="utf-8")
+    with pytest.raises(json.JSONDecodeError):
+        load_problems(corpus)
+
+
+def test_asset_traversal_blocked_at_ingestion(
+    tmp_path: Path,
+    fixture_sources_path: Path,
+    fixture_assets_root: Path,
+) -> None:
+    # Write the raw line, bypassing the model, so validate_corpus is the thing
+    # that has to reject a path-traversal asset reference.
+    corpus = tmp_path / "problems.jsonl"
+    corpus.write_text(
+        '{"id": "vq_seed_9998", '
+        '"source": {"source_id": "fixture-source"}, '
+        '"domain": "circuit_theory", '
+        '"topics": ["ohm_law"], '
+        '"question_text": "[fixture] traversal test", '
+        '"has_formula": false, '
+        '"has_circuit_figure": false, '
+        '"is_multipart": false, '
+        '"answer_available": false, '
+        '"assets": [{"path": "../escape.svg", "kind": "figure"}]}\n',
+        encoding="utf-8",
+    )
+    codes = corpus_codes(corpus, fixture_sources_path, fixture_assets_root)
+    assert "problem_record_invalid" in codes
 
 
 def _real_corpus() -> list[SeedProblemRecord]:

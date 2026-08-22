@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel
-
+from ._base import ContractModel
 from .enums import Domain, SourceStatus
 from .license import LicenseMetadata
 
 
-class Source(BaseModel):
+class Source(ContractModel):
     """A registered source entry in ``data/sources.yaml``."""
 
     id: str
@@ -21,7 +20,7 @@ class Source(BaseModel):
     notes: str | None = None
 
 
-class SourceRef(BaseModel):
+class SourceRef(ContractModel):
     """Provenance of a single problem within a registered source."""
 
     source_id: str

@@ -38,30 +38,7 @@ class AssetKind(str, Enum):
     OTHER = "other"
 
 
-class Topic(str, Enum):
-    """Controlled topic vocabulary for seed problems.
-
-    Intentionally an open vocabulary that grows as the seed corpus reveals
-    what EEProblemIR must represent. Not frozen yet.
-    """
-
-    # Circuit Theory
-    OHM_LAW = "ohm_law"
-    SERIES_PARALLEL = "series_parallel"
-    KCL = "kcl"
-    KVL = "kvl"
-    NODE_VOLTAGE = "node_voltage"
-    MESH_CURRENT = "mesh_current"
-    THEVENIN = "thevenin"
-    NORTON = "norton"
-    SUPERPOSITION = "superposition"
-    RC = "rc"
-    RL = "rl"
-    AC_PHASOR = "ac_phasor"
-    IMPEDANCE = "impedance"
-
-    # Analog probe
-    DIODE = "diode"
-    BJT = "bjt"
-    MOSFET = "mosfet"
-    OPAMP = "opamp"
+# NOTE: Topic is deliberately NOT an enum during M0. The real topic taxonomy
+# is unknown until the seed corpus is populated, so topics are stored as open
+# lowercase slugs (see ``contracts.seed.TopicSlug``) and only frozen as a
+# ``Topic taxonomy v0.1`` in M1, after the real problems are observed.

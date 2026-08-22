@@ -20,6 +20,5 @@ Thumbs.db
 .idea/
 .vscode/
 
-# Developing Routes
+# Superpowers session artifacts are local; not part of the public contract.
 docs/superpowers/*
-docs/development/*
