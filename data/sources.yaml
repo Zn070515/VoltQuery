@@ -9,7 +9,8 @@
 sources:
   - id: socratic-electronics
     title: Socratic Electronics
-    author: Tony R. Kuphaldt
+    authors:
+      - Tony R. Kuphaldt
     domains:
       - circuit_theory
     license:
@@ -29,7 +30,8 @@ sources:
 
   - id: lessons-in-electric-circuits
     title: Lessons in Electric Circuits
-    author: Tony R. Kuphaldt
+    authors:
+      - Tony R. Kuphaldt
     domains:
       - circuit_theory
     license:
@@ -49,7 +51,7 @@ sources:
 
   - id: open-circuits-i-materials
     title: Open Circuits I Course Materials
-    author: Various
+    authors: []
     domains:
       - circuit_theory
       - analog_electronics

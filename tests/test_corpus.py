@@ -9,12 +9,6 @@ import pytest
 from voltquery.contracts import SeedProblemRecord
 from voltquery.seed import load_problems, validate_corpus
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-
-TARGET_TOTAL = 40
-TARGET_CIRCUIT = 32
-TARGET_ANALOG = 8
-
 
 def corpus_codes(problems_path: Path, sources_path: Path, assets_root: Path) -> set[str]:
     issues = validate_corpus(problems_path, sources_path, assets_root)
@@ -134,27 +128,3 @@ def test_asset_traversal_blocked_at_ingestion(
     )
     codes = corpus_codes(corpus, fixture_sources_path, fixture_assets_root)
     assert "problem_record_invalid" in codes
-
-
-def _real_corpus() -> list[SeedProblemRecord]:
-    corpus_path = REPO_ROOT / "benchmarks" / "seed" / "problems.jsonl"
-    if not corpus_path.exists() or corpus_path.stat().st_size == 0:
-        return []
-    return load_problems(corpus_path)
-
-
-def test_problem_count() -> None:
-    records = _real_corpus()
-    if not records:
-        pytest.skip("seed corpus not yet populated; content task pending")
-    assert len(records) >= TARGET_TOTAL
-
-
-def test_required_probe_coverage() -> None:
-    records = _real_corpus()
-    if not records:
-        pytest.skip("seed corpus not yet populated; content task pending")
-    circuit = sum(1 for record in records if record.domain.value == "circuit_theory")
-    analog = sum(1 for record in records if record.domain.value == "analog_electronics")
-    assert circuit >= TARGET_CIRCUIT
-    assert analog >= TARGET_ANALOG

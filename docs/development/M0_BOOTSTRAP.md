@@ -90,7 +90,8 @@ Example schema:
 sources:
   - id: example-source
     title: Example Source
-    author: Example Author
+    authors:
+      - Example Author
 
     domains:
       - circuit_theory
@@ -162,21 +163,26 @@ Example:
   "source": {
     "source_id": "source-id",
     "document": "document-name",
-    "page": 12,
+    "page_index": 12,
+    "page_label": "7",
     "question_number": "Q3"
   },
   "domain": "circuit_theory",
-  "topic": [
+  "topics": [
     "kcl",
     "node_voltage"
   ],
   "question_text": "…",
   "has_formula": true,
   "has_circuit_figure": true,
+  "is_multipart": false,
   "answer_available": true,
-  "assets": {
-    "question_image": "assets/vq_seed_0001.png"
-  }
+  "assets": [
+    {
+      "path": "assets/vq_seed_0001.png",
+      "kind": "figure"
+    }
+  ]
 }
 ```
 

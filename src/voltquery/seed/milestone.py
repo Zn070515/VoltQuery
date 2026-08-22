@@ -13,7 +13,7 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from voltquery.contracts import SeedProblemRecord, Source
-from voltquery.contracts.enums import Domain, SourceStatus
+from voltquery.contracts.enums import DataPolicy, Domain, SourceStatus
 
 from .corpus import load_problems, validate_corpus
 from .issues import ValidationIssue
@@ -141,6 +141,29 @@ def _check_sources(
                     code="milestone_source_unverified",
                     path=source_id,
                     message=f"source '{source_id}' license metadata not verified",
+                )
+            )
+        if source.license.data_policy is not DataPolicy.PUBLIC_REDISTRIBUTABLE:
+            issues.append(
+                ValidationIssue(
+                    code="milestone_source_not_redistributable",
+                    path=source_id,
+                    message=(
+                        f"source '{source_id}' data policy is "
+                        f"{source.license.data_policy.value}; the public Gold "
+                        "corpus requires public_redistributable"
+                    ),
+                )
+            )
+        if source.license.redistribution is not True:
+            issues.append(
+                ValidationIssue(
+                    code="milestone_source_no_redistribution",
+                    path=source_id,
+                    message=(
+                        f"source '{source_id}' does not explicitly allow "
+                        "redistribution"
+                    ),
                 )
             )
 

@@ -1,7 +1,8 @@
 sources:
   - id: fixture-source
     title: Fixture Source (schema example, VoltQuery-owned)
-    author: VoltQuery Fixtures
+    authors:
+      - VoltQuery Fixtures
     domains:
       - circuit_theory
     license:

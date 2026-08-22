@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pydantic import Field
+
 from ._base import ContractModel
 from .enums import Domain, SourceStatus
 from .license import LicenseMetadata
@@ -12,7 +14,10 @@ class Source(ContractModel):
 
     id: str
     title: str
-    author: str | None = None
+    authors: list[str] = Field(default_factory=list)
+    institution: str | None = None
+    edition: str | None = None
+    published_year: int | None = None
     domains: list[Domain]
     license: LicenseMetadata
     source_url: str | None = None
@@ -25,5 +30,6 @@ class SourceRef(ContractModel):
 
     source_id: str
     document: str | None = None
-    page: int | None = None
+    page_index: int | None = None
+    page_label: str | None = None
     question_number: str | None = None

@@ -29,7 +29,8 @@ def test_m0_unpopulated_corpus_reports_counts(
     fixture_assets_root: Path,
 ) -> None:
     # The fixture corpus has 4 circuit_theory records and 0 analog ones; the
-    # fixture source is approved+verified, so only the count gates fail.
+    # fixture source is approved+verified+public_redistributable, so only the
+    # count gates fail.
     issues = check_m0(
         fixture_corpus_path,
         fixture_sources_path,
@@ -39,5 +40,39 @@ def test_m0_unpopulated_corpus_reports_counts(
     assert "milestone_problem_count" in codes
     assert "milestone_circuit_count" in codes
     assert "milestone_analog_count" in codes
+    assert "milestone_source_unapproved" not in codes
+    assert "milestone_source_unverified" not in codes
+    assert "milestone_source_not_redistributable" not in codes
+    assert "milestone_source_no_redistribution" not in codes
+
+
+def test_m0_blocks_research_only_source(
+    tmp_path: Path,
+    fixture_corpus_path: Path,
+    fixture_assets_root: Path,
+) -> None:
+    sources = tmp_path / "sources.yaml"
+    sources.write_text(
+        "sources:\n"
+        "  - id: fixture-source\n"
+        "    title: Fixture Source\n"
+        "    authors: [VoltQuery Fixtures]\n"
+        "    domains: [circuit_theory]\n"
+        "    license:\n"
+        "      id: CC-BY-NC-4.0\n"
+        "      redistribution: false\n"
+        "      derivatives: true\n"
+        "      commercial: false\n"
+        "      attribution_required: true\n"
+        "      data_policy: research_only\n"
+        "      verified: true\n"
+        "    status: approved\n",
+        encoding="utf-8",
+    )
+    issues = check_m0(fixture_corpus_path, sources, fixture_assets_root)
+    codes = _error_codes(issues)
+    assert "milestone_source_not_redistributable" in codes
+    assert "milestone_source_no_redistribution" in codes
+    # The source is still approved and verified; only the data-policy gates trip.
     assert "milestone_source_unapproved" not in codes
     assert "milestone_source_unverified" not in codes

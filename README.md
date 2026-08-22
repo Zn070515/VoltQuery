@@ -45,8 +45,8 @@ Python >=3.12,<3.13
 - `docs/roadmap.md` — milestone/version roadmap
 - `docs/version-spec.md` — version features and acceptance criteria
 - `docs/architecture.md` — architecture rules
-- `docs/development/M0-BOOTSTRAP.md` — immediate M0 starting work
-- `docs/development/SEED-CORPUS-FINDINGS.md` — lessons learned from the seed corpus
+- `docs/development/M0_BOOTSTRAP.md` — immediate M0 starting work
+- `docs/development/SEED_CORPUS_FINDINGS.md` — lessons learned from the seed corpus
 
 ## Long-term Direction
 

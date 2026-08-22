@@ -23,12 +23,20 @@ def test_license_defaults_are_restrictive() -> None:
     assert license_meta.id == "UNKNOWN"
     assert license_meta.data_policy is DataPolicy.UNKNOWN
     assert license_meta.verified is False
+    assert license_meta.verification_url is None
+    assert license_meta.verified_at is None
+    assert license_meta.verification_note is None
 
 
 def test_seed_record_round_trip() -> None:
     record = SeedProblemRecord(
         id="vq_seed_0001",
-        source={"source_id": "fixture-source", "page": 1},
+        source={
+            "source_id": "fixture-source",
+            "page_index": 1,
+            "page_label": "7",
+            "question_number": "Q1",
+        },
         domain="circuit_theory",
         topics=["ohm_law"],
         question_text="[fixture] round trip",
@@ -40,6 +48,23 @@ def test_seed_record_round_trip() -> None:
     )
     restored = SeedProblemRecord.model_validate(record.model_dump())
     assert restored == record
+
+
+def test_source_ref_page_variants() -> None:
+    record = SeedProblemRecord(
+        id="vq_seed_page",
+        source={"source_id": "fixture-source", "page_label": "iv"},
+        domain="circuit_theory",
+        topics=["ohm_law"],
+        question_text="[fixture] label-only page",
+        has_formula=False,
+        has_circuit_figure=False,
+        is_multipart=False,
+        answer_available=False,
+        assets=[],
+    )
+    assert record.source.page_index is None
+    assert record.source.page_label == "iv"
 
 
 def test_unknown_field_rejected() -> None:

@@ -14,11 +14,13 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
-      - name: Install dependencies
-        run: uv sync --dev
+      - name: Install dependencies (locked)
+        run: uv sync --locked --dev
       - name: Lint
         run: uv run ruff check .
       - name: Type check
         run: uv run mypy
       - name: Test
         run: uv run pytest
+      - name: Validate real registry and corpus
+        run: uv run voltquery validate
