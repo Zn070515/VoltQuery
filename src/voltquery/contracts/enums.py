@@ -39,6 +39,44 @@ class AssetKind(str, Enum):
     OTHER = "other"
 
 
+class AssetRole(str, Enum):
+    """What an asset *is for*, orthogonal to ``AssetKind`` (what it *is*).
+
+    ``observed``-role assets come straight from the source and are the retrieval
+    targets; ``generated`` assets (a CircuitIR render, an OCR-derived crop) are
+    produced by VoltQuery and are NOT source provenance.
+    """
+
+    QUESTION_CROP = "question_crop"
+    FIGURE = "figure"
+    SCHEMATIC = "schematic"
+    FORMULA = "formula"
+    TABLE = "table"
+    ANSWER = "answer"
+    SOLUTION = "solution"
+    GENERATED = "generated"
+
+
+class FormulaRole(str, Enum):
+    """Whether a formula is given by the source, merely displayed, or to derive.
+
+    An EE problem *gives* ``V = IR`` rather than "stating" it; so the source
+    narrative carries ``given`` formulas, a figure/table may *display* one, and a
+    problem may ask the student to ``derived`` a relation.
+    """
+
+    GIVEN = "given"
+    DISPLAYED = "displayed"
+    DERIVED = "derived"
+
+
+class FormulaLayout(str, Enum):
+    """Textual layout of a formula occurrence."""
+
+    INLINE = "inline"
+    DISPLAY = "display"
+
+
 # NOTE: Topic is deliberately NOT an enum during M0. The real topic taxonomy
 # is unknown until the seed corpus is populated, so topics are stored as open
 # lowercase slugs (see ``contracts.seed.TopicSlug``) and only frozen as a
