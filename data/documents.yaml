@@ -99,3 +99,77 @@ documents:
     license_evidence:
       - "collection: CC-BY-4.0 (About this book page: 'Creative Commons Attribution 4.0 International License, except where otherwise noted'; chapter footer confirms)"
       - "note: web-only Pressbooks chapter (no paginated PDF); SourceRef.page_index is null, page_label is the section title."
+
+  - id: umass-funee-ch6-4
+    source_id: umass-ee-fundamentals
+    filename: chapter-6-4.html
+    url: https://openbooks.library.umass.edu/funee/chapter/6-4/
+    sha256: "61633180ce6ddb6114c3e925714e8dedb7c9b19f8c9f694ddb8cb6cfbf431f31"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "collection: CC-BY-4.0 (About this book page: 'Creative Commons Attribution 4.0 International License, except where otherwise noted'; chapter footer confirms)"
+      - "note: web-only Pressbooks chapter (no paginated PDF); SourceRef.page_index is null, page_label is the section title."
+
+  - id: janzen-intro-emc
+    source_id: janzen-electricity-magnetism-circuits
+    filename: janzen_intro_to_emc.html
+    url: https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/579/3/Introduction-to-Electricity-Magnetism-and-Circuits-1536847996.html
+    sha256: "d18d75d3c88a195221403a63ac91332a8bf7f0bea89832aaece71a47e29d778a"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "collection: CC-BY-4.0 (CircuitBread appendices page and eCampusOntario Open Library record; see data/sources.yaml)"
+      - "note: whole-book Pressbooks XHTML export (6.48 MB) from the eCampusOntario Open Library. SourceRef.page_index is null; page_label is the section title. The primary CircuitBread pages and the openpress.usask.ca mirror were gated on egress (403/401), so the eCampusOntario mirror was used."
+
+  - id: lessons-dc-vol1
+    source_id: lessons-electric-circuits-dc
+    filename: DC.pdf
+    url: https://www.ibiblio.org/kuphaldt/electricCircuits/DC/DC.pdf
+    sha256: "b49dc6038ef2e2988c30e8920451b076602f54c959c5f56949d7fad6f08bf3f0"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "collection: CC-BY-4.0 (Kuphaldt Lessons in Electric Circuits, Volume I (DC), 5th ed.; full license text in Appendix 3)"
+      - "note: page_index is the 0-based PDF page; page_label is the printed page number. Offset is -9 (PDF page N prints as N-9) due to front matter."
+
+  - id: socratic-igfet
+    source_id: socratic-electronics
+    filename: igfet.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/igfet.pdf
+    sha256: "a60c42b8d3a146e1250f84703e51e461c750fdef319edfaa1672fae623f0eba3"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"
+      - "note: Insulated-gate field-effect transistor (MOSFET) worksheet; Question 13 is a 4-circuit MOSFET-identification problem."
+
+  - id: socratic-dcmesh
+    source_id: socratic-electronics
+    filename: dcmesh.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/dcmesh.pdf
+    sha256: "02fa82597262c9b4c7b2f0e6f5e217491ab9b5eb873379d3f767d2fc16397668"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"
+      - "note: DC Mesh Current analysis worksheet; Question 6 is an unbalanced-bridge mesh-equation problem."
+
+  - id: socratic-super
+    source_id: socratic-electronics
+    filename: super.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/super.pdf
+    sha256: "1be75652596cc9526d6bec402f49e6b92134b1eb7c79f0c2013efce4e44f3aa5"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"
+      - "note: Superposition Theorem worksheet; Question 6 is a mixed voltage/current-source superposition problem."
+
+  - id: socratic-kvl
+    source_id: socratic-electronics
+    filename: kvl.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/kvl.pdf
+    sha256: "b469943c3a16ca7a047b89b9f7b75ee7003ad1be5fd15bc5a336f82ac618c394"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"
+      - "note: Kirchhoff's Laws worksheet; Question 3 is a series voltage-polarity/drop problem (12/8/6 V sources, 2 V drop)."

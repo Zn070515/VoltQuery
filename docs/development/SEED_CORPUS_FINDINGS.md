@@ -1,44 +1,61 @@
 # Seed Corpus Findings
 
 Status: **pending**. Core analysis is anchored to the seed problems studied: the
-16 public Gold items in `benchmarks/seed/problems.jsonl` (`vq_seed_0001–0015`
-Socratic worksheets + `vq_seed_0017` UMass) plus the one held OpenStax item
-(`vq_seed_0016`). M0 is RED (16 < 40), so this is a running requirements ledger
-for `EEProblemIR` v0.1, not a completion report. Observations below reflect the
-latest facts — not an earlier pilot-only view. **Note:** `vq_seed_0016` has been
-**physically isolated** out of the public Gold corpus: it is no longer in
-`problems.jsonl` and its crops are no longer under `benchmarks/seed/assets/`. It
-is now an on-hold item, with only locator/metadata public in
-`benchmarks/research/held.jsonl` and full text + crops local-only under
+24 public Gold items in `benchmarks/seed/problems.jsonl` (`vq_seed_0001–0015`
+Socratic worksheets + `vq_seed_0017`, `vq_seed_0018` UMass + `vq_seed_0019`,
+`vq_seed_0020` Janzen + `vq_seed_0021` Lessons DC + `vq_seed_0022–0025` Socratic)
+plus the one held OpenStax item (`vq_seed_0016`). M0 is RED (24 < 40), so this is
+a running requirements ledger for `EEProblemIR` v0.1, not a completion report.
+Observations below reflect the latest facts — not an earlier pilot-only view.
+**Note:** `vq_seed_0016` has been **physically isolated** out of the public Gold
+corpus: it is no longer in `problems.jsonl` and its crops are no longer under
+`benchmarks/seed/assets/`. It is now an on-hold item, with only locator/metadata
+public in `benchmarks/research/held.jsonl` and full text + crops local-only under
 `data/raw/hold/vq_seed_0016/`. Its source is held in `LICENSE_REVIEW_REQUIRED`
 (see *Source policy ≠ Document policy*), so it is **not** counted toward the
-public Gold gate — the public Gold is 16 (12 circuit, 4 analog). It remains a
+public Gold gate — the public Gold is 24 (18 circuit, 6 analog). It remains a
 valid data-shape observation for `EEProblemIR`.
 
 The seed corpus is the requirements document for `EEProblemIR` v0.1. Record
 observations here rather than freezing the IR ahead of real data. Historical
 change is tracked by Git; this document carries the current truth, not a changelog.
 
-## Composition at 16
+## Composition at 24
 
-- **Public Gold** (`benchmarks/seed/problems.jsonl`): **16 problems —
-  12 circuit_theory, 4 analog_electronics.** Source mix: **15 from
-  `socratic-electronics`** (Kuphaldt Socratic worksheets) + **1 from
-  `umass-ee-fundamentals`** (`vq_seed_0017`, a diode worked example). This file is
-  physically public-only; its count equals the Gold count.
+- **Public Gold** (`benchmarks/seed/problems.jsonl`): **24 problems —
+  18 circuit_theory, 6 analog_electronics.** Source mix: **19 from
+  `socratic-electronics`** (Kuphaldt Socratic worksheets, 11 documents) + **2 from
+  `umass-ee-fundamentals`** (`vq_seed_0017`, a diode worked example;
+  `vq_seed_0018`, an inverting op-amp closed-loop-gain worked example) + **2 from
+  `janzen-electricity-magnetism-circuits`** (`vq_seed_0019`, a Thévenin-equivalent
+  worked example; `vq_seed_0020`, an RLC-series AC example) + **1 from
+  `lessons-electric-circuits-dc`** (`vq_seed_0021`, a node-voltage method worked
+  example). This file is physically public-only; its count equals the Gold count.
+  The batch 0022–0025 (Socratic igfet MOSFET, dcmesh mesh current, super
+  superposition, kvl Kirchhoff) closes the remaining named topic gaps (mesh/KVL,
+  superposition, MOSFET).
 - **On hold** (`benchmarks/research/held.jsonl`): **1 from
   `openstax-university-physics-v2`** (`vq_seed_0016`, University Physics Vol 2,
   Ch 10) — held from the public Gold gate pending license review (imprint
   CC-BY-4.0 vs current collection CC-BY-NC-SA-4.0 + AI-training restriction).
   Only locator/metadata is public; full text + crops are local-only. See
   *Source diversity* and *Source policy ≠ Document policy*.
-- The analysis in *Findings* below is anchored to the 17 problems studied (16
-  public Gold + the held OpenStax item). `vq_seed_0017` is the first public
-  problem from a web-only independent source — see *Web-source provenance*.
+- The analysis in *Findings* below is anchored to the 25 problems studied (24
+  public Gold + the held OpenStax item). `vq_seed_0017` and `vq_seed_0018` are the
+  first public problems from a web-only independent source, and `vq_seed_0019`/
+  `vq_seed_0020` establish the third independent source family, with
+  `vq_seed_0021` adding a fourth (`lessons-electric-circuits-dc`) —
+  see *Source diversity* and *Web-source provenance*.
 - Topics observed: ohm_law, series, parallel, voltage_divider, thevenin, norton,
   equivalent_circuit, led, capacitor, rc_time_constant, rl_time_constant,
   inductor, algebraic_manipulation, bjt, emitter_follower, op_amp, voltage_gain,
-  feedback, voltage_follower, **kirchhoffs_laws**, **power**. Open slugs;
+  feedback, voltage_follower, **negative_feedback**, **inverting_amplifier**,
+  **closed_loop_gain**, **node_voltage**, **nodal_analysis**, **kcl**,
+  **mesh**, **mesh_current**, **kvl**, **bridge**, **unbalanced_bridge**,
+  **superposition**, **superposition_theorem**, **current_source**,
+  **ac**, **phasor**, **impedance**, **mosfet**, **insulated_gate_fet**,
+  **depletion**, **enhancement**, **n_channel**, **p_channel**,
+  **voltage_polarity**, **voltage_drop**, **series_voltage**. Open slugs;
   vocabulary is not frozen.
 
 ## Questions to answer
@@ -176,8 +193,8 @@ Circuit Theory items are linear/deterministic (Ohm, series-parallel dividers, RC
 time constants, and now OpenStax Kirchhoff/power) and need only network + equation
 modeling. Analog therefore requires semantic knowledge (transistor/diode operating
 region, op-amp rules) that is not expressible as a generic circuit graph. Device
-coverage is still partial: BJT, op-amp, and diode (`vq_seed_0017`) are observed;
-**MOSFET is not yet in the corpus** (see *Next tranche*).
+coverage is still partial: BJT, op-amp, diode (`vq_seed_0017`), and now MOSFET
+(`vq_seed_0022`, Socratic igfet Question 13) are observed.
 
 ### 9. What source location metadata is always available?
 
@@ -196,7 +213,7 @@ the lookup key, and only odd numbers appear.
 
 ### 10. What must be represented in `EEProblemIR` v0.1?
 
-From 16 problems, minimally:
+From 24 problems, minimally:
 - structured **answer** — scalar-with-unit / table / expression / explanation /
   ordered subparts / drawing,
 - structured **inputs** — data tables embedded in `vq_seed_0002/0004/0005/0015`
@@ -237,12 +254,14 @@ convention plus the `has_circuit_figure` boolean are sufficient to finish M0.
 
 ## Source diversity (most serious gap)
 
-**15 of the 16 public Gold problems are from `socratic-electronics`; the other
-(`vq_seed_0017`, UMass) is the first from an independently verified source. The
-single other independent item (`vq_seed_0016`, OpenStax) is on hold in
-`benchmarks/research/held.jsonl`.** The set is no longer strictly single-source,
-but the mix is still thin: UMass is the only genuinely independent released item,
-so diversity is the most serious open gap (see *Next tranche*).
+**15 of the 18 public Gold problems are from `socratic-electronics`; three are
+from independently verified sources (`vq_seed_0017`, `vq_seed_0018` UMass;
+`vq_seed_0019` Janzen). The single other independent item (`vq_seed_0016`,
+OpenStax) is on hold in `benchmarks/research/held.jsonl`.** The mix now spans four
+independent released families — Socratic (19), UMass (2), Janzen (2), and Lessons
+DC (1) — so six of the eight named content gaps are closed. Diversity still leans
+heavily on Socratic (19/24), which is the main open question for the next tranche
+(see *Next tranche*).
 OpenStax University Physics Vol 2 is genuinely independent, but it is registered
 as `status: license_review` (NOT approved/public) because its document imprint
 (CC-BY-4.0) conflicts with its current collection license (CC-BY-NC-SA-4.0 +
@@ -251,9 +270,11 @@ corpus, and its record has been physically isolated out of `problems.jsonl` and
 the public crops. Its other costs stand regardless: two-column pages, rasterized
 body values, and odd-numbered-only answers each add per-problem work.
 
-The real content gaps (KCL/KVL partially covered by the held `vq_seed_0016`; nodal,
-mesh, superposition, AC/phasor, impedance, and MOSFET) and the remaining lettered
-subparts are the driver of the next tranche.
+The real content gaps (KCL/KVL now covered by `vq_seed_0025`; nodal covered by
+`vq_seed_0021`; mesh by `vq_seed_0023`; superposition by `vq_seed_0024`;
+AC/phasor/impedance by `vq_seed_0020`; MOSFET by `vq_seed_0022`) are closed; the
+remaining lettered-subparts and the thin non-Socratic mix are the driver of the
+next tranche.
 
 ## License version discrepancy
 
@@ -294,7 +315,7 @@ imprint: the same source can carry a document that prints a different (older)
 notice than the collection currently declares. This is the concrete requirement
 `vq_seed_0016` forced out, and it is a better M0 finding than the diversity gap.
 
-## Web-source provenance (UMass, vq_seed_0017)
+## Web-source provenance (UMass, Janzen)
 
 UMass is a **web-only Pressbooks book** — no paginated PDF, hence no
 `page_index`. It is the first public problem to exercise a web-source provenance
@@ -311,6 +332,18 @@ pattern, and it fits the **existing** contracts without changes:
   defines an HTML/web-source `question_crop` as a rendered-page screenshot (not a
   PDF crop), with `page_index` null. `vq_seed_0017_question.png` was produced by
   headless page render (Edge) of the chapter.
+- **A rendered crop is only trustworthy when the prompt isn't inline-formula-dense.**
+  `vq_seed_0018` (6.4, inverting-gain worked example) has most of its problem
+  statement as inline `quicklatex` formula images. Under a `file://` render those
+  inline formula PNGs do not resolve into the element box, so the captured crop
+  shows the prose with blank gaps where the values should be — a misleading
+  "question" image. Rather than commit that, `vq_seed_0018` ships the **authentic
+  circuit figure (Figure 6.27) as the `schematic` asset** and puts the whole
+  question in `question_text` with the exact values (A = ∞, Vi = 2 V, R_I = 1 kΩ,
+  R_f = 10 kΩ, 24 V unipolar supply, G = −R_f/R_I = −10). It therefore has **one**
+  asset, not two, and no question_crop. Recorded as the current behavior; a better
+  crop pipeline (render the formulas offline or embed a MathML/LaTeX renderer) is
+  an M1+ concern.
 - **Web provenance requires artifact preservation, not a URL alone.** A PDF is
   re-fetchable from its URL; a CMS page can change or disappear under the same URL.
   The `sha256` thus proves the exact bytes seen at `retrieved_at`, not future
@@ -325,12 +358,26 @@ pattern, and it fits the **existing** contracts without changes:
   same fidelity gap as OpenStax body text; `has_formula` records presence, the
   expression itself is not extractable text.
 
-Both UMass and the (in-progress) Janzen work show that the genuinely-verified
-independent CC-BY sources are **textbooks**, not problem-set-heavy worksheets:
-they are usable but need worked-example mining (answer-bearing) rather than a
-straight "Problems" lift.
+Both UMass and the Janzen work show that the genuinely-verified independent
+CC-BY sources are **textbooks**, not problem-set-heavy worksheets: they are
+usable but need worked-example mining (answer-bearing) rather than a straight
+"Problems" lift.
+- **Janzen (3rd family), vq_seed_0019 — text-faithful record with no figure.** The
+  Thévenin worked example (Example 7.3.1) is complete in the source text, but its
+  circuit snapshot (Figure 7.3.1(a)) is **not obtainable** under the current
+  acquisition constraints: CircuitBread is Cloudflare-gated (403), the
+  openpress.usask.ca mirror is egress-gated (401, and the figure asset returned a
+  tiny HTML error), and the eCampusOntario repo serves the PDF at ~8 KB/s (48 MB ≈
+  100 min). Rather than wait or reconstruct a schematic from prose (which the
+  golden rule forbids), `vq_seed_0019` is posed **text-faithfully** — the verbatim
+  prompt plus the source's own narrative description of Figure 7.3.1(a) — with
+  `assets: []` and `has_circuit_figure: false`. The figure gap is recorded here as
+  an **access follow-up** (retrieve Figure 7.3.1(a) later and promote the schematic
+  asset). This is a deliberate, recorded deviation for a gated figure; the
+  Annotation Guide now documents the *text-faithful rendered-figure* case to
+  distinguish it from a fabricated reconstruction.
 
-## Next tranche (0018–0025)
+## Next tranche (0026–0030)
 
 - **OpenStax is on hold** — `vq_seed_0016` stays in the corpus but is excluded
   from the public Gold gate, and **no further OpenStax problems are collected**
@@ -353,12 +400,15 @@ straight "Problems" lift.
       trap is confirmed; only a pressbooks catalog row said CC BY).
   - LibreTexts **page/book-level** CC-BY-4.0 works (e.g. Charles Kann Digital
     Circuit Projects) — never treat `libretexts.org` as a single source license.
-  - **Fall back to Socratic** (Kuphaldt) for nodal/mesh, superposition, and MOSFET
-    if no verified independent source covers them.
-- **Analog probe**: grow toward the 8 target — currently 4 (BJT, op-amp ×2, diode),
-  needing MOSFET and three more analog shapes.
+- **Socratic fallback is largely spent** — nodal (`vq_seed_0021`), mesh
+  (`vq_seed_0023`), superposition (`vq_seed_0024`), KCL/KVL (`vq_seed_0025`), and
+  MOSFET (`vq_seed_0022`) are filled. The remaining open driver is **source
+  diversity**, not topic coverage: 19/24 items are still Socratic, so the next
+  batch should preferentially add non-Socratic (Janzen, Lessons, UMass) items.
+- **Analog probe** is at **6/8** (BJT, op-amp ×3, diode, MOSFET). Two analog
+  shapes remain to hit 8; keep them independent-source where possible.
 
-At 25 problems the corpus begins to be a genuine cross-source benchmark. Mix is
-roughly: Circuit 7–8 (KCL/KVL, node/mesh, superposition, AC/phasor/impedance) +
-Analog 4 (remaining MOSFET and three more), spread over >= 3–4 independent source
-families.
+The remaining Socratic item (`vq_seed_0018` op-amp) plus `vq_seed_0019`/`vq_seed_0020`
+Janzen and `vq_seed_0021` Lessons DC already establish the 4-family benchmark mix.
+Circuit set now covers Ohm, series/parallel divider, Thevenin/Norton, RC/RL time
+constants, nodal, mesh, superposition, KVL, and AC/phasor/impedance.
