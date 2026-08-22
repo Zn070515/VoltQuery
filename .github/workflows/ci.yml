@@ -24,3 +24,5 @@ jobs:
         run: uv run pytest
       - name: Validate real registry and corpus
         run: uv run voltquery validate
+      - name: Enforce public-Gold source policy
+        run: uv run voltquery policy public-gold

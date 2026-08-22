@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from voltquery.seed import check_m0
+from voltquery.seed import check_m0, check_public_gold_policy
 from voltquery.seed.issues import Severity
 
 
@@ -120,3 +120,105 @@ def test_m0_excludes_license_review_source(
     assert "milestone_source_license_review" in codes
     assert "milestone_source_unapproved" not in codes
     assert "milestone_source_not_redistributable" not in codes
+
+
+def test_public_gold_policy_passes_for_approved_source(
+    fixture_corpus_path: Path,
+    fixture_sources_path: Path,
+) -> None:
+    # The policy gate enforces the source policy but must NOT trip the count
+    # gates — it is the CI-safe public/research boundary before the target size.
+    issues = check_public_gold_policy(fixture_corpus_path, fixture_sources_path)
+    codes = _error_codes(issues)
+    assert "milestone_source_unapproved" not in codes
+    assert "milestone_source_unverified" not in codes
+    assert "milestone_source_not_redistributable" not in codes
+    assert "milestone_source_no_redistribution" not in codes
+    assert "milestone_problem_count" not in codes
+    assert "milestone_circuit_count" not in codes
+    assert "milestone_analog_count" not in codes
+
+
+def test_public_gold_policy_blocks_research_only_source(
+    tmp_path: Path,
+    fixture_corpus_path: Path,
+) -> None:
+    sources = tmp_path / "sources.yaml"
+    sources.write_text(
+        "sources:\n"
+        "  - id: fixture-source\n"
+        "    title: Fixture Source\n"
+        "    authors: [VoltQuery Fixtures]\n"
+        "    domains: [circuit_theory]\n"
+        "    license:\n"
+        "      id: CC-BY-NC-4.0\n"
+        "      redistribution: false\n"
+        "      derivatives: true\n"
+        "      commercial: false\n"
+        "      attribution_required: true\n"
+        "      data_policy: research_only\n"
+        "      verified: true\n"
+        "    status: approved\n",
+        encoding="utf-8",
+    )
+    issues = check_public_gold_policy(fixture_corpus_path, sources)
+    codes = _error_codes(issues)
+    assert "milestone_source_not_redistributable" in codes
+    assert "milestone_source_no_redistribution" in codes
+    assert "milestone_source_unapproved" not in codes
+    assert "milestone_source_unverified" not in codes
+    assert "milestone_problem_count" not in codes
+
+
+def test_public_gold_policy_blocks_unapproved_source(
+    tmp_path: Path,
+    fixture_corpus_path: Path,
+) -> None:
+    sources = tmp_path / "sources.yaml"
+    sources.write_text(
+        "sources:\n"
+        "  - id: fixture-source\n"
+        "    title: Fixture Source\n"
+        "    authors: [VoltQuery Fixtures]\n"
+        "    domains: [circuit_theory]\n"
+        "    license:\n"
+        "      id: fixture-license\n"
+        "      redistribution: true\n"
+        "      derivatives: true\n"
+        "      commercial: true\n"
+        "      attribution_required: true\n"
+        "      data_policy: public_redistributable\n"
+        "      verified: true\n"
+        "    status: candidate\n",
+        encoding="utf-8",
+    )
+    issues = check_public_gold_policy(fixture_corpus_path, sources)
+    codes = _error_codes(issues)
+    assert "milestone_source_unapproved" in codes
+
+
+def test_public_gold_policy_blocks_unverified_source(
+    tmp_path: Path,
+    fixture_corpus_path: Path,
+) -> None:
+    sources = tmp_path / "sources.yaml"
+    sources.write_text(
+        "sources:\n"
+        "  - id: fixture-source\n"
+        "    title: Fixture Source\n"
+        "    authors: [VoltQuery Fixtures]\n"
+        "    domains: [circuit_theory]\n"
+        "    license:\n"
+        "      id: fixture-license\n"
+        "      redistribution: true\n"
+        "      derivatives: true\n"
+        "      commercial: true\n"
+        "      attribution_required: true\n"
+        "      data_policy: public_redistributable\n"
+        "      verified: false\n"
+        "    status: approved\n",
+        encoding="utf-8",
+    )
+    issues = check_public_gold_policy(fixture_corpus_path, sources)
+    codes = _error_codes(issues)
+    assert "milestone_source_unverified" in codes

@@ -4,8 +4,8 @@
 # proposed, BEFORE the license/policy gate has adjudicated them. A candidate is
 # promoted to data/sources.yaml (status: approved) only after the exact license of
 # the specific file/version in use has been independently verified and recorded
-# (verification_url / verified_at / verification_note). Until then every entry is
-# `pending_verification` — never assume a discovered URL implies a license.
+# (verification_url / verified_at / verification_note). Never assume a discovered
+# URL implies a license.
 #
 # This file is deliberately NOT a frozen cross-module contract. It is an ingest
 # registry for source discovery. When the acquisition pipeline becomes its own

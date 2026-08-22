@@ -14,6 +14,7 @@ sources:
     institution: Open Book Project
     domains:
       - circuit_theory
+      - analog_electronics
     license:
       id: CC-BY-3.0-US
       redistribution: true
@@ -212,6 +213,7 @@ sources:
     published_year: 2025
     domains:
       - circuit_theory
+      - analog_electronics
     license:
       id: CC-BY-4.0
       redistribution: true

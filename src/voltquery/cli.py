@@ -5,7 +5,13 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from .seed import check_m0, validate_corpus, validate_documents, validate_sources
+from .seed import (
+    check_m0,
+    check_public_gold_policy,
+    validate_corpus,
+    validate_documents,
+    validate_sources,
+)
 from .seed.issues import Severity, ValidationIssue
 
 # Root is the repo directory (parent of the ``src`` layout).
@@ -85,6 +91,20 @@ def build_parser() -> argparse.ArgumentParser:
         help="Check the M0 seed corpus + benchmark contract gate.",
     )
     _add_path_args(m0)
+
+    policy = sub.add_parser(
+        "policy",
+        help="Enforce a corpus policy gate (independent of count targets).",
+    )
+    policy_sub = policy.add_subparsers(dest="policy_name", required=True)
+    pub_gold = policy_sub.add_parser(
+        "public-gold",
+        help=(
+            "Check every problem source is approved + verified + "
+            "public_redistributable + redistribution (no count targets)."
+        ),
+    )
+    _add_path_args(pub_gold)
     return parser
 
 
@@ -112,6 +132,11 @@ def _run_milestone_m0(args: argparse.Namespace) -> int:
     return _render(check_m0(corpus_path, sources_path, assets_root, _documents_from(args)))
 
 
+def _run_policy_public_gold(args: argparse.Namespace) -> int:
+    sources_path, corpus_path, _assets_root = _paths_from(args)
+    return _render(check_public_gold_policy(corpus_path, sources_path))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -120,6 +145,8 @@ def main(argv: list[str] | None = None) -> int:
         return _run_validate(args)
     if args.command == "milestone" and args.milestone_name == "m0":
         return _run_milestone_m0(args)
+    if args.command == "policy" and args.policy_name == "public-gold":
+        return _run_policy_public_gold(args)
 
     parser.print_help()
     return 0

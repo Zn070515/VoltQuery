@@ -65,6 +65,49 @@ def check_m0(
     return issues
 
 
+def check_public_gold_policy(
+    problems_path: str | Path,
+    sources_path: str | Path,
+) -> list[ValidationIssue]:
+    """Enforce the public-Gold source policy without any count gate.
+
+    Counts belong in ``check_m0`` (which stays RED until 40/32/8). This is the
+    CI-safe policy gate: it fails whenever a problem references a source that is
+    not approved, not verified, not ``public_redistributable``, or that does not
+    explicitly allow redistribution. It deliberately does NOT check 40/32/8, so
+    CI can keep the public/research boundary enforced before the corpus reaches
+    its target size.
+    """
+
+    problems_file = Path(problems_path)
+    issues: list[ValidationIssue] = []
+
+    if not problems_file.exists():
+        issues.append(
+            ValidationIssue(
+                code="milestone_corpus_missing",
+                path=str(problems_file),
+                message="corpus file does not exist",
+            )
+        )
+        return issues
+
+    try:
+        records = load_problems(problems_file)
+    except (FileNotFoundError, json.JSONDecodeError, ValidationError, ValueError) as exc:
+        issues.append(
+            ValidationIssue(
+                code="policy_problems_unreadable",
+                path=str(problems_file),
+                message=f"could not load records for policy check: {exc}",
+            )
+        )
+        return issues
+
+    _check_sources(records, Path(sources_path), issues)
+    return issues
+
+
 def _check_counts(
     records: list[SeedProblemRecord],
     ref: str,

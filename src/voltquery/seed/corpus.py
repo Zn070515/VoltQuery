@@ -7,7 +7,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from voltquery.contracts import DocumentRef, SeedProblemRecord
+from voltquery.contracts import DocumentRef, SeedProblemRecord, Source
 
 from .documents import load_documents
 from .issues import ValidationIssue, format_validation_error
@@ -58,7 +58,7 @@ def validate_corpus(
         )
         return issues
 
-    source_ids = _registered_source_ids(sources_path)
+    sources = _registered_sources(sources_path)
     documents = _registered_documents(documents_path)
 
     seen_ids: set[str] = set()
@@ -100,7 +100,7 @@ def validate_corpus(
                 )
             seen_ids.add(record.id)
 
-            if record.source.source_id not in source_ids:
+            if record.source.source_id not in sources:
                 issues.append(
                     ValidationIssue(
                         code="problem_source_unknown",
@@ -111,6 +111,8 @@ def validate_corpus(
                         ),
                     )
                 )
+            else:
+                _check_source_domain(record, sources, ref, issues)
 
             _check_document_ref(record, documents, ref, issues)
 
@@ -142,15 +144,36 @@ def validate_corpus(
     return issues
 
 
-def _registered_source_ids(sources_path: str | Path) -> set[str]:
+def _registered_sources(sources_path: str | Path) -> dict[str, Source]:
     source_path = Path(sources_path)
     if not source_path.exists():
-        return set()
+        return {}
     try:
-        return {source.id for source in load_sources(source_path)}
+        return {source.id: source for source in load_sources(source_path)}
     except (ValueError, ValidationError):
         # An unreadable registry means no source can be resolved.
-        return set()
+        return {}
+
+
+def _check_source_domain(
+    record: SeedProblemRecord,
+    sources: dict[str, Source],
+    ref: str,
+    issues: list[ValidationIssue],
+) -> None:
+    source = sources[record.source.source_id]
+    if record.domain not in source.domains:
+        issues.append(
+            ValidationIssue(
+                code="problem_source_domain_mismatch",
+                path=ref,
+                message=(
+                    f"problem '{record.id}' is '{record.domain.value}' but source "
+                    f"'{source.id}' only declares "
+                    f"{sorted(domain.value for domain in source.domains)}"
+                ),
+            )
+        )
 
 
 def _registered_documents(documents_path: str | Path) -> dict[str, DocumentRef]:

@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 import pytest
-from voltquery.contracts import SeedProblemRecord
+from voltquery.contracts import Domain, SeedProblemRecord
 from voltquery.seed import load_problems, validate_corpus
 
 
@@ -51,6 +51,40 @@ def test_problem_source_exists(
         fixture_corpus_path, fixture_sources_path, fixture_assets_root, fixture_documents_path
     )
     assert "problem_source_unknown" not in codes
+
+
+def test_problem_source_domain_mismatch_detected(
+    tmp_path: Path,
+    fixture_sources_path: Path,
+    fixture_assets_root: Path,
+    fixture_documents_path: Path,
+) -> None:
+    # fixture-source declares only circuit_theory; an analog problem must be flagged
+    # as a cross-reference error rather than silently accepted.
+    record = SeedProblemRecord(
+        id="vq_seed_9994",
+        source={"source_id": "fixture-source", "document_id": "fixture-worksheet"},
+        domain="analog_electronics",
+        topics=["diode"],
+        question_text="[fixture] source domain mismatch test",
+        has_formula=False,
+        has_circuit_figure=False,
+        is_multipart=False,
+        answer_available=False,
+        assets=[],
+    )
+    corpus = tmp_path / "problems.jsonl"
+    _write_problem(corpus, record)
+    codes = corpus_codes(corpus, fixture_sources_path, fixture_assets_root, fixture_documents_path)
+    assert "problem_source_domain_mismatch" in codes
+    # A matching domain must not trip the same rule.
+    matched = record.model_copy(update={"domain": Domain.CIRCUIT_THEORY})
+    corpus_matched = tmp_path / "problems2.jsonl"
+    _write_problem(corpus_matched, matched)
+    codes_matched = corpus_codes(
+        corpus_matched, fixture_sources_path, fixture_assets_root, fixture_documents_path
+    )
+    assert "problem_source_domain_mismatch" not in codes_matched
 
 
 def test_problem_ids_unique(
