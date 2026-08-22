@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from .seed import check_m0, validate_corpus, validate_sources
+from .seed import check_m0, validate_corpus, validate_documents, validate_sources
 from .seed.issues import Severity, ValidationIssue
 
 # Root is the repo directory (parent of the ``src`` layout).
@@ -18,6 +18,10 @@ def _default_paths() -> tuple[Path, Path, Path]:
         _REPO_ROOT / "benchmarks" / "seed" / "problems.jsonl",
         _REPO_ROOT / "benchmarks" / "seed",
     )
+
+
+def _default_documents_path() -> Path:
+    return _REPO_ROOT / "data" / "documents.yaml"
 
 
 def _add_path_args(cmd: argparse.ArgumentParser) -> None:
@@ -36,6 +40,11 @@ def _add_path_args(cmd: argparse.ArgumentParser) -> None:
         default=None,
         help="Root directory of the corpus assets (default: benchmarks/seed).",
     )
+    cmd.add_argument(
+        "--documents",
+        default=None,
+        help="Path to data/documents.yaml (default: repo default).",
+    )
 
 
 def _paths_from(args: argparse.Namespace) -> tuple[Path, Path, Path]:
@@ -47,6 +56,13 @@ def _paths_from(args: argparse.Namespace) -> tuple[Path, Path, Path]:
     if getattr(args, "assets", None) is not None:
         assets_root = Path(args.assets)
     return sources_path, corpus_path, assets_root
+
+
+def _documents_from(args: argparse.Namespace) -> Path:
+    documents_path = _default_documents_path()
+    if getattr(args, "documents", None) is not None:
+        documents_path = Path(args.documents)
+    return documents_path
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -86,6 +102,7 @@ def _render(issues: list[ValidationIssue]) -> int:
 def _run_validate(args: argparse.Namespace) -> int:
     sources_path, corpus_path, assets_root = _paths_from(args)
     issues: list[ValidationIssue] = list(validate_sources(sources_path))
+    issues.extend(validate_documents(_documents_from(args)))
     issues.extend(validate_corpus(corpus_path, sources_path, assets_root))
     return _render(issues)
 

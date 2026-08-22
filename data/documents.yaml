@@ -1,0 +1,49 @@
+# VoltQuery document registry.
+#
+# A document is a specific retrieved artifact a problem was sourced from; a
+# problem's ``SourceRef.document_id`` points here. The collection-level license
+# lives on the ``Source`` (data/sources.yaml); a document may itself print a
+# different notice (the Socratic PDFs imprint CC-BY-1.0 under a CC-BY-3.0-US
+# site license). ``sha256`` pins the exact bytes and ``retrieved_at`` records the
+# fetch date so the provenance is reproducible.
+
+documents:
+  - id: socratic-ohm-law
+    source_id: socratic-electronics
+    filename: ohm_law.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/ohm_law.pdf
+    sha256: "2e75e6ad302000be39a4204080ff494b57f62482b675774949502ce6404219cf"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"
+
+  - id: socratic-dc-sp
+    source_id: socratic-electronics
+    filename: dc_sp.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/dc_sp.pdf
+    sha256: "a89a495d926ad317c35fc1eb4d1c7e3ced534ac6775ed4725e6097ef1e90c1a7"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"
+
+  - id: socratic-time2
+    source_id: socratic-electronics
+    filename: time2.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/time2.pdf
+    sha256: "bff3f1928697efc5dcc208c3f7d476de53ad41a5638412badfa0fe1716b11052"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"
+
+  - id: socratic-bjtbias
+    source_id: socratic-electronics
+    filename: bjtbias.pdf
+    url: https://www.ibiblio.org/kuphaldt/socratic/output/bjtbias.pdf
+    sha256: "1c12e1674ffe31a7f65ecef85f73a02bff418c2528ce4a40467ea73c84c7201b"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "imprint: CC-BY-1.0 (printed on the compiled worksheet PDF)"
+      - "collection: CC-BY-3.0-US (authoritative site license)"

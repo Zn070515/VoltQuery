@@ -21,9 +21,9 @@ observations here rather than freezing the IR ahead of real data.
 
 ## Findings
 
-_Anchored to the first 5 recorded problems (vq_seed_0001–0005). These are the
-minimum-deliverable M0 seed set; the schema gaps below are what they actually
-revealed, captured now so `EEProblemIR` v0.1 does not freeze ahead of more data._
+_Anchored to the first 5 recorded problems (vq_seed_0001–0005), the first pilot
+tranche. The schema gaps below are what they actually revealed, captured now so
+`EEProblemIR` v0.1 does not freeze ahead of more data._
 
 ### 1. Can a problem have multiple figures?
 
@@ -123,6 +123,20 @@ The existing `SeedProblemRecord` (its flat asset list, coarse booleans, prose-on
 question, bool-only answer availability) is an adequate *M0 ingest* shape but is not
 yet an `EEProblem`/`EEProblemIR`: it can record provenance and presence, not the
 problem's structure.
+
+### Additional observation: corrected annotation semantics
+
+Under the observable rules in `benchmarks/seed/ANNOTATION_GUIDE.md`, the first
+five problems are uniformly `has_formula: false` and `is_multipart: false`. No
+source in the tranche explicitly *displays* a formula (the Ohm's-law equations on
+the ohm_law page belong to the adjacent Question 13, not Question 14), and none
+uses explicit `(a)(b)(c)` subparts (`V_AB/V_BC/V_CD` is one task with three
+targets; the RC and BJT tables are multi-row, not subparts). This is a real
+observation about the tranche, not a defect: the pilot set is heavily
+"conceptual/data" and deliberately light on "formula-displaying" and
+"structured-subpart" shapes. The next tranche should include at least one
+formula-displaying problem and one explicit `(a)(b)(c)` problem to cover those
+two shapes. Documented here so M1 does not assume these shapes are represented.
 
 ### Additional observation: license version discrepancy
 

@@ -11,6 +11,7 @@ def test_validate_fixture_clean(
     fixture_sources_path: Path,
     fixture_corpus_path: Path,
     fixture_assets_root: Path,
+    fixture_documents_path: Path,
 ) -> None:
     code = main(
         [
@@ -21,6 +22,8 @@ def test_validate_fixture_clean(
             str(fixture_corpus_path),
             "--assets",
             str(fixture_assets_root),
+            "--documents",
+            str(fixture_documents_path),
         ]
     )
     assert code == 0
@@ -30,6 +33,7 @@ def test_milestone_m0_fixture_reports_count_gates(
     fixture_sources_path: Path,
     fixture_corpus_path: Path,
     fixture_assets_root: Path,
+    fixture_documents_path: Path,
 ) -> None:
     code = main(
         [
@@ -41,6 +45,8 @@ def test_milestone_m0_fixture_reports_count_gates(
             str(fixture_corpus_path),
             "--assets",
             str(fixture_assets_root),
+            "--documents",
+            str(fixture_documents_path),
         ]
     )
     # The fixture corpus is structurally valid but under the 40/32/8 targets.

@@ -1,6 +1,7 @@
 """Typed contracts for the VoltQuery M0 seed corpus."""
 
 from ._base import ContractModel
+from .document import DocumentRef
 from .enums import AssetKind, DataPolicy, Domain, SourceStatus
 from .license import LicenseMetadata
 from .seed import TOPIC_SLUG_PATTERN, AssetRef, SeedProblemRecord, TopicSlug
@@ -11,6 +12,7 @@ __all__ = [
     "AssetRef",
     "ContractModel",
     "DataPolicy",
+    "DocumentRef",
     "Domain",
     "LicenseMetadata",
     "SeedProblemRecord",

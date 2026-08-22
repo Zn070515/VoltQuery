@@ -1,0 +1,9 @@
+documents:
+  - id: fixture-worksheet
+    source_id: fixture-source
+    filename: worksheet.pdf
+    url: https://example.invalid/fixtures/worksheet.pdf
+    sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "collection: fixture-license (VoltQuery-owned schema fixture)"

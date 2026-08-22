@@ -25,5 +25,10 @@ def fixture_corpus_path() -> Path:
 
 
 @pytest.fixture
+def fixture_documents_path() -> Path:
+    return FIXTURES / "documents.yaml"
+
+
+@pytest.fixture
 def fixture_assets_root() -> Path:
     return FIXTURES

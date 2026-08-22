@@ -26,10 +26,14 @@ class Source(ContractModel):
 
 
 class SourceRef(ContractModel):
-    """Provenance of a single problem within a registered source."""
+    """Provenance of a single problem within a registered source.
+
+    ``document_id`` references a ``DocumentRef`` in ``data/documents.yaml`` so
+    the exact retrieved artifact (URL + SHA256 + fetch date) is reproducible.
+    """
 
     source_id: str
-    document: str | None = None
+    document_id: str | None = None
     page_index: int | None = None
     page_label: str | None = None
     question_number: str | None = None
