@@ -9,9 +9,14 @@ Target: **40 manually reviewed** seed problems.
 retrieval benchmark. It is populated by the content task with manually reviewed
 problems sourced from verified licenses.
 
-Current status: **5 / 40 pilot problems collected** (4 Circuit Theory,
-1 Analog Electronics). Each is fully annotated per
+Current status: **15 / 40 problems collected** (12 Circuit Theory,
+3 Analog Electronics). Each is fully annotated per
 [`ANNOTATION_GUIDE.md`](ANNOTATION_GUIDE.md).
+
+All 15 problems are currently drawn from the `socratic-electronics` source. The
+next tranche should diversify across the approved Lessons in Electric Circuits
+(DC/AC/Semiconductors) and KSU Circuits I sources — see
+[`docs/development/SEED_CORPUS_FINDINGS.md`](../../docs/development/SEED_CORPUS_FINDINGS.md).
 
 ## Gold / Silver / Bronze
 
