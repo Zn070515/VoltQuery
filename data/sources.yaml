@@ -40,6 +40,7 @@ sources:
     authors:
       - Tony R. Kuphaldt
     institution: Open Book Project
+    edition: 5th Edition
     domains:
       - circuit_theory
     license:
@@ -69,6 +70,7 @@ sources:
     authors:
       - Tony R. Kuphaldt
     institution: Open Book Project
+    edition: 6th Edition
     domains:
       - circuit_theory
     license:
@@ -94,6 +96,7 @@ sources:
     authors:
       - Tony R. Kuphaldt
     institution: Open Book Project
+    edition: 5th Edition
     domains:
       - analog_electronics
     license:
