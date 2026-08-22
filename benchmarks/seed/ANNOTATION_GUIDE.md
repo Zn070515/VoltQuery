@@ -48,6 +48,10 @@ printed, `kind: figure`), and a **schematic crop** (`kind: schematic`) when a ci
 appears. The question crop is the future screenshot / layout-retrieval target; the
 schematic crop is the future `CircuitIR` / visual-retrieval target. Keep both.
 
+For HTML / web sources, `question_crop` is a rendered-page screenshot crop (a portion
+of the problem as it appears in a browser), not a PDF crop. `page_index` is `null` for
+such sources; the `page_label` records the section title instead.
+
 ## Provenance
 
 - `source_id` — a registered source in `data/sources.yaml`.

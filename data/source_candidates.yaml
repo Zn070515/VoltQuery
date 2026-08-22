@@ -10,6 +10,17 @@
 # This file is deliberately NOT a frozen cross-module contract. It is an ingest
 # registry for source discovery. When the acquisition pipeline becomes its own
 # component, this shape should move behind a typed model.
+#
+# Candidate lifecycle (`status`, top level):
+#   discovered            surfaced but not yet license-verified
+#   verified              license claim independently confirmed at the artifact level
+#   promoted              verified acceptable; registered in data/sources.yaml
+#   rejected              verified NOT acceptable under the target policy
+# `reason` (rejected-only) records why; `promoted_source_id` (promoted-only)
+# records the data/sources.yaml id it was registered under.
+# `license_claim.status` tracks the *claim* resolution specifically:
+# pending_verification / verified / rejected — i.e. did the requested license (e.g.
+# CC-BY-4.0) actually hold on the artifact.
 
 candidates:
   - id: ksu-engineering-electronics
@@ -17,12 +28,14 @@ candidates:
     discovered_url: https://alg.manifoldapp.org/projects/laboratory-manual-for-engineering-electronics
     license_claim:
       id: CC-BY-4.0
-      status: pending_verification
+      status: rejected
     acquisition:
       type: web
       requires_auth: false
     policy:
       target: public_redistributable
+    status: rejected
+    reason: noncommercial
     priority: A
     notes: >-
       Laboratory Manual for Engineering Electronics (Kennesaw State / OpenALG).
@@ -41,12 +54,14 @@ candidates:
     discovered_url: https://pressbooks.atlanticoer-relatlantique.ca/semiconductorlab/
     license_claim:
       id: CC-BY-4.0
-      status: pending_verification
+      status: rejected
     acquisition:
       type: web
       requires_auth: false
     policy:
       target: public_redistributable
+    status: rejected
+    reason: noncommercial
     priority: A
     notes: >-
       Fiore, Semiconductor Devices: Theory and Application Lab Manual. Verified
@@ -64,12 +79,14 @@ candidates:
     discovered_url: https://openbooks.library.umass.edu/funee/
     license_claim:
       id: CC-BY-4.0
-      status: pending_verification
+      status: verified
     acquisition:
       type: web
       requires_auth: false
     policy:
       target: public_redistributable
+    status: promoted
+    promoted_source_id: umass-ee-fundamentals
     priority: A
     notes: >-
       UMass, Applied Electrical Engineering Fundamentals. Verified 2026-08-22:
@@ -77,19 +94,22 @@ candidates:
       states licensed under CC BY 4.0 International, except where otherwise noted.
       Author David J. McLaughlin; UMass Amherst; accompaniers ECE 361. Independent
       author/institution. VERIFIED CC BY 4.0 → eligible for public Gold, pending
-      per-problem annotation.
+      per-problem annotation. Registered at data/sources.yaml as
+      umass-ee-fundamentals.
 
   - id: janzen-electricity-magnetism-circuits
     domain: [circuit_theory]
     discovered_url: https://www.circuitbread.com/textbooks/introduction-to-electricity-magnetism-and-circuits/
     license_claim:
       id: CC-BY-4.0
-      status: pending_verification
+      status: verified
     acquisition:
       type: web
       requires_auth: false
     policy:
       target: public_redistributable
+    status: promoted
+    promoted_source_id: janzen-electricity-magnetism-circuits
     priority: A
     notes: >-
       Daryl Janzen, Introduction to Electricity, Magnetism, and Circuits.
@@ -97,6 +117,7 @@ candidates:
       Library record both state CC BY 4.0 International, except where otherwise
       noted. Advanced circuit analysis incl. Thevenin. Independent author system.
       VERIFIED CC BY 4.0 → eligible for public Gold, pending per-problem annotation.
+      Registered at data/sources.yaml as janzen-electricity-magnetism-circuits.
 
   - id: libretexts-digital-circuit-projects
     domain: [digital_electronics]
@@ -109,6 +130,7 @@ candidates:
       requires_auth: false
     policy:
       target: public_redistributable
+    status: discovered
     priority: B
     notes: >-
       Charles Kann, Digital Circuit Projects (LibreTexts). RULE: LibreTexts must be
