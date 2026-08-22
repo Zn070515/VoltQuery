@@ -7,8 +7,9 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from voltquery.contracts import SeedProblemRecord
+from voltquery.contracts import DocumentRef, SeedProblemRecord
 
+from .documents import load_documents
 from .issues import ValidationIssue, format_validation_error
 from .sources import load_sources
 
@@ -39,6 +40,7 @@ def validate_corpus(
     problems_path: str | Path,
     sources_path: str | Path,
     assets_root: str | Path,
+    documents_path: str | Path,
 ) -> list[ValidationIssue]:
     """Validate the seed corpus, returning structured issues."""
 
@@ -57,6 +59,7 @@ def validate_corpus(
         return issues
 
     source_ids = _registered_source_ids(sources_path)
+    documents = _registered_documents(documents_path)
 
     seen_ids: set[str] = set()
     with problems_file.open("r", encoding="utf-8") as fh:
@@ -109,6 +112,8 @@ def validate_corpus(
                     )
                 )
 
+            _check_document_ref(record, documents, ref, issues)
+
             for asset in record.assets:
                 asset_path = (assets / asset.path).resolve()
                 if not asset_path.is_relative_to(assets.resolve()):
@@ -146,3 +151,59 @@ def _registered_source_ids(sources_path: str | Path) -> set[str]:
     except (ValueError, ValidationError):
         # An unreadable registry means no source can be resolved.
         return set()
+
+
+def _registered_documents(documents_path: str | Path) -> dict[str, DocumentRef]:
+    doc_path = Path(documents_path)
+    if not doc_path.exists():
+        return {}
+    try:
+        return {doc.id: doc for doc in load_documents(doc_path)}
+    except (ValueError, ValidationError):
+        # An unreadable registry means no document can be resolved.
+        return {}
+
+
+def _check_document_ref(
+    record: SeedProblemRecord,
+    documents: dict[str, DocumentRef],
+    ref: str,
+    issues: list[ValidationIssue],
+) -> None:
+    document_id = record.source.document_id
+    if document_id is None:
+        issues.append(
+            ValidationIssue(
+                code="problem_document_missing",
+                path=ref,
+                message=(
+                    f"problem '{record.id}' has no document_id "
+                    "(document provenance is mandatory)"
+                ),
+            )
+        )
+        return
+    if document_id not in documents:
+        issues.append(
+            ValidationIssue(
+                code="problem_document_unknown",
+                path=ref,
+                message=(
+                    f"problem '{record.id}' references unknown document id "
+                    f"'{document_id}'"
+                ),
+            )
+        )
+        return
+    if documents[document_id].source_id != record.source.source_id:
+        issues.append(
+            ValidationIssue(
+                code="problem_document_source_mismatch",
+                path=ref,
+                message=(
+                    f"problem '{record.id}' references document '{document_id}' "
+                    f"belonging to source '{documents[document_id].source_id}' "
+                    f"but the problem source is '{record.source.source_id}'"
+                ),
+            )
+        )

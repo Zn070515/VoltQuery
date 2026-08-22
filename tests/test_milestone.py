@@ -18,8 +18,14 @@ def test_m0_missing_corpus(
     tmp_path: Path,
     fixture_sources_path: Path,
     fixture_assets_root: Path,
+    fixture_documents_path: Path,
 ) -> None:
-    issues = check_m0(tmp_path / "nope.jsonl", fixture_sources_path, fixture_assets_root)
+    issues = check_m0(
+        tmp_path / "nope.jsonl",
+        fixture_sources_path,
+        fixture_assets_root,
+        fixture_documents_path,
+    )
     assert "milestone_corpus_missing" in _error_codes(issues)
 
 
@@ -27,6 +33,7 @@ def test_m0_unpopulated_corpus_reports_counts(
     fixture_corpus_path: Path,
     fixture_sources_path: Path,
     fixture_assets_root: Path,
+    fixture_documents_path: Path,
 ) -> None:
     # The fixture corpus has 4 circuit_theory records and 0 analog ones; the
     # fixture source is approved+verified+public_redistributable, so only the
@@ -35,6 +42,7 @@ def test_m0_unpopulated_corpus_reports_counts(
         fixture_corpus_path,
         fixture_sources_path,
         fixture_assets_root,
+        fixture_documents_path,
     )
     codes = _error_codes(issues)
     assert "milestone_problem_count" in codes
@@ -50,6 +58,7 @@ def test_m0_blocks_research_only_source(
     tmp_path: Path,
     fixture_corpus_path: Path,
     fixture_assets_root: Path,
+    fixture_documents_path: Path,
 ) -> None:
     sources = tmp_path / "sources.yaml"
     sources.write_text(
@@ -69,7 +78,7 @@ def test_m0_blocks_research_only_source(
         "    status: approved\n",
         encoding="utf-8",
     )
-    issues = check_m0(fixture_corpus_path, sources, fixture_assets_root)
+    issues = check_m0(fixture_corpus_path, sources, fixture_assets_root, fixture_documents_path)
     codes = _error_codes(issues)
     assert "milestone_source_not_redistributable" in codes
     assert "milestone_source_no_redistribution" in codes

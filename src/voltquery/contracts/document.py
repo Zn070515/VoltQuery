@@ -24,6 +24,6 @@ class DocumentRef(ContractModel):
     source_id: str
     filename: str
     url: str
-    sha256: str
+    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     retrieved_at: date
     license_evidence: list[str] = Field(default_factory=list)

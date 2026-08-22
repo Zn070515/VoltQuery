@@ -64,5 +64,19 @@ def test_duplicate_document_id(tmp_path: Path) -> None:
     assert "duplicate_document_id" in _error_codes(path)
 
 
+def test_document_invalid_sha256_format(tmp_path: Path) -> None:
+    path = _write_documents(
+        tmp_path,
+        "documents:\n"
+        "  - id: d1\n"
+        "    source_id: s\n"
+        "    filename: a.pdf\n"
+        "    url: https://x/a.pdf\n"
+        "    sha256: 'not-hex'\n"
+        "    retrieved_at: 2026-08-22\n",
+    )
+    assert "document_record_invalid" in _error_codes(path)
+
+
 def test_document_registry_missing(tmp_path: Path) -> None:
     assert "document_registry_missing" in _error_codes(tmp_path / "nope.yaml")

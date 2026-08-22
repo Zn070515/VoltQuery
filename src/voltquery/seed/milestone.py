@@ -28,6 +28,7 @@ def check_m0(
     problems_path: str | Path,
     sources_path: str | Path,
     assets_root: str | Path,
+    documents_path: str | Path,
 ) -> list[ValidationIssue]:
     """Return issues blocking M0 completion. An empty list means M0 is done."""
 
@@ -44,7 +45,7 @@ def check_m0(
         )
         return issues
 
-    issues.extend(validate_corpus(problems_path, sources_path, assets_root))
+    issues.extend(validate_corpus(problems_path, sources_path, assets_root, documents_path))
 
     try:
         records = load_problems(problems_file)

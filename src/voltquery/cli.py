@@ -103,13 +103,13 @@ def _run_validate(args: argparse.Namespace) -> int:
     sources_path, corpus_path, assets_root = _paths_from(args)
     issues: list[ValidationIssue] = list(validate_sources(sources_path))
     issues.extend(validate_documents(_documents_from(args)))
-    issues.extend(validate_corpus(corpus_path, sources_path, assets_root))
+    issues.extend(validate_corpus(corpus_path, sources_path, assets_root, _documents_from(args)))
     return _render(issues)
 
 
 def _run_milestone_m0(args: argparse.Namespace) -> int:
     sources_path, corpus_path, assets_root = _paths_from(args)
-    return _render(check_m0(corpus_path, sources_path, assets_root))
+    return _render(check_m0(corpus_path, sources_path, assets_root, _documents_from(args)))
 
 
 def main(argv: list[str] | None = None) -> int:
