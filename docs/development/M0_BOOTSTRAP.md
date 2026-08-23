@@ -1,5 +1,11 @@
 # M0 Bootstrap — Seed Corpus + Benchmark Contract
 
+> **Status: complete.** This is the bootstrap plan that produced the current
+> M0 corpus (`benchmarks/seed/problems.jsonl`, 40 / 32 / 8; `milestone m0`
+> GREEN). It is retained as a historical record of how M0 was scoped; the
+> active milestone is now **M1 — EEProblemIR v0.1**. See `../roadmap.md` and
+> `SEED_CORPUS_FINDINGS.md`.
+
 ## Objective
 
 Turn the empty `VoltQuery/` directory into a measurable research project before adding OCR, LLMs, circuit recognition, or solvers.

@@ -28,6 +28,13 @@ The seed corpus is the requirements document for `EEProblemIR` v0.1. Record
 observations here rather than freezing the IR ahead of real data. Historical
 change is tracked by Git; this document carries the current truth, not a changelog.
 
+Those requirements are now encoded as **M1 — EEProblemIR v0.1**: the contract
+in `src/voltquery/contracts/problem.py` (typed `inputs` as a quantity/table
+union, three-axis assets with a `Waveform` kind, `parts`, `targets`,
+`formulas`, explicit `schema_version`) and the 40-record projection in
+`benchmarks/seed/problem_ir.jsonl`, gated by `voltquery ir validate` for
+seed↔IR parity.
+
 ## Composition at 40
 
 - **Public Gold** (`benchmarks/seed/problems.jsonl`): **40 problems —

@@ -49,19 +49,26 @@ Never silently convert uncertainty into confidence.
 
 The current milestone is:
 
-> **M0 — Seed Corpus + Benchmark Contract**
+> **M1 — EEProblemIR v0.1**
 
-M0 is complete only after:
-1. Repository structure is stable.
-2. Public/open source registry exists.
-3. 40 manually checked seed problems exist.
-4. Every seed problem has provenance.
-5. Seed problems cover both Circuit Theory and Analog Electronics probe cases.
-6. `problems.jsonl` has a validated schema.
-7. Tests verify IDs, sources, license metadata, and referenced assets.
-8. `SEED_CORPUS_FINDINGS.md` records lessons learned from the seed corpus.
+M0 is complete (40-problem public Gold corpus: 32 Circuit Theory / 8 Analog
+Electronics, license-verified, validated by `milestone m0`).
 
-Do **not** begin large OCR, search, solver, mobile, or LLM work before M0 is complete unless explicitly requested.
+M1 is the first stable, typed, versioned representation of an EE problem.
+Concretely in place so far:
+1. `EEProblemIR` v0.1 contract with explicit `schema_version = "v0.1"`.
+2. A derived `benchmarks/seed/problem_ir.jsonl` — one record per seed, holding
+   the seed's identity fields plus structure: `parts`, typed `inputs`
+   (quantity/table), three-axis `assets` (kind × role × origin), `targets`,
+   and `formulas`.
+3. A parity guarantee: `voltquery ir validate` enforces one-to-one id parity
+   with the seed corpus and per-record agreement on source / domain / topics /
+   verbatim statement / multipart shape / source facts / document refs.
+4. `answer` stays `None` by convention — `answer_available` is a source fact
+   (observable), and the machine-parseable answer is a deferred M2 solver concern.
+
+Do **not** start M2 (Document → Problem ingestion), OCR, search, solver,
+mobile, or LLM work before M1 is complete unless explicitly requested.
 
 ---
 

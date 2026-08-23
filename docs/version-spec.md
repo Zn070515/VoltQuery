@@ -8,6 +8,8 @@ Acceptance criteria are project targets. They may be adjusted after the first re
 
 # M0 — Seed Corpus + Benchmark Contract
 
+Status: **complete** (40 / 32 / 8; `milestone m0` GREEN).
+
 ## Features
 
 - repository initialized
@@ -21,22 +23,25 @@ Acceptance criteria are project targets. They may be adjusted after the first re
 
 ## Acceptance Criteria
 
-- [ ] `requires-python = ">=3.12,<3.13"`
-- [ ] at least 3 registered sources
-- [ ] every source has license/provenance metadata
-- [ ] 40 seed problems exist
-- [ ] at least 32 Circuit Theory problems
-- [ ] at least 8 Analog Electronics probe problems
-- [ ] all problem IDs are unique
-- [ ] every problem resolves to a registered source
-- [ ] every referenced local asset exists
-- [ ] problem records load through typed validation
-- [ ] seed corpus includes text-only, formula, circuit-figure, and multipart forms
-- [ ] findings document records schema implications and observed edge cases
+- [x] `requires-python = ">=3.12,<3.13"`
+- [x] at least 3 registered sources
+- [x] every source has license/provenance metadata
+- [x] 40 seed problems exist
+- [x] at least 32 Circuit Theory problems
+- [x] at least 8 Analog Electronics probe problems
+- [x] all problem IDs are unique
+- [x] every problem resolves to a registered source
+- [x] every referenced local asset exists
+- [x] problem records load through typed validation
+- [x] seed corpus includes text-only, formula, circuit-figure, and multipart forms
+- [x] findings document records schema implications and observed edge cases
 
 ---
 
 # M1 — EEProblemIR v0.1
+
+Status: **in progress** (schema, corpus projection, and parity gate in place;
+`answer` population deferred to M2).
 
 ## Features
 
@@ -51,12 +56,12 @@ Acceptance criteria are project targets. They may be adjusted after the first re
 
 ## Acceptance Criteria
 
-- [ ] 100% of seed problems can be represented
-- [ ] no seed problem requires an untyped "misc" catch-all for essential semantics
-- [ ] schema round-trip serialization test passes
-- [ ] schema version is explicit
-- [ ] source provenance survives serialization
-- [ ] backwards-compatibility policy documented
+- [x] 100% of seed problems can be represented
+- [x] no seed problem requires an untyped "misc" catch-all for essential semantics
+- [x] schema round-trip serialization test passes
+- [x] schema version is explicit
+- [x] source provenance survives serialization
+- [x] backwards-compatibility policy documented
 
 ---
 

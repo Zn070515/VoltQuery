@@ -10,11 +10,19 @@ VoltQuery is an early-stage project exploring professional problem retrieval, st
 
 Current milestone:
 
-**M0 — Seed Corpus + Benchmark Contract**
+**M1 — EEProblemIR v0.1**
 
-The project is intentionally **not** starting with a large OCR/LLM stack.
+M0 is complete: a 40-problem (32 Circuit Theory / 8 Analog Electronics)
+manually reviewed, license-verified public Gold corpus plus its source registry
+and benchmark contract live at `benchmarks/seed/problems.jsonl`.
 
-The first goal is to build a small, trustworthy open EE seed corpus and benchmark that can later measure:
+M1 is the first stable typed representation of an EE problem — `EEProblemIR`
+v0.1 (`benchmarks/seed/problem_ir.jsonl`), a versioned one-record-per-seed
+projection of the corpus with structured parts, typed inputs (quantity/table),
+three-axis assets, targets, and formulas. The project is intentionally **not**
+starting with a large OCR/LLM stack.
+
+The corpus and its IR are being built to later measure:
 - document parsing
 - OCR
 - retrieval
@@ -45,8 +53,8 @@ Python >=3.12,<3.13
 - `docs/roadmap.md` — milestone/version roadmap
 - `docs/version-spec.md` — version features and acceptance criteria
 - `docs/architecture.md` — architecture rules
-- `docs/development/M0_BOOTSTRAP.md` — immediate M0 starting work
-- `docs/development/SEED_CORPUS_FINDINGS.md` — lessons learned from the seed corpus
+- `docs/development/M0_BOOTSTRAP.md` — the completed M0 bootstrap plan
+- `docs/development/SEED_CORPUS_FINDINGS.md` — lessons learned from the seed corpus (the requirements ledger for `EEProblemIR` v0.1)
 
 ## Long-term Direction
 

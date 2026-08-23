@@ -9,10 +9,18 @@ Target: **40 manually reviewed** seed problems.
 retrieval benchmark. It is populated by the content task with manually reviewed
 problems sourced from verified licenses.
 
+`problem_ir.jsonl` is the derived **M1 IR corpus**: one `EEProblemIR` v0.1
+record per seed problem (same id set, verified by `voltquery ir validate`),
+carrying the seed's identity fields verbatim plus structure — `parts`, typed
+`inputs`, three-axis `assets`, `targets`, and `formulas`. `answer` is `None` by
+convention (see `docs/development/SEED_CORPUS_FINDINGS.md`).
+
 Current status: **40 / 40 problems collected** (32 Circuit Theory,
 8 Analog Electronics). Each is fully annotated per
 [`ANNOTATION_GUIDE.md`](ANNOTATION_GUIDE.md). **M0 is complete** — the
-`milestone m0` gate is GREEN (40 problem / 32 circuit / 8 analog).
+`milestone m0` gate is GREEN (40 problem / 32 circuit / 8 analog). **M1 is in
+progress** — all 40 records populate `problem_ir.jsonl` and `ir validate`
+reports 0 issues.
 
 The corpus now spans **4 truly independent author/institution ecosystems**. The
 Kuphaldt / Open Book Project works (`socratic-electronics` and the `lessons-*`

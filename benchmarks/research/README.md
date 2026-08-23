@@ -36,9 +36,13 @@ the public repo. They live under the gitignored `data/raw/` tree (e.g.
 
 ## Held items
 
-See `held.jsonl`. Currently it holds only `vq_seed_0016` (OpenStax University
-Physics Vol 2, Ch 10 problem 37), whose source is `LICENSE_REVIEW_REQUIRED`
-because its document imprint (CC-BY-4.0) conflicts with the current OpenStax
-collection license (CC-BY-NC-SA-4.0 + no-LLM/generative-AI-training clause).
+See `held.jsonl`. It holds two items:
+- `vq_seed_0016` (OpenStax University Physics Vol 2, Ch 10 problem 37), whose
+  source is `LICENSE_REVIEW_REQUIRED` because its document imprint (CC-BY-4.0)
+  conflicts with the current OpenStax collection license (CC-BY-NC-SA-4.0 +
+  no-LLM/generative-AI-training clause).
+- `vq_seed_0019` (Janzen Thévenin, Example 7.3.1), held for an unretrieved
+  egress-gated figure (Figure 7.3.1(a)); the earlier record re-encoded the
+  un-fetched schematic into `question_text`, which violates the no-re-encode rule.
 See `docs/development/SEED_CORPUS_FINDINGS.md` → *Source policy ≠ Document
 policy*.
