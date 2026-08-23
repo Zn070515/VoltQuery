@@ -83,7 +83,7 @@ candidates:
       is confirmed: this family is not a CC-BY public source.
 
   - id: umass-ee-fundamentals
-    domain: [circuit_theory]
+    domain: [circuit_theory, analog_electronics]
     discovered_url: https://openbooks.library.umass.edu/funee/
     license_claim:
       id: CC-BY-4.0
@@ -101,9 +101,11 @@ candidates:
       "About this book" (openbooks.library.umass.edu/funee/front-matter/about/)
       states licensed under CC BY 4.0 International, except where otherwise noted.
       Author David J. McLaughlin; UMass Amherst; accompaniers ECE 361. Independent
-      author/institution. VERIFIED CC BY 4.0 → eligible for public Gold, pending
-      per-problem annotation. Registered at data/sources.yaml as
-      umass-ee-fundamentals.
+      author/institution. VERIFIED CC BY 4.0 → registered at data/sources.yaml as
+      umass-ee-fundamentals. Mined into the public Gold corpus as 2 analog
+      worked-example problems (`vq_seed_0017` diode, `vq_seed_0018` inverting
+      op-amp / closed-loop gain) — hence the added analog domain coverage; both
+      are answer-bearing worked examples.
 
   - id: janzen-electricity-magnetism-circuits
     domain: [circuit_theory]
@@ -124,8 +126,12 @@ candidates:
       Verified 2026-08-22: CircuitBread appendices page and eCampusOntario Open
       Library record both state CC BY 4.0 International, except where otherwise
       noted. Advanced circuit analysis incl. Thevenin. Independent author system.
-      VERIFIED CC BY 4.0 → eligible for public Gold, pending per-problem annotation.
-      Registered at data/sources.yaml as janzen-electricity-magnetism-circuits.
+      VERIFIED CC BY 4.0 → registered at data/sources.yaml as
+      janzen-electricity-magnetism-circuits. Mined into the public Gold corpus as
+      6 problems (`vq_seed_0020`, `vq_seed_0026`, `vq_seed_0027`,
+      `vq_seed_0040`–`0042`); `vq_seed_0019` (Thévenin Example 7.3.1) is held out
+      of Gold for an unretrieved egress-gated figure — see
+      benchmarks/research/held.jsonl.
 
   - id: libretexts-digital-circuit-projects
     domain: [digital_electronics]

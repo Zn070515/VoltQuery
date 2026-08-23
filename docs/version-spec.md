@@ -40,8 +40,9 @@ Status: **complete** (40 / 32 / 8; `milestone m0` GREEN).
 
 # M1 — EEProblemIR v0.1
 
-Status: **in progress** (schema, corpus projection, and parity gate in place;
-`answer` population deferred to M2).
+Status: **frozen** (EEProblemIR v0.1 contract, 40-record Gold projection, and a
+strict seed↔IR parity gate are all green; all six acceptance criteria below are
+met).
 
 ## Features
 

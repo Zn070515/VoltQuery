@@ -65,10 +65,20 @@ Concretely in place so far:
    with the seed corpus and per-record agreement on source / domain / topics /
    verbatim statement / multipart shape / source facts / document refs.
 4. `answer` stays `None` by convention — `answer_available` is a source fact
-   (observable), and the machine-parseable answer is a deferred M2 solver concern.
+   (observable). Capturing the source's own answer / worked-solution text is a
+   deferred M2 (Document → Problem) ingestion concern. Deterministic solving is a
+   v0.3 concern and is not part of M2.
 
 Do **not** start M2 (Document → Problem ingestion), OCR, search, solver,
 mobile, or LLM work before M1 is complete unless explicitly requested.
+
+---
+
+## License
+
+VoltQuery's own code is MIT (see `LICENSE`). Per-source corpus documents are
+licensed independently via `data/sources.yaml` (predominantly CC-BY) and the two
+are never conflated: the MIT code license does not re-license any source material.
 
 ---
 

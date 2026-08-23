@@ -35,6 +35,28 @@ union, three-axis assets with a `Waveform` kind, `parts`, `targets`,
 `benchmarks/seed/problem_ir.jsonl`, gated by `voltquery ir validate` for
 seed↔IR parity.
 
+### M1 v0.1 encoding status (current truth)
+
+The sections below describe the **M0 observations** that drove the contract; the
+frozen-now "what each observation became" mapping is:
+
+- §2 figure↔part association → `ProblemAsset.parts` (a subproblem-label list);
+- §3 shared-page / crop geometry → `ProblemAsset.crop_rect` + `page_index`
+  (for source-reproducible crops) + `parts` binding;
+- §4 formula role & layout → `Formula.role` (`FormulaRole`:
+  given/displayed/derived) × `Formula.layout` (`FormulaLayout`: inline/display);
+- §5 subparts → recursive `Part.parts` (replacing the bool-only `is_multipart`);
+- §6 structured answers → `Answer` (open `{type, content}` — not a rigid union,
+  since a real answer blends scalar + drawing + explanation);
+- §7 typed units → `Unit` (`symbol` + `normalized` spelling) beside prose, with
+  a required unit plate (empty symbol = dimensionless);
+- §10 table/quantity inputs → `Input` discriminated union
+  (`QuantityInput | TableInput`).
+
+Still deferred beyond v0.1 (M2 / v0.2+): capturing the source's own machine-parseable
+answer/solution text, `CircuitGraph`/`MathIR`, and the source-answer rendering of
+images-of-values fidelity.
+
 ## Composition at 40
 
 - **Public Gold** (`benchmarks/seed/problems.jsonl`): **40 problems —
@@ -170,8 +192,12 @@ requires but does not print. Observed:
   relationship from a data table).
 
 So the single boolean conflates "involved", "stated", and "to-derive", and cannot
-distinguish inline from display. The four displayed formulas are **display
-formulas**; no seed problem shows an inline formula mid-sentence. The OpenStax
+distinguish inline from display. M1 resolves this with `Formula.role`
+(`FormulaRole`: given/displayed/derived) × `Formula.layout` (`FormulaLayout`:
+inline/display). Of the captured formulas, most are **display** formulas
+(`vq_seed_0008`, `vq_seed_0013`, `vq_seed_0030`, `vq_seed_0042`); `vq_seed_0014`
+is the one **inline** occurrence (`AV = Vout / Vin(+)` appears mid-sentence).
+The OpenStax
 source introduces a *different* value-form: component values and computed answers
 are rendered as **images** (rasterized math), so the extracted narrative simply has
 a gap where the number sits (`R1 = 2 kΩ` survives as text only because the OpenStax
@@ -193,7 +219,9 @@ remaining multi-work problems are expressed as:
 - pre-split "Question N" headers already in the worksheet.
 
 The boolean is still too weak regardless: it cannot enumerate parts, order them, or
-attach per-part answers. `EEProblemIR` needs structured subparts. Being able to
+attach per-part answers. M1 replaces it with **recursive `Part.parts`** (which
+also lets a subpart carry its own nested subparts, e.g. 0032's (i)/(ii)/(iii)).
+Being able to
 verify `is_multipart` across two sources is itself a useful contract test: OpenStax answers
 **only odd-numbered** problems, so a multipart problem is only `answer_available`
 if its number is odd (problem 37 is odd). Caveat: `vq_seed_0016` is the sole
@@ -222,11 +250,14 @@ is the widest single gap for `EEProblemIR`.
 
 ### 7. Are units explicit?
 
-No. Units are embedded in prose (µA, MΩ, kΩ, µF, ms, V). There are no typed
-value+unit fields; the inconsistent spellings ("kΩ" vs "KΩ" across problems) are
-a symptom of untyped prose. OpenStax uses typographic subscripts (`V₁`, `R₁`) and
-formatted units (`2 kΩ`) in vector text in its *figures*, and rasterized values
-in its *body text*. This blocks solver and unit-validation work and is a genuine gap.
+No. Units are embedded in prose (µA, MΩ, kΩ, µF, ms, V). In M0 the inconsistent
+spellings ("kΩ" vs "KΩ" across problems) were a symptom of untyped prose; M1
+encodes a **typed `Unit`** (`symbol` + `normalized` spelling) beside the prose
+value, with a required unit plate so a missing unit is never mistaken for a known
+one (an empty symbol marks a dimensionless quantity). OpenStax uses typographic
+subscripts (`V₁`, `R₁`) and formatted units (`2 kΩ`) in vector text in its
+*figures*, and rasterized values in its *body text*. This still blocks solver and
+unit-validation work on rasterized values and is a genuine gap.
 
 ### 8. What does Analog require that Circuit Theory does not?
 
@@ -271,14 +302,15 @@ From 40 problems, minimally:
 - **asset role vs asset kind** — see *AssetKind ≠ AssetRole*,
 - **figure** bound to (a) part(s), carrying a source crop rectangle,
 - **typed units** separate from prose, with normalized spellings,
-- **formula role** (stated vs displayed vs to-derive) and **layout** (inline vs
-  display).
+- **formula role** (given/displayed/derived) and **layout** (inline/display).
 
-The current `SeedProblemRecord` — flat asset list, coarse booleans, prose-only
-question, bool-only answer availability — is an adequate M0 *ingest* shape but is
-not yet `EEProblem`/`EEProblemIR`: it can record provenance and presence, not the
-problem's structure. That distinction is deliberate: it is the observable
-requirements contract for M1, not a frozen final IR.
+The M0 `SeedProblemRecord` — flat asset list, coarse booleans, prose-only
+question, bool-only answer availability — records provenance and presence, not the
+problem's structure. That is the deliberate M0 *ingest* shape; the requirements it
+surfaced are now encoded as **M1 `EEProblemIR` v0.1** (see the *M1 v0.1 encoding
+status* note), and v0.1 is the frozen target rather than a final IR — the
+solving-adjacent structure (`CircuitGraph`, `MathIR`, `AnswerSchema`,
+`SolutionPath`) and the source-answer capture remain deferred to M2 / v0.2+.
 
 ## AssetKind ≠ AssetRole
 
@@ -294,10 +326,12 @@ different roles:
 - **content_crop** — a figure/diagram *inside* the question (future
   visual-retrieval / `CircuitIR` target).
 
-M1 will likely need a separate `role` axis alongside `kind`, e.g. `kind:
-{schematic, formula, figure, table, waveform}` × `role: {question_crop,
-content_crop}`. This is recorded now and is **not** a blocker for M0 — filename
-convention plus the `has_circuit_figure` boolean are sufficient to finish M0.
+M0 resolved `role` from the filename convention (`*_question.png` vs
+`*_circuit.png`) plus the `has_circuit_figure` boolean. M1 v0.1 makes this
+explicit as three orthogonal axes, `kind × role × origin` (`AssetKind` ×
+`AssetRole` × `AssetOrigin`), so a source schematic is `kind=schematic,
+role=content_crop, origin=source` and a generated OCR crop is `kind=figure,
+role=content_crop, origin=generated`.
 
 ## Source diversity (most serious gap)
 

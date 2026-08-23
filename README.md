@@ -56,6 +56,14 @@ Python >=3.12,<3.13
 - `docs/development/M0_BOOTSTRAP.md` — the completed M0 bootstrap plan
 - `docs/development/SEED_CORPUS_FINDINGS.md` — lessons learned from the seed corpus (the requirements ledger for `EEProblemIR` v0.1)
 
+## License
+
+VoltQuery's own code is released under the MIT License (see `LICENSE`).
+The corpus materials are governed separately: each source is licensed per
+`data/sources.yaml` (predominantly CC-BY), and only public-redistributable
+records are in `benchmarks/seed/`. The MIT code license does not re-license
+the per-source documents.
+
 ## Long-term Direction
 
 ```text
