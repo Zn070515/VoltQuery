@@ -10,17 +10,17 @@ VoltQuery is an early-stage project exploring professional problem retrieval, st
 
 Current milestone:
 
-**M1 — EEProblemIR v0.1**
+**M2 — Document → Problem Ingestion**
 
 M0 is complete: a 40-problem (32 Circuit Theory / 8 Analog Electronics)
 manually reviewed, license-verified public Gold corpus plus its source registry
 and benchmark contract live at `benchmarks/seed/problems.jsonl`.
 
-M1 is the first stable typed representation of an EE problem — `EEProblemIR`
-v0.1 (`benchmarks/seed/problem_ir.jsonl`), a versioned one-record-per-seed
-projection of the corpus with structured parts, typed inputs (quantity/table),
-three-axis assets, targets, and formulas. The project is intentionally **not**
-starting with a large OCR/LLM stack.
+M1 — `EEProblemIR` v0.1 (`benchmarks/seed/problem_ir.jsonl`) is complete and
+**frozen**: a versioned one-record-per-seed projection of the corpus with
+structured parts, typed inputs (quantity/table), three-axis assets, targets, and
+formulas, guarded by a strict seed↔IR parity gate (`voltquery ir validate`).
+The project is intentionally **not** starting with a large OCR/LLM stack.
 
 The corpus and its IR are being built to later measure:
 - document parsing

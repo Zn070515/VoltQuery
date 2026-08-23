@@ -19,7 +19,7 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from voltquery.contracts import EEProblemIR, Part, ProblemAsset, SeedProblemRecord
-from voltquery.contracts.enums import AssetKind, AssetRole, Domain
+from voltquery.contracts.enums import AssetKind, Domain
 
 from .corpus import _registered_documents, _registered_sources, load_problems
 from .issues import ValidationIssue, format_validation_error
@@ -315,26 +315,26 @@ def _check_observables(
                 ),
             )
         )
-    if _has_diagram_asset(ir.assets) and not ir.observables.has_circuit_figure:
+    if _has_circuit_asset(ir.assets) and not ir.observables.has_circuit_figure:
         issues.append(
             ValidationIssue(
                 code="problem_ir_observable_figure_inconsistent",
                 path=ref,
-                message=f"{tag} IR has a diagram asset but records has_circuit_figure=False",
+                message=f"{tag} IR has a circuit asset but records has_circuit_figure=False",
             )
         )
 
 
-def _has_diagram_asset(assets: list[ProblemAsset]) -> bool:
-    """True if an asset carries the visual diagram (not the question-text crop)."""
-    for asset in assets:
-        if asset.role is AssetRole.CONTENT_CROP and asset.kind in (
-            AssetKind.FIGURE,
-            AssetKind.SCHEMATIC,
-            AssetKind.WAVEFORM,
-        ):
-            return True
-    return False
+def _has_circuit_asset(assets: list[ProblemAsset]) -> bool:
+    """True if an asset is a circuit *schematic* (the diagram with circuit structure).
+
+    ``has_circuit_figure`` is a world fact: does the source reference a circuit
+    figure? Ordinary figures (a pictorial), waveforms, and device curves are NOT
+    circuit figures, so only a ``SCHEMATIC`` asset counts as evidence for the
+    observable. Anything else must not silently turn ``has_circuit_figure`` into
+    ``has_visual_content``.
+    """
+    return any(asset.kind is AssetKind.SCHEMATIC for asset in assets)
 
 
 def _check_assets(

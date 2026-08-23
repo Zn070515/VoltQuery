@@ -16,9 +16,10 @@ Do not introduce a general LLM dependency before deterministic baselines exist.
 
 # Pre-v0.1 Research Milestones
 
-> **Current milestone: M1 — EEProblemIR v0.1.** M0 (Seed Corpus + Benchmark
-> Contract) is complete; the M1 IR schema, its 40-record `problem_ir.jsonl`
-> projection, and the `voltquery ir validate` parity gate are in place.
+> **Current milestone: M2 — Document → Problem Ingestion.** M0 (Seed Corpus +
+> Benchmark Contract) is complete; M1 (EEProblemIR v0.1) is complete and frozen —
+> its IR schema, the 40-record `problem_ir.jsonl` projection, and the strict
+> `voltquery ir validate` parity gate are all green.
 
 ## M0 — Seed Corpus + Benchmark Contract
 

@@ -333,11 +333,79 @@ def test_observable_figure_reverse_detected(
 
 
 # --- assets: existence and part binding under an assets_root ---
-def _make_asset_root(tmp_path: Path) -> Path:
+def _mk_assets(tmp_path: Path, *rel_paths: str) -> Path:
     root = tmp_path / "assets_root"
-    (root / "assets").mkdir(parents=True)
-    (root / "assets" / "diagram.png").write_bytes(b"png")
+    for rel in rel_paths or ("assets/diagram.png",):
+        asset = root / rel
+        asset.parent.mkdir(parents=True, exist_ok=True)
+        asset.write_bytes(b"png")
     return root
+
+
+def _make_asset_root(tmp_path: Path) -> Path:
+    return _mk_assets(tmp_path)
+
+
+# --- circuit-figure evidence is schematic-only: a waveform or generic figure is
+# legal when has_circuit_figure is False, but a schematic is not ---
+def test_circuit_figure_waveform_asset_legal(
+    tmp_path: Path,
+    fixture_sources_path: Path,
+    fixture_documents_path: Path,
+) -> None:
+    seed = _seed(has_circuit_figure=False)
+    ir = _ir(
+        seed,
+        assets=[{
+            "path": "assets/curve.png",
+            "kind": "waveform",
+            "role": "content_crop",
+            "origin": "source",
+        }],
+    )
+    assets_root = _mk_assets(tmp_path, "assets/curve.png")
+    codes = _codes(tmp_path, seed, ir, fixture_sources_path, fixture_documents_path, assets_root)
+    assert codes == set()
+
+
+def test_circuit_figure_generic_figure_asset_legal(
+    tmp_path: Path,
+    fixture_sources_path: Path,
+    fixture_documents_path: Path,
+) -> None:
+    seed = _seed(has_circuit_figure=False)
+    ir = _ir(
+        seed,
+        assets=[{
+            "path": "assets/pictorial.png",
+            "kind": "figure",
+            "role": "content_crop",
+            "origin": "source",
+        }],
+    )
+    assets_root = _mk_assets(tmp_path, "assets/pictorial.png")
+    codes = _codes(tmp_path, seed, ir, fixture_sources_path, fixture_documents_path, assets_root)
+    assert codes == set()
+
+
+def test_circuit_figure_schematic_asset_flagged(
+    tmp_path: Path,
+    fixture_sources_path: Path,
+    fixture_documents_path: Path,
+) -> None:
+    seed = _seed(has_circuit_figure=False)
+    ir = _ir(
+        seed,
+        assets=[{
+            "path": "assets/circuit.png",
+            "kind": "schematic",
+            "role": "content_crop",
+            "origin": "source",
+        }],
+    )
+    assets_root = _mk_assets(tmp_path, "assets/circuit.png")
+    codes = _codes(tmp_path, seed, ir, fixture_sources_path, fixture_documents_path, assets_root)
+    assert "problem_ir_observable_figure_inconsistent" in codes
 
 
 def test_asset_missing_detected(

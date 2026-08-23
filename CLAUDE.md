@@ -49,28 +49,28 @@ Never silently convert uncertainty into confidence.
 
 The current milestone is:
 
-> **M1 — EEProblemIR v0.1**
+> **M2 — Document → Problem Ingestion**
 
 M0 is complete (40-problem public Gold corpus: 32 Circuit Theory / 8 Analog
 Electronics, license-verified, validated by `milestone m0`).
 
-M1 is the first stable, typed, versioned representation of an EE problem.
-Concretely in place so far:
+M1 — `EEProblemIR` v0.1 — is complete and **frozen**:
 1. `EEProblemIR` v0.1 contract with explicit `schema_version = "v0.1"`.
 2. A derived `benchmarks/seed/problem_ir.jsonl` — one record per seed, holding
    the seed's identity fields plus structure: `parts`, typed `inputs`
    (quantity/table), three-axis `assets` (kind × role × origin), `targets`,
    and `formulas`.
-3. A parity guarantee: `voltquery ir validate` enforces one-to-one id parity
-   with the seed corpus and per-record agreement on source / domain / topics /
-   verbatim statement / multipart shape / source facts / document refs.
+3. A strict parity guarantee: `voltquery ir validate` enforces one-to-one id
+   parity with the seed corpus and per-record agreement on source / domain /
+   topics / verbatim statement / multipart shape / source facts / document refs.
 4. `answer` stays `None` by convention — `answer_available` is a source fact
    (observable). Capturing the source's own answer / worked-solution text is a
    deferred M2 (Document → Problem) ingestion concern. Deterministic solving is a
    v0.3 concern and is not part of M2.
 
-Do **not** start M2 (Document → Problem ingestion), OCR, search, solver,
-mobile, or LLM work before M1 is complete unless explicitly requested.
+Do **not** start M2 work before this milestone banner is honored: M2 is now the
+current milestone, so M2 development may begin. M2 excludes OCR/search/solver
+work beyond Document → Problem ingestion; solving remains a v0.3 concern.
 
 ---
 
