@@ -19,7 +19,7 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from voltquery.contracts import EEProblemIR, Part, ProblemAsset, SeedProblemRecord
-from voltquery.contracts.enums import AssetKind, Domain
+from voltquery.contracts.enums import AssetKind, AssetOrigin, AssetRole, Domain
 
 from .corpus import _registered_documents, _registered_sources, load_problems
 from .issues import ValidationIssue, format_validation_error
@@ -326,15 +326,22 @@ def _check_observables(
 
 
 def _has_circuit_asset(assets: list[ProblemAsset]) -> bool:
-    """True if an asset is a circuit *schematic* (the diagram with circuit structure).
+    """True if an asset is a source circuit *schematic* (the diagram with structure).
 
-    ``has_circuit_figure`` is a world fact: does the source reference a circuit
+    ``has_circuit_figure`` is a world fact: does the *source* reference a circuit
     figure? Ordinary figures (a pictorial), waveforms, and device curves are NOT
-    circuit figures, so only a ``SCHEMATIC`` asset counts as evidence for the
-    observable. Anything else must not silently turn ``has_circuit_figure`` into
-    ``has_visual_content``.
+    circuit figures, and a GENERATED ``CircuitIR`` render is not source provenance
+    either. Following the frozen three-axis ``kind x role x origin`` semantics, only
+    ``kind=SCHEMATIC, role=CONTENT_CROP, origin=SOURCE`` (the contract's canonical
+    source schematic) counts as evidence. Anything else must not silently turn
+    ``has_circuit_figure`` into ``has_visual_content``.
     """
-    return any(asset.kind is AssetKind.SCHEMATIC for asset in assets)
+    return any(
+        asset.kind is AssetKind.SCHEMATIC
+        and asset.role is AssetRole.CONTENT_CROP
+        and asset.origin is AssetOrigin.SOURCE
+        for asset in assets
+    )
 
 
 def _check_assets(

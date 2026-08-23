@@ -408,6 +408,50 @@ def test_circuit_figure_schematic_asset_flagged(
     assert "problem_ir_observable_figure_inconsistent" in codes
 
 
+def test_circuit_figure_generated_schematic_asset_legal(
+    tmp_path: Path,
+    fixture_sources_path: Path,
+    fixture_documents_path: Path,
+) -> None:
+    # A generated CircuitIR render is not source provenance: it must not turn
+    # has_circuit_figure into has_visual_content.
+    seed = _seed(has_circuit_figure=False)
+    ir = _ir(
+        seed,
+        assets=[{
+            "path": "assets/circuit_render.png",
+            "kind": "schematic",
+            "role": "content_crop",
+            "origin": "generated",
+        }],
+    )
+    assets_root = _mk_assets(tmp_path, "assets/circuit_render.png")
+    codes = _codes(tmp_path, seed, ir, fixture_sources_path, fixture_documents_path, assets_root)
+    assert codes == set()
+
+
+def test_circuit_figure_question_crop_schematic_legal(
+    tmp_path: Path,
+    fixture_sources_path: Path,
+    fixture_documents_path: Path,
+) -> None:
+    # The role must be CONTENT_CROP (the diagram carrier); a question-text crop is
+    # not a circuit figure.
+    seed = _seed(has_circuit_figure=False)
+    ir = _ir(
+        seed,
+        assets=[{
+            "path": "assets/question.png",
+            "kind": "schematic",
+            "role": "question_crop",
+            "origin": "source",
+        }],
+    )
+    assets_root = _mk_assets(tmp_path, "assets/question.png")
+    codes = _codes(tmp_path, seed, ir, fixture_sources_path, fixture_documents_path, assets_root)
+    assert codes == set()
+
+
 def test_asset_missing_detected(
     tmp_path: Path,
     fixture_sources_path: Path,
