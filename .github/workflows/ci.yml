@@ -30,6 +30,8 @@ jobs:
         run: uv run pytest
       - name: Validate real registry and corpus
         run: uv run voltquery validate
+      - name: Validate problem IR corpus and seed parity
+        run: uv run voltquery ir validate
       - name: Enforce public-Gold source policy
         run: uv run voltquery policy public-gold
       - name: Check M0 seed-corpus + benchmark gate

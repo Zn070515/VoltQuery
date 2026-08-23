@@ -4,6 +4,7 @@ from .corpus import load_problems, validate_corpus
 from .documents import load_documents, validate_documents
 from .issues import Severity, ValidationIssue, format_validation_error
 from .milestone import check_m0, check_public_gold_policy
+from .problem_ir import load_problem_ir, validate_problem_ir
 from .sources import load_sources, validate_sources
 
 __all__ = [
@@ -13,9 +14,11 @@ __all__ = [
     "check_public_gold_policy",
     "format_validation_error",
     "load_documents",
+    "load_problem_ir",
     "load_problems",
     "load_sources",
     "validate_corpus",
     "validate_documents",
+    "validate_problem_ir",
     "validate_sources",
 ]

@@ -10,6 +10,7 @@ from .seed import (
     check_public_gold_policy,
     validate_corpus,
     validate_documents,
+    validate_problem_ir,
     validate_sources,
 )
 from .seed.issues import Severity, ValidationIssue
@@ -28,6 +29,10 @@ def _default_paths() -> tuple[Path, Path, Path]:
 
 def _default_documents_path() -> Path:
     return _REPO_ROOT / "data" / "documents.yaml"
+
+
+def _default_ir_path() -> Path:
+    return _REPO_ROOT / "benchmarks" / "seed" / "problem_ir.jsonl"
 
 
 def _add_path_args(cmd: argparse.ArgumentParser) -> None:
@@ -105,7 +110,38 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     _add_path_args(pub_gold)
+
+    ir = sub.add_parser("ir", help="Validate the M1 problem IR corpus.")
+    ir_sub = ir.add_subparsers(dest="ir_command", required=True)
+    ir_validate = ir_sub.add_parser(
+        "validate",
+        help="Validate problem_ir.jsonl and its seed<->IR parity.",
+    )
+    _add_ir_args(ir_validate)
     return parser
+
+
+def _add_ir_args(cmd: argparse.ArgumentParser) -> None:
+    cmd.add_argument(
+        "--sources",
+        default=None,
+        help="Path to data/sources.yaml (default: repo default).",
+    )
+    cmd.add_argument(
+        "--corpus",
+        default=None,
+        help="Path to benchmarks/seed/problems.jsonl (default: repo default).",
+    )
+    cmd.add_argument(
+        "--documents",
+        default=None,
+        help="Path to data/documents.yaml (default: repo default).",
+    )
+    cmd.add_argument(
+        "--ir",
+        default=None,
+        help="Path to benchmarks/seed/problem_ir.jsonl (default: repo default).",
+    )
 
 
 def _render(issues: list[ValidationIssue]) -> int:
@@ -137,6 +173,16 @@ def _run_policy_public_gold(args: argparse.Namespace) -> int:
     return _render(check_public_gold_policy(corpus_path, sources_path))
 
 
+def _run_ir_validate(args: argparse.Namespace) -> int:
+    sources_path, corpus_path, _assets_root = _paths_from(args)
+    ir_path = Path(args.ir) if args.ir else None
+    if ir_path is None:
+        ir_path = _default_ir_path()
+    return _render(
+        validate_problem_ir(corpus_path, ir_path, sources_path, _documents_from(args))
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -147,6 +193,8 @@ def main(argv: list[str] | None = None) -> int:
         return _run_milestone_m0(args)
     if args.command == "policy" and args.policy_name == "public-gold":
         return _run_policy_public_gold(args)
+    if args.command == "ir" and args.ir_command == "validate":
+        return _run_ir_validate(args)
 
     parser.print_help()
     return 0
