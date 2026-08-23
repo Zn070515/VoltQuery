@@ -14,6 +14,10 @@ build/
 # verified as redistributable and repo policy permits inclusion.
 data/raw/
 
+# Generated M2 ingest spike output (candidate store + extracted figure
+# crops) is scratch, not part of the curated benchmark contract.
+benchmarks/ingest/
+
 # OS / editor
 .DS_Store
 Thumbs.db

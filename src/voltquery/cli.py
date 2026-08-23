@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 from pathlib import Path
+
+from voltquery.contracts import DocumentRef, Source
 
 from .seed import (
     check_m0,
@@ -80,8 +83,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="voltquery",
         description=(
-            "VoltQuery - Electrical Engineering problem search & "
-            "verification baseline tooling."
+            "VoltQuery - Electrical Engineering problem search & " "verification baseline tooling."
         ),
     )
     sub = parser.add_subparsers(dest="command", required=True)
@@ -118,7 +120,50 @@ def build_parser() -> argparse.ArgumentParser:
         help="Validate problem_ir.jsonl and its seed<->IR parity.",
     )
     _add_ir_args(ir_validate)
+
+    ingest = sub.add_parser(
+        "ingest",
+        help=(
+            "Turn a registered PDF into a candidate store "
+            "(problem candidates + retained figures)."
+        ),
+    )
+    _add_ingest_args(ingest)
     return parser
+
+
+def _add_ingest_args(cmd: argparse.ArgumentParser) -> None:
+    cmd.add_argument("--pdf", required=True, help="Path to the input PDF to ingest.")
+    cmd.add_argument(
+        "--source",
+        required=True,
+        help="Source id that owns the document (must be in data/sources.yaml).",
+    )
+    cmd.add_argument(
+        "--doc",
+        required=True,
+        help="Document id to bind provenance to (must be in data/documents.yaml).",
+    )
+    cmd.add_argument(
+        "--output",
+        required=True,
+        help="Directory to write candidates.jsonl + assets/ into.",
+    )
+    cmd.add_argument(
+        "--pages",
+        default=None,
+        help="1-based page range '12-15' (default: all pages).",
+    )
+    cmd.add_argument(
+        "--sources",
+        default=None,
+        help="Path to data/sources.yaml (default: repo default).",
+    )
+    cmd.add_argument(
+        "--documents",
+        default=None,
+        help="Path to data/documents.yaml (default: repo default).",
+    )
 
 
 def _add_ir_args(cmd: argparse.ArgumentParser) -> None:
@@ -152,8 +197,7 @@ def _add_ir_args(cmd: argparse.ArgumentParser) -> None:
 def _render(issues: list[ValidationIssue]) -> int:
     for issue in issues:
         print(
-            f"[{issue.severity.value.upper():7}] {issue.code}: {issue.message}"
-            f"  ({issue.path})"
+            f"[{issue.severity.value.upper():7}] {issue.code}: {issue.message}" f"  ({issue.path})"
         )
     errors = [issue for issue in issues if issue.severity == Severity.ERROR]
     print(f"checked: {len(issues)} issue(s), {len(errors)} error(s)")
@@ -188,6 +232,174 @@ def _run_ir_validate(args: argparse.Namespace) -> int:
     )
 
 
+def _run_ingest(args: argparse.Namespace) -> int:
+    sources_path = _paths_from(args)[0]
+    documents_path = _documents_from(args)
+    pdf_path = Path(args.pdf)
+    source_id = args.source
+    document_id = args.doc
+
+    issues: list[ValidationIssue] = []
+
+    if not pdf_path.exists():
+        issues.append(
+            ValidationIssue(
+                code="ingest_pdf_missing",
+                path=str(pdf_path),
+                message="ingest input PDF does not exist",
+            )
+        )
+        return _render(issues)
+
+    source = _find_source(sources_path, source_id, issues)
+    document = _find_document(documents_path, document_id, source_id, issues) if source else None
+    if issues:
+        return _render(issues)
+
+    pdf_sha = _sha256(pdf_path)
+    if document is not None and document.sha256 != pdf_sha:
+        issues.append(
+            ValidationIssue(
+                code="ingest_document_sha_mismatch",
+                path=str(pdf_path),
+                message=(
+                    f"PDF sha256 {pdf_sha} does not match registered document "
+                    f"'{document_id}' sha256 {document.sha256}; refusing to ingest "
+                    "an artifact that is not the registered byte-for-byte document"
+                ),
+            )
+        )
+        return _render(issues)
+
+    if source is not None and not source.license.verified:
+        issues.append(
+            ValidationIssue(
+                code="ingest_source_license_unverified",
+                path=str(sources_path),
+                message=f"source '{source_id}' license is not verified; ingesting locally only",
+                severity=Severity.WARNING,
+            )
+        )
+
+    try:
+        from .ingest.extraction import ingest_pdf
+
+        report = ingest_pdf(
+            pdf_path,
+            source_id,
+            document_id,
+            page_range=args.pages,
+            output_dir=args.output,
+        )
+    except ValueError as exc:
+        issues.append(
+            ValidationIssue(
+                code="ingest_invalid_page_range",
+                path=str(pdf_path),
+                message=str(exc),
+            )
+        )
+        return _render(issues)
+    except RuntimeError as exc:
+        issues.append(
+            ValidationIssue(
+                code="ingest_pymupdf_unavailable",
+                path=str(pdf_path),
+                message=str(exc),
+            )
+        )
+        return _render(issues)
+
+    for issue in issues:
+        print(f"[{issue.severity.value.upper():7}] {issue.code}: {issue.message}  ({issue.path})")
+    print(
+        f"ingested {report.pages_seen} page(s) from {report.document_sha256[:16]}... "
+        f"→ {report.candidates} candidate(s), {report.figures_retained} figure(s) retained, "
+        f"{len(report.dropped_pages)} page(s) dropped"
+    )
+    if report.dropped_pages:
+        print(f"  dropped pages (no retained prose): {report.dropped_pages}")
+    print(f"  output: {args.output}")
+    return 0
+
+
+def _find_source(
+    sources_path: Path, source_id: str, issues: list[ValidationIssue]
+) -> Source | None:
+    from .seed.sources import load_sources
+
+    try:
+        sources = load_sources(sources_path)
+    except ValueError as exc:
+        issues.append(
+            ValidationIssue(
+                code="ingest_sources_invalid",
+                path=str(sources_path),
+                message=str(exc),
+            )
+        )
+        return None
+    source = next((s for s in sources if s.id == source_id), None)
+    if source is None:
+        issues.append(
+            ValidationIssue(
+                code="ingest_source_unknown",
+                path=str(sources_path),
+                message=f"source '{source_id}' is not in the source registry",
+            )
+        )
+    return source
+
+
+def _find_document(
+    documents_path: Path, document_id: str, source_id: str, issues: list[ValidationIssue]
+) -> DocumentRef | None:
+    from .seed.documents import load_documents
+
+    try:
+        documents = load_documents(documents_path)
+    except ValueError as exc:
+        issues.append(
+            ValidationIssue(
+                code="ingest_documents_invalid",
+                path=str(documents_path),
+                message=str(exc),
+            )
+        )
+        return None
+    document = next((d for d in documents if d.id == document_id), None)
+    if document is None:
+        issues.append(
+            ValidationIssue(
+                code="ingest_document_unknown",
+                path=str(documents_path),
+                message=f"document '{document_id}' is not in the document registry",
+            )
+        )
+        return None
+    if document.source_id != source_id:
+        issues.append(
+            ValidationIssue(
+                code="ingest_document_source_mismatch",
+                path=str(documents_path),
+                message=(
+                    f"document '{document_id}' belongs to source "
+                    f"'{document.source_id}', not '{source_id}'"
+                ),
+            )
+        )
+        return None
+    return document
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -200,6 +412,8 @@ def main(argv: list[str] | None = None) -> int:
         return _run_policy_public_gold(args)
     if args.command == "ir" and args.ir_command == "validate":
         return _run_ir_validate(args)
+    if args.command == "ingest":
+        return _run_ingest(args)
 
     parser.print_help()
     return 0

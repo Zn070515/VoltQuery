@@ -13,6 +13,7 @@ from .enums import (
     FormulaRole,
     SourceStatus,
 )
+from .ingest import CANDIDATE_SCHEMA_VERSION, ParserProvenance, ProblemCandidate, SourceBlock
 from .license import LicenseMetadata
 from .problem import (
     SCHEMA_VERSION,
@@ -32,6 +33,7 @@ from .seed import TOPIC_SLUG_PATTERN, AssetRef, SeedProblemRecord, TopicSlug
 from .source import Source, SourceRef
 
 __all__ = [
+    "CANDIDATE_SCHEMA_VERSION",
     "SCHEMA_VERSION",
     "Answer",
     "AssetKind",
@@ -49,12 +51,15 @@ __all__ = [
     "FormulaRole",
     "Input",
     "LicenseMetadata",
+    "ParserProvenance",
     "Part",
     "ProblemAsset",
+    "ProblemCandidate",
     "ProblemObservables",
     "QuantityInput",
     "SeedProblemRecord",
     "Source",
+    "SourceBlock",
     "SourceRef",
     "SourceStatus",
     "TableInput",
