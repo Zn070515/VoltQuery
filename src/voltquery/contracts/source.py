@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pydantic import Field
+from pydantic import Field, field_validator
 
 from ._base import ContractModel
 from .enums import Domain, SourceStatus
@@ -37,3 +37,10 @@ class SourceRef(ContractModel):
     page_index: int | None = None
     page_label: str | None = None
     question_number: str | None = None
+
+    @field_validator("page_index")
+    @classmethod
+    def _non_negative_page(cls, value: int | None) -> int | None:
+        if value is not None and value < 0:
+            raise ValueError("page_index must be non-negative")
+        return value

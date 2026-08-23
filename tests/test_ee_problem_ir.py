@@ -16,6 +16,7 @@ from voltquery.contracts import (
     LicenseMetadata,
     ProblemAsset,
     QuantityInput,
+    SourceRef,
     TableInput,
 )
 
@@ -238,6 +239,22 @@ def test_crop_rect_requires_page() -> None:
         )
 
 
+@pytest.mark.parametrize("val", [float("nan"), float("inf"), float("-inf")])
+def test_crop_rect_rejects_non_finite(val) -> None:
+    with pytest.raises(ValidationError):
+        CropRect(x0=val, y0=0, x1=612, y1=705)
+
+
+def test_problem_asset_rejects_negative_page() -> None:
+    with pytest.raises(ValidationError):
+        ProblemAsset(path="assets/q.png", page_index=-1)
+
+
+def test_source_ref_rejects_negative_page() -> None:
+    with pytest.raises(ValidationError):
+        SourceRef(source_id="fixture-source", page_index=-1)
+
+
 # --- license verified=True must carry auditable evidence ---
 def test_license_verified_requires_evidence() -> None:
     with pytest.raises(ValidationError):
@@ -258,6 +275,10 @@ def test_formula_role_values() -> None:
     assert FormulaRole("derived") is FormulaRole.DERIVED
     with pytest.raises(ValueError):
         FormulaRole("stated")  # old M0 vocabulary is gone
+
+
+def test_formula_role_rejects_old_to_derive() -> None:
+    with pytest.raises(ValueError):
         FormulaRole("to_derive")
 
 

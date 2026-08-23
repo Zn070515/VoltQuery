@@ -12,6 +12,7 @@ explanation, so a rigid per-shape union is premature.
 
 from __future__ import annotations
 
+import math
 from typing import Annotated, Any, Literal
 
 from pydantic import Field, field_validator, model_validator
@@ -56,6 +57,9 @@ class CropRect(ContractModel):
 
     @model_validator(mode="after")
     def _well_formed(self) -> CropRect:
+        for val in (self.x0, self.y0, self.x1, self.y1):
+            if not math.isfinite(val):
+                raise ValueError("crop coordinates must be finite")
         if self.x1 <= self.x0:
             raise ValueError("x1 must be greater than x0")
         if self.y1 <= self.y0:
@@ -174,6 +178,13 @@ class ProblemAsset(ContractModel):
     @classmethod
     def _validate_path(cls, value: str) -> str:
         return _validate_asset_path(value)
+
+    @field_validator("page_index")
+    @classmethod
+    def _non_negative_page(cls, value: int | None) -> int | None:
+        if value is not None and value < 0:
+            raise ValueError("page_index must be non-negative")
+        return value
 
     @model_validator(mode="after")
     def _crop_requires_page(self) -> ProblemAsset:

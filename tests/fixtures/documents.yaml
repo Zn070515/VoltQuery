@@ -7,3 +7,11 @@ documents:
     retrieved_at: 2026-08-22
     license_evidence:
       - "collection: fixture-license (VoltQuery-owned schema fixture)"
+  - id: fixture-worksheet-2
+    source_id: fixture-source
+    filename: worksheet-2.pdf
+    url: https://example.invalid/fixtures/worksheet-2.pdf
+    sha256: "1111111111111111111111111111111111111111111111111111111111111111"
+    retrieved_at: 2026-08-22
+    license_evidence:
+      - "collection: fixture-license (VoltQuery-owned schema fixture)"

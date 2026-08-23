@@ -142,6 +142,11 @@ def _add_ir_args(cmd: argparse.ArgumentParser) -> None:
         default=None,
         help="Path to benchmarks/seed/problem_ir.jsonl (default: repo default).",
     )
+    cmd.add_argument(
+        "--assets",
+        default=None,
+        help="Root directory of the corpus assets (default: benchmarks/seed).",
+    )
 
 
 def _render(issues: list[ValidationIssue]) -> int:
@@ -174,12 +179,12 @@ def _run_policy_public_gold(args: argparse.Namespace) -> int:
 
 
 def _run_ir_validate(args: argparse.Namespace) -> int:
-    sources_path, corpus_path, _assets_root = _paths_from(args)
+    sources_path, corpus_path, assets_root = _paths_from(args)
     ir_path = Path(args.ir) if args.ir else None
     if ir_path is None:
         ir_path = _default_ir_path()
     return _render(
-        validate_problem_ir(corpus_path, ir_path, sources_path, _documents_from(args))
+        validate_problem_ir(corpus_path, ir_path, sources_path, _documents_from(args), assets_root)
     )
 
 

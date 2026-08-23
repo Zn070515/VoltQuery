@@ -18,7 +18,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from voltquery.contracts import EEProblemIR, ProblemAsset, SeedProblemRecord
+from voltquery.contracts import EEProblemIR, Part, ProblemAsset, SeedProblemRecord
 from voltquery.contracts.enums import AssetKind, AssetRole, Domain
 
 from .corpus import _registered_documents, _registered_sources, load_problems
@@ -50,6 +50,7 @@ def validate_problem_ir(
     ir_path: str | Path,
     sources_path: str | Path,
     documents_path: str | Path,
+    assets_root: str | Path | None = None,
 ) -> list[ValidationIssue]:
     """Validate the IR corpus, including seed<->IR parity, returning issues."""
 
@@ -150,6 +151,7 @@ def validate_problem_ir(
             continue
         ir, ref = hit
         _check_parity(seed, ir, ref, sources, documents, issues)
+        _check_assets(seed.id, ir, assets_root, ref, issues)
 
     return issues
 
@@ -164,18 +166,18 @@ def _check_parity(
 ) -> None:
     tag = f"problem '{seed.id}'"
 
-    if ir.source.source_id != seed.source.source_id:
+    if ir.source != seed.source:
         issues.append(
             ValidationIssue(
                 code="problem_ir_source_mismatch",
                 path=ref,
                 message=(
-                    f"{tag} IR source '{ir.source.source_id}' != seed source "
-                    f"'{seed.source.source_id}'"
+                    f"{tag} IR source provenance {ir.source.model_dump()} != seed "
+                    f"{seed.source.model_dump()}"
                 ),
             )
         )
-    elif ir.source.source_id not in sources:
+    if ir.source.source_id not in sources:
         issues.append(
             ValidationIssue(
                 code="problem_ir_source_unknown",
@@ -268,7 +270,8 @@ def _check_observables(
 ) -> None:
     tag = f"problem '{seed.id}'"
 
-    # answer_available is a source fact carried verbatim; it must agree exactly.
+    # All three source facts are carried verbatim and must agree exactly (M0 is
+    # frozen; the one-way tolerance for under-flagging no longer applies).
     if ir.observables.answer_available is not seed.answer_available:
         issues.append(
             ValidationIssue(
@@ -281,17 +284,14 @@ def _check_observables(
             )
         )
 
-    # has_formula is a source fact too, but M0 under-flagged a few records that
-    # were later found to print a formula. Parity is therefore one-directional:
-    # a fact we knew must not be lost, and captured formulas must be reflected.
-    if seed.has_formula and not ir.observables.has_formula:
+    if ir.observables.has_formula is not seed.has_formula:
         issues.append(
             ValidationIssue(
                 code="problem_ir_observable_formula_inconsistent",
                 path=ref,
                 message=(
-                    f"{tag} seed says has_formula but IR records "
-                    f"has_formula=False"
+                    f"{tag} IR has_formula={ir.observables.has_formula} "
+                    f"!= seed {seed.has_formula}"
                 ),
             )
         )
@@ -304,14 +304,14 @@ def _check_observables(
             )
         )
 
-    if seed.has_circuit_figure and not ir.observables.has_circuit_figure:
+    if ir.observables.has_circuit_figure is not seed.has_circuit_figure:
         issues.append(
             ValidationIssue(
                 code="problem_ir_observable_figure_inconsistent",
                 path=ref,
                 message=(
-                    f"{tag} seed says has_circuit_figure but IR records "
-                    f"has_circuit_figure=False"
+                    f"{tag} IR has_circuit_figure={ir.observables.has_circuit_figure} "
+                    f"!= seed {seed.has_circuit_figure}"
                 ),
             )
         )
@@ -335,6 +335,64 @@ def _has_diagram_asset(assets: list[ProblemAsset]) -> bool:
         ):
             return True
     return False
+
+
+def _check_assets(
+    problem_id: str,
+    ir: EEProblemIR,
+    assets_root: str | Path | None,
+    ref: str,
+    issues: list[ValidationIssue],
+) -> None:
+    if assets_root is None:
+        return
+    root = Path(assets_root).resolve()
+    for asset in ir.assets:
+        asset_path = (root / asset.path).resolve()
+        if not asset_path.is_relative_to(root):
+            issues.append(
+                ValidationIssue(
+                    code="problem_ir_asset_escape",
+                    path=ref,
+                    message=(
+                        f"problem '{problem_id}' references asset outside the "
+                        f"corpus root: '{asset.path}'"
+                    ),
+                )
+            )
+        elif not asset_path.exists():
+            issues.append(
+                ValidationIssue(
+                    code="problem_ir_asset_missing",
+                    path=ref,
+                    message=(
+                        f"problem '{problem_id}' references missing asset "
+                        f"'{asset.path}'"
+                    ),
+                )
+            )
+        if asset.parts:
+            labels = _collect_part_labels(ir.parts)
+            for label in asset.parts:
+                if label not in labels:
+                    issues.append(
+                        ValidationIssue(
+                            code="problem_ir_asset_part_unknown",
+                            path=ref,
+                            message=(
+                                f"problem '{problem_id}' binds asset '{asset.path}' "
+                                f"to unknown part '{label}'"
+                            ),
+                        )
+                    )
+
+
+def _collect_part_labels(parts: list[Part] | None) -> list[str]:
+    labels: list[str] = []
+    for part in parts or []:
+        labels.append(part.label)
+        labels.extend(_collect_part_labels(part.parts))
+    return labels
 
 
 def _check_document_ref(
