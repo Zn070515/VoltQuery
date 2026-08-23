@@ -13,6 +13,11 @@ sources:
       attribution_required: true
       data_policy: public_redistributable
       verified: true
+      verification_url: https://example.org/voltquery-fixture-license
+      verified_at: 2026-08-22
+      verification_note: >-
+        Structural fixture owned by VoltQuery for schema testing; no external
+        curriculum content, license declared by the project for validation.
     source_url: null
     status: approved
     notes: >-

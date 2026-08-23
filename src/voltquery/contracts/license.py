@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from datetime import date
 
+from pydantic import model_validator
+
 from ._base import ContractModel
 from .enums import DataPolicy
 
@@ -28,3 +30,22 @@ class LicenseMetadata(ContractModel):
     verification_url: str | None = None
     verified_at: date | None = None
     verification_note: str | None = None
+
+    @model_validator(mode="after")
+    def _verified_requires_evidence(self) -> LicenseMetadata:
+        if not self.verified:
+            return self
+        missing = [
+            name
+            for name, value in (
+                ("verification_url", self.verification_url),
+                ("verified_at", self.verified_at),
+                ("verification_note", self.verification_note),
+            )
+            if not value
+        ]
+        if missing:
+            raise ValueError(
+                "verified=True requires evidence; missing: " + ", ".join(missing)
+            )
+        return self

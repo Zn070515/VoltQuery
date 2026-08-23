@@ -31,29 +31,45 @@ class SourceStatus(str, Enum):
 
 
 class AssetKind(str, Enum):
-    """Kind of local asset referenced by a seed problem."""
+    """What a local asset *is*, independent of its purpose.
+
+    Orthogonal to ``AssetRole`` (what it is *for*). A schematic drawing is
+    ``kind=SCHEMATIC`` whether it is a source crop or a rendered ``CircuitIR``
+    output; that distinction lives on ``AssetOrigin`` instead.
+    """
 
     FIGURE = "figure"
-    FORMULA = "formula"
     SCHEMATIC = "schematic"
+    WAVEFORM = "waveform"
+    TABLE = "table"
+    FORMULA = "formula"
     OTHER = "other"
 
 
 class AssetRole(str, Enum):
-    """What an asset *is for*, orthogonal to ``AssetKind`` (what it *is*).
+    """What an asset *is for* (its role), orthogonal to ``AssetKind``.
 
-    ``observed``-role assets come straight from the source and are the retrieval
-    targets; ``generated`` assets (a CircuitIR render, an OCR-derived crop) are
-    produced by VoltQuery and are NOT source provenance.
+    A role never repeats the kind: a schematic crop is ``kind=SCHEMATIC,
+    role=CONTENT_CROP``, not ``role=SCHEMATIC``. ``content_crop`` is a generic
+    "this crop carries the diagram/visual content" label; ``question_crop`` is
+    strictly the retrievable question-text region.
     """
 
     QUESTION_CROP = "question_crop"
-    FIGURE = "figure"
-    SCHEMATIC = "schematic"
-    FORMULA = "formula"
-    TABLE = "table"
-    ANSWER = "answer"
-    SOLUTION = "solution"
+    CONTENT_CROP = "content_crop"
+    ANSWER_CROP = "answer_crop"
+    SOLUTION_CROP = "solution_crop"
+
+
+class AssetOrigin(str, Enum):
+    """Where an asset came from, orthogonal to ``kind`` and ``role``.
+
+    ``source`` assets are provenance (a crop or file pulled from the source).
+    ``generated`` assets (an OCR-derived crop, a ``CircuitIR`` render) are
+    produced by VoltQuery and are NOT source provenance.
+    """
+
+    SOURCE = "source"
     GENERATED = "generated"
 
 

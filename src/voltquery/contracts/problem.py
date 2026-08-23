@@ -12,14 +12,18 @@ explanation, so a rigid per-shape union is premature.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Annotated, Any, Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 
 from ._base import ContractModel
-from .enums import AssetKind, AssetRole, Domain, FormulaLayout, FormulaRole
+from .enums import AssetKind, AssetOrigin, AssetRole, Domain, FormulaLayout, FormulaRole
 from .seed import TopicSlug
 from .source import SourceRef
+
+# Current contract version. Bumping ``schema_version`` is a breaking change and
+# must ride with an explicit migration (no silent drift on ``problem_ir.jsonl``).
+SCHEMA_VERSION: Literal["v0.1"] = "v0.1"
 
 
 def _validate_asset_path(value: str) -> str:
@@ -38,12 +42,27 @@ def _validate_asset_path(value: str) -> str:
 
 
 class CropRect(ContractModel):
-    """A source-page rectangle (points, top-left origin) for an asset crop."""
+    """A source-page rectangle (points, top-left origin) for an asset crop.
+
+    A rectangle is degenerate/meaningless unless it has positive area and a
+    non-negative origin on the page; reject anything that cannot name a real
+    region.
+    """
 
     x0: float
     y0: float
     x1: float
     y1: float
+
+    @model_validator(mode="after")
+    def _well_formed(self) -> CropRect:
+        if self.x1 <= self.x0:
+            raise ValueError("x1 must be greater than x0")
+        if self.y1 <= self.y0:
+            raise ValueError("y1 must be greater than y0")
+        if self.x0 < 0 or self.y0 < 0:
+            raise ValueError("crop origin must be non-negative")
+        return self
 
 
 class Unit(ContractModel):
@@ -53,17 +72,44 @@ class Unit(ContractModel):
     normalized: str | None = None
 
 
-class Quantity(ContractModel):
-    """A numeric or symbolic quantity with an explicit unit.
+class QuantityInput(ContractModel):
+    """A named, quantified *given* of a problem.
 
-    ``note`` is the extension slot for uncertainty / tolerance (deliberately not
-    a first-class field in v0.1), so the model can grow without a breaking change.
+    ``name`` binds the quantity to the object it denotes in the problem (``Vs``,
+    ``R1``, ``open_loop_gain``). It is optional in v0.1 because ingestion does not
+    always resolve the binding; a ``None`` name is an honest "unbound" rather
+    than an invented one. Unitless (dimensionless) quantities use
+    ``unit=Unit(symbol="", normalized=None)`` -- the unit plate is required so a
+    reader never mistakes a missing unit for a known one.
+
+    ``note`` is the extension slot for uncertainty / tolerance.
     """
 
+    type: Literal["quantity"] = "quantity"
+    name: str | None = None
     value: float | str
     unit: Unit
-    normalized: str | None = None
     note: str | None = None
+
+
+class TableInput(ContractModel):
+    """A tabular *given* of a problem (e.g. a resistor/current table).
+
+    Minimal v0.1 shape: a binding ``name``, the column names, and an open ``rows``
+    payload. ``columns``/``rows`` are optional so a table whose values live only
+    in a schematic asset can be declared as a placeholder without inventing rows.
+    """
+
+    type: Literal["table"] = "table"
+    name: str | None = None
+    columns: list[str] = Field(default_factory=list)
+    rows: list[dict[str, Any]] = Field(default_factory=list)
+    note: str | None = None
+
+
+# A problem's ``inputs`` mix singular quantities and tabular givens. The
+# ``type`` discriminator keeps the union unambiguous.
+Input = Annotated[QuantityInput | TableInput, Field(discriminator="type")]
 
 
 class Answer(ContractModel):
@@ -80,12 +126,18 @@ class Answer(ContractModel):
 
 
 class Part(ContractModel):
-    """One subproblem of a multipart problem (replaces ``is_multipart: bool``)."""
+    """One subproblem of a multipart problem (replaces ``is_multipart: bool``).
+
+    ``parts`` lets a subproblem carry its own nested subparts (e.g. 0032's
+    (i)/(ii)/(iii) inside part b) rather than flattening them into ``target``.
+    ``None`` = not resolved, ``[]`` = no nested subparts, ``[Part, ...]`` = nested.
+    """
 
     label: str
     statement: str
     target: str | None = None
     answer: Answer | None = None
+    parts: list[Part] | None = None
 
 
 class Formula(ContractModel):
@@ -99,14 +151,21 @@ class Formula(ContractModel):
 class ProblemAsset(ContractModel):
     """An asset carried by an IR problem, richer than M0's ``AssetRef``.
 
-    Adds a ``role`` axis (what it is *for*) alongside the M0 ``kind`` (what it
-    *is*), a source ``crop_rect`` (with the source ``page_index``), and an
-    optional binding to subproblem ``parts``.
+    Three orthogonal axes replace M0's single ``kind``:
+      * ``kind``   -- what the asset *is* (figure/schematic/waveform/table/...)
+      * ``role``   -- what it is *for* (question crop vs. content crop, ...)
+      * ``origin`` -- where it came from (source provenance vs. generated)
+
+    A source schematic is ``kind=SCHEMATIC, role=CONTENT_CROP, origin=SOURCE``; a
+    generated OCR crop is ``kind=FIGURE, role=CONTENT_CROP, origin=GENERATED``. A
+    ``crop_rect`` pins a source region and therefore requires a ``page_index``.
+    ``parts`` binds an asset to a specific subproblem label.
     """
 
     path: str
     kind: AssetKind = AssetKind.FIGURE
-    role: AssetRole = AssetRole.FIGURE
+    role: AssetRole = AssetRole.CONTENT_CROP
+    origin: AssetOrigin = AssetOrigin.SOURCE
     page_index: int | None = None
     crop_rect: CropRect | None = None
     parts: list[str] | None = None
@@ -115,6 +174,12 @@ class ProblemAsset(ContractModel):
     @classmethod
     def _validate_path(cls, value: str) -> str:
         return _validate_asset_path(value)
+
+    @model_validator(mode="after")
+    def _crop_requires_page(self) -> ProblemAsset:
+        if self.crop_rect is not None and self.page_index is None:
+            raise ValueError("crop_rect requires a source page_index")
+        return self
 
 
 class ProblemObservables(ContractModel):
@@ -141,13 +206,15 @@ class EEProblemIR(ContractModel):
     not parse the subparts is distinguishable from a genuinely single-part item.
     """
 
+    schema_version: Literal["v0.1"]
     id: str
     source: SourceRef
     domain: Domain
     topics: list[TopicSlug]
     statement: str
     parts: list[Part] | None = None
-    inputs: list[Quantity] = Field(default_factory=list)
+    inputs: list[Input] = Field(default_factory=list)
+    targets: list[str] = Field(default_factory=list)
     answer: Answer | None = None
     assets: list[ProblemAsset] = Field(default_factory=list)
     formulas: list[Formula] = Field(default_factory=list)

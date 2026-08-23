@@ -26,8 +26,11 @@ def _parse_sources(path: Path) -> list[Source]:
 
 
 def _read_yaml(path: Path) -> dict[str, Any]:
-    with path.open("r", encoding="utf-8") as fh:
-        data = yaml.safe_load(fh)
+    try:
+        with path.open("r", encoding="utf-8") as fh:
+            data = yaml.safe_load(fh)
+    except yaml.YAMLError as exc:
+        raise ValueError(f"{path}: invalid YAML: {exc}") from exc
     if data is None:
         return {}
     if not isinstance(data, dict):

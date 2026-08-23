@@ -75,6 +75,9 @@ def test_m0_blocks_research_only_source(
         "      attribution_required: true\n"
         "      data_policy: research_only\n"
         "      verified: true\n"
+        "      verification_url: https://example.org/fixture-license\n"
+        "      verified_at: 2026-08-22\n"
+        "      verification_note: test fixture source\n"
         "    status: approved\n",
         encoding="utf-8",
     )
@@ -158,6 +161,9 @@ def test_public_gold_policy_blocks_research_only_source(
         "      attribution_required: true\n"
         "      data_policy: research_only\n"
         "      verified: true\n"
+        "      verification_url: https://example.org/fixture-license\n"
+        "      verified_at: 2026-08-22\n"
+        "      verification_note: test fixture source\n"
         "    status: approved\n",
         encoding="utf-8",
     )
@@ -189,6 +195,9 @@ def test_public_gold_policy_blocks_unapproved_source(
         "      attribution_required: true\n"
         "      data_policy: public_redistributable\n"
         "      verified: true\n"
+        "      verification_url: https://example.org/fixture-license\n"
+        "      verified_at: 2026-08-22\n"
+        "      verification_note: test fixture source\n"
         "    status: candidate\n",
         encoding="utf-8",
     )

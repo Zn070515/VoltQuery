@@ -5,18 +5,25 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 from voltquery.contracts import (
+    SCHEMA_VERSION,
     Answer,
+    AssetKind,
+    AssetOrigin,
     AssetRole,
+    CropRect,
     EEProblemIR,
     FormulaRole,
+    LicenseMetadata,
     ProblemAsset,
-    Quantity,
+    QuantityInput,
+    TableInput,
 )
 
 
 def make_ir(**overrides):
     """Build a minimal valid ``EEProblemIR`` with a couple of overrides."""
     data = {
+        "schema_version": SCHEMA_VERSION,
         "id": "vq_ir_test",
         "source": {"source_id": "fixture-source"},
         "domain": "circuit_theory",
@@ -24,6 +31,7 @@ def make_ir(**overrides):
         "statement": "Consider the circuit.",
         "parts": None,
         "inputs": [],
+        "targets": [],
         "answer": None,
         "assets": [],
         "formulas": [],
@@ -40,6 +48,18 @@ def make_ir(**overrides):
 def test_round_trip() -> None:
     ir = make_ir()
     assert EEProblemIR.model_validate(ir.model_dump()) == ir
+
+
+# --- schema_version is a required, literal-pinned contract version ---
+def test_schema_version_is_pinned() -> None:
+    assert make_ir().schema_version == "v0.1"
+
+
+def test_schema_version_required() -> None:
+    data = make_ir().model_dump()
+    del data["schema_version"]
+    with pytest.raises(ValidationError):
+        EEProblemIR.model_validate(data)
 
 
 # --- parts: three-state (None = unparsed, [] = no subparts, [Part] = multipart) ---
@@ -68,6 +88,25 @@ def test_parts_list_is_multipart() -> None:
     assert ir.parts[0].answer.type == "scalar"
 
 
+def test_part_can_nest_subparts() -> None:
+    ir = make_ir(
+        parts=[
+            {
+                "label": "b",
+                "statement": "Find the currents.",
+                "target": "current through RL",
+                "parts": [
+                    {"label": "i", "statement": "Only the 12V source.", "target": "I_RL(12V)"},
+                    {"label": "ii", "statement": "Only the 5V source.", "target": "I_RL(5V)"},
+                ],
+            }
+        ]
+    )
+    assert len(ir.parts[0].parts) == 2
+    assert ir.parts[0].parts[0].label == "i"
+    assert ir.parts[0].parts[1].target == "I_RL(5V)"
+
+
 # --- answer: open {type, content}, deliberately not a rigid union ---
 def test_answer_is_open_type_content() -> None:
     # A real answer can bundle scalar + drawing + explanation; content stays open.
@@ -79,13 +118,71 @@ def test_answer_is_open_type_content() -> None:
     assert answer.content["scalar"]["Rth"] == "1 kΩ"
 
 
-# --- role axis is orthogonal to kind; AssetRole is wide ---
-def test_asset_role_broader_than_kind() -> None:
-    asset = ProblemAsset(path="assets/vq_schematic.png", kind="schematic", role="schematic")
-    assert asset.role is AssetRole.SCHEMATIC
-    # a generated (not source) asset is a distinct role, not a source kind
-    gen = ProblemAsset(path="assets/vq_ocr_crop.png", kind="figure", role="generated")
-    assert gen.role is AssetRole.GENERATED
+# --- top-level targets capture what the whole problem asks for ---
+def test_top_level_targets() -> None:
+    ir = make_ir(targets=["equivalent resistance", "source current"])
+    assert ir.targets == ["equivalent resistance", "source current"]
+    assert make_ir().targets == []
+
+
+# --- inputs: discriminated union of quantity and table givens ---
+def test_input_discriminated_union() -> None:
+    ir = make_ir(
+        inputs=[
+            {"type": "quantity", "name": "Vs", "value": 10, "unit": {"symbol": "V"}},
+            {"type": "table", "name": "bias_table", "columns": ["R", "I"],
+             "rows": [{"R": "1k", "I": "2mA"}]},
+        ]
+    )
+    assert isinstance(ir.inputs[0], QuantityInput)
+    assert isinstance(ir.inputs[1], TableInput)
+    assert ir.inputs[0].name == "Vs"
+    assert ir.inputs[1].rows[0]["R"] == "1k"
+
+
+def test_quantity_input_typed_unit() -> None:
+    q = QuantityInput(name="Vs", value="Vs", unit={"symbol": "V"})
+    assert q.type == "quantity"
+    assert q.name == "Vs"
+    assert q.value == "Vs"
+    assert q.unit.symbol == "V"
+    assert q.note is None
+
+
+def test_quantity_input_dimensionless() -> None:
+    # A unitless given uses an empty symbol + no normalized spelling.
+    q = QuantityInput(value=100_000, unit={"symbol": ""})
+    assert q.unit.symbol == ""
+    assert q.unit.normalized is None
+
+
+def test_table_input_defaults() -> None:
+    t = TableInput(name="gain_table")
+    assert t.columns == []
+    assert t.rows == []
+    assert t.type == "table"
+
+
+# --- role and origin are orthogonal to kind; none repeats another ---
+def test_asset_three_axes_orthogonal() -> None:
+    src_schematic = ProblemAsset(
+        path="assets/vq_schematic.png", kind="schematic",
+        role="content_crop", origin="source")
+    assert src_schematic.kind is AssetKind.SCHEMATIC
+    assert src_schematic.role is AssetRole.CONTENT_CROP
+    assert src_schematic.origin is AssetOrigin.SOURCE
+
+    gen_crop = ProblemAsset(
+        path="assets/vq_ocr_crop.png", kind="figure",
+        role="content_crop", origin="generated")
+    assert gen_crop.kind is AssetKind.FIGURE
+    assert gen_crop.role is AssetRole.CONTENT_CROP
+    assert gen_crop.origin is AssetOrigin.GENERATED
+
+    question = ProblemAsset(
+        path="assets/vq_question.png", kind="figure",
+        role="question_crop", origin="source")
+    assert question.role is AssetRole.QUESTION_CROP
 
 
 def test_asset_crop_rect_and_parts_binding() -> None:
@@ -93,6 +190,7 @@ def test_asset_crop_rect_and_parts_binding() -> None:
         path="assets/vq_question.png",
         kind="figure",
         role="question_crop",
+        origin="source",
         page_index=31,
         crop_rect={"x0": 0, "y0": 400, "x1": 612, "y1": 705},
         parts=["a", "b"],
@@ -112,6 +210,47 @@ def test_asset_path_invalid(path: str) -> None:
         ProblemAsset(path=path)
 
 
+# --- crop rect invariants: positive area, non-negative page origin ---
+def test_crop_rect_accepts_valid() -> None:
+    r = CropRect(x0=0, y0=400, x1=612, y1=705)
+    assert (r.x0, r.x1, r.y0, r.y1) == (0, 612, 400, 705)
+
+
+@pytest.mark.parametrize(
+    "rect",
+    [
+        {"x0": 10, "y0": 0, "x1": 5, "y1": 20},   # x1 < x0
+        {"x0": 0, "y0": 10, "x1": 20, "y1": 5},   # y1 < y0
+        {"x0": 0, "y0": 0, "x1": 0, "y1": 5},     # zero width (x1 == x0)
+        {"x0": -1, "y0": 0, "x1": 20, "y1": 5},   # negative origin
+    ],
+)
+def test_crop_rect_invariants(rect) -> None:
+    with pytest.raises(ValidationError):
+        CropRect(**rect)
+
+
+def test_crop_rect_requires_page() -> None:
+    with pytest.raises(ValidationError):
+        ProblemAsset(
+            path="assets/q.png", role="question_crop",
+            crop_rect={"x0": 0, "y0": 0, "x1": 10, "y1": 10},
+        )
+
+
+# --- license verified=True must carry auditable evidence ---
+def test_license_verified_requires_evidence() -> None:
+    with pytest.raises(ValidationError):
+        LicenseMetadata(verified=True)
+    lic = LicenseMetadata(
+        verified=True,
+        verification_url="https://example.org/license",
+        verified_at="2026-08-22",
+        verification_note="Verified against the published notice.",
+    )
+    assert lic.verified is True
+
+
 # --- formula role renamed: given / displayed / derived ---
 def test_formula_role_values() -> None:
     assert FormulaRole("given") is FormulaRole.GIVEN
@@ -120,14 +259,6 @@ def test_formula_role_values() -> None:
     with pytest.raises(ValueError):
         FormulaRole("stated")  # old M0 vocabulary is gone
         FormulaRole("to_derive")
-
-
-# --- quantity carries value/unit/normalized; note is the extension slot ---
-def test_quantity_typed_unit() -> None:
-    q = Quantity(value="Vs", unit={"symbol": "V"})
-    assert q.value == "Vs"
-    assert q.unit.symbol == "V"
-    assert q.note is None
 
 
 # --- observables are source facts, independent of assets ---
